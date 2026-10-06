@@ -1,0 +1,2 @@
+-- Development-only seed data belongs here.
+-- Do not add production credentials or real personal data.
