@@ -17,6 +17,14 @@
 
 The initial migration defines UUID primary keys, foreign keys, tenant slug uniqueness, tenant/user membership uniqueness, invitation uniqueness, and indexes for membership lookup, invitations, and tenant audit timelines.
 
+## Invitation Lifecycle
+
+The authentication lifecycle migration adds `invitations.delivery_status` and a
+partial unique index for pending invitations by tenant and case-folded email.
+Invitation acceptance transactionally inserts membership/role records and audit
+events. Only token digests are stored; acceptance never reactivates an existing
+membership. See [Authentication lifecycle](AUTHENTICATION.md).
+
 ## Financial Model Boundary
 
 No financial production tables are created in Sprint 0. Billing, invoices, payments, allocations, receipts, refunds, and SaaS subscription billing belong to later sprints and must remain structurally separate.

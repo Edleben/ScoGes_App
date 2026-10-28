@@ -20,13 +20,28 @@ pnpm dev
 
 ## Verification
 
+Install the matching Playwright browser before the first browser smoke test:
+
+```bash
+pnpm exec playwright install chromium
+```
+
 ```bash
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
 pnpm test:e2e
+pnpm check:supabase
+pnpm test:db
 ```
+
+`check:supabase` checks Auth and the membership schema using the public configuration.
+`test:db` requires a server-only `DATABASE_URL` and runs real PostgreSQL authorization
+tests with all fixtures rolled back. See [Database testing](docs/DATABASE_TESTING.md).
+
+Authentication setup, SMTP configuration, and browser-test requirements are described
+in [Authentication lifecycle](docs/AUTHENTICATION.md).
 
 ## Sprint Boundary
 

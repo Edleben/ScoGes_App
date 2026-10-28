@@ -32,3 +32,8 @@ Future domain folders should remain separate for `academics`, `people`, `billing
 Authenticated users sign in through Supabase. Dashboard routes call server-side session helpers. Users without an active membership are redirected to onboarding. Onboarding creates a tenant, settings, tenant-admin membership, role assignment, and audit event via a Supabase RPC.
 
 All sensitive tenant actions must resolve the user and membership server-side. UI-only checks are not authorization.
+
+Authentication lifecycle routes and the session-refresh proxy are documented in
+[Authentication lifecycle](AUTHENTICATION.md). Invitation email uses an `EmailProvider`
+interface with a bounded, TLS-required SMTP adapter under `src/lib/email`. SMTP calls
+run outside database transactions; invitation issuance and acceptance use narrow RPCs.

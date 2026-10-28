@@ -23,3 +23,18 @@ Reason: each flow must be transactional and auditable. The RPCs verify `auth.uid
 Decision: do not create billing or payment tables yet.
 
 Reason: Sprint 0 is limited to platform foundations. Financial records require deeper domain design and tests in later sprints.
+
+## ADR-0005: Authentication Lifecycle and SMTP Boundary
+
+Decision: retain Supabase Auth for signup, password recovery, PKCE exchange and
+session refresh; use a per-request Next.js proxy for refresh-cookie propagation.
+Resolve identity and permissions again in server actions and database RPCs.
+
+Invitation acceptance is a transactional RPC bound to a verified recipient email.
+Store only token digests; return tokens once to the authorized issuance action and
+send fragment links through an `EmailProvider` SMTP adapter. A tenant-preference
+cookie is revalidated against the user's active membership before use.
+
+Nodemailer supplies SMTP transport missing from the existing stack; it is isolated
+under infrastructure, requires TLS and uses bounded timeouts. No new email vendor,
+queue, service-role application access or later-sprint domain is introduced.

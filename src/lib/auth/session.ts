@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { activeTenantCookie } from "@/modules/identity/auth-navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { AuthUser, Membership, TenantRole } from "@/types/foundation";
 
@@ -42,20 +44,46 @@ export async function requireCurrentUser() {
   return user;
 }
 
-export async function getActiveMembership(userId: string): Promise<Membership | null> {
+export async function getActiveMembership(
+  userId: string,
+): Promise<Membership | null> {
   const supabase = await createSupabaseServerClient();
 
   if (!supabase) {
     return null;
   }
 
-  const { data } = await supabase
-    .from("memberships")
-    .select("id,tenant_id,user_id,status,membership_roles(roles(key))")
-    .eq("user_id", userId)
-    .eq("status", "active")
-    .limit(1)
-    .maybeSingle<MembershipRow>();
+  const preferred = (await cookies()).get(activeTenantCookie)?.value;
+  const queryMembership = (tenantId?: string) => {
+    let query = supabase
+      .from("memberships")
+      .select("id,tenant_id,user_id,status,membership_roles(roles(key))")
+      .eq("user_id", userId)
+      .eq("status", "active");
+    if (tenantId) query = query.eq("tenant_id", tenantId);
+    return query
+      .order("created_at", { ascending: true })
+      .order("id", { ascending: true })
+      .limit(1)
+      .maybeSingle<MembershipRow>();
+  };
+  const preferredResult =
+    preferred &&
+    /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(
+      preferred,
+    )
+      ? await queryMembership(preferred)
+      : null;
+  // The cookie is only a preference. Ownership and active status remain authoritative.
+  const { data, error } =
+    preferredResult?.data || preferredResult?.error
+      ? preferredResult
+      : await queryMembership();
+
+  if (error) {
+    // Do not mistake an unavailable database or missing schema for a new user.
+    throw new Error("Tenant context is temporarily unavailable.");
+  }
 
   if (!data) {
     return null;

@@ -1,96 +1,127 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getAppUrl } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { getActiveMembership, requireCurrentUser } from "@/lib/auth/session";
-import { inviteMemberSchema, signInSchema } from "@/modules/identity/schemas";
+import {
+  emailSchema,
+  passwordSchema,
+  signInSchema,
+  signUpSchema,
+} from "./schemas";
+import {
+  activeTenantCookie,
+  authDestination,
+  invitationCookie,
+} from "./auth-navigation";
+import { authReply, formLocale, type AuthActionState } from "./auth-state";
+export type { AuthActionState } from "./auth-state";
 
-export type AuthActionState = {
-  ok: boolean;
-  message?: string;
-};
+function callbackUrl(form: FormData, next: string) {
+  const url = new URL("/auth/callback", getAppUrl());
+  url.searchParams.set("next", next);
+  url.searchParams.set("locale", formLocale(form));
+  return url.toString();
+}
 
 export async function signInAction(
-  _previousState: AuthActionState,
-  formData: FormData,
+  _: AuthActionState,
+  form: FormData,
 ): Promise<AuthActionState> {
+  const parsed = signInSchema.safeParse(Object.fromEntries(form));
+  if (!parsed.success) return authReply(form, false, "invalid");
   const supabase = await createSupabaseServerClient();
-
-  if (!supabase) {
-    return { ok: false, message: "Supabase is not configured." };
-  }
-
-  const parsed = signInSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
-
-  if (!parsed.success) {
-    return { ok: false, message: "Invalid sign-in details." };
-  }
-
+  if (!supabase) return authReply(form, false, "unavailable");
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  if (error) return authReply(form, false, "credentials");
+  const pendingInvitation = (await cookies()).has(invitationCookie);
+  redirect(
+    pendingInvitation
+      ? "/invitations/accept"
+      : authDestination(form.get("next")),
+  );
+}
 
-  if (error) {
-    return { ok: false, message: error.message };
-  }
+export async function signUpAction(
+  _: AuthActionState,
+  form: FormData,
+): Promise<AuthActionState> {
+  const parsed = signUpSchema.safeParse(Object.fromEntries(form));
+  if (!parsed.success) return authReply(form, false, "invalid");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return authReply(form, false, "unavailable");
+  const destination = (await cookies()).has(invitationCookie)
+    ? "/invitations/accept"
+    : authDestination(form.get("next"));
+  const { data, error } = await supabase.auth.signUp({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    options: {
+      emailRedirectTo: callbackUrl(form, destination),
+      data: { preferred_locale: formLocale(form) },
+    },
+  });
+  if (
+    error &&
+    !["user_already_exists", "email_exists"].includes(error.code ?? "")
+  )
+    return authReply(form, false, "unavailable");
+  if (data.session) redirect(destination);
+  return authReply(form, true, "checkEmail");
+}
 
-  redirect("/dashboard");
+export async function requestPasswordResetAction(
+  _: AuthActionState,
+  form: FormData,
+): Promise<AuthActionState> {
+  const parsed = emailSchema.safeParse(Object.fromEntries(form));
+  if (!parsed.success) return authReply(form, false, "invalid");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return authReply(form, false, "unavailable");
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    parsed.data.email,
+    { redirectTo: callbackUrl(form, "/auth/reset-password") },
+  );
+  if (error && error.code !== "user_not_found")
+    return authReply(form, false, "unavailable");
+  return authReply(form, true, "checkEmail");
+}
+
+export async function updatePasswordAction(
+  _: AuthActionState,
+  form: FormData,
+): Promise<AuthActionState> {
+  const parsed = passwordSchema.safeParse(Object.fromEntries(form));
+  if (!parsed.success) return authReply(form, false, "invalid");
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return authReply(form, false, "unavailable");
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user?.email_confirmed_at)
+    return authReply(form, false, "invalidLink");
+  const { error } = await supabase.auth.updateUser({
+    password: parsed.data.password,
+  });
+  if (error) return authReply(form, false, "unavailable");
+  const { error: signOutError } = await supabase.auth.signOut({
+    scope: "global",
+  });
+  if (signOutError) return authReply(form, false, "passwordSignoutFailed");
+  (await cookies()).delete(activeTenantCookie);
+  redirect(`/login?notice=passwordUpdated&locale=${formLocale(form)}`);
 }
 
 export async function signOutAction() {
   const supabase = await createSupabaseServerClient();
-  await supabase?.auth.signOut();
+  if (supabase) {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new Error("Unable to sign out. Please retry.");
+  }
+  const store = await cookies();
+  store.delete(invitationCookie);
+  store.delete(activeTenantCookie);
   redirect("/login");
-}
-
-export async function requestPasswordResetAction(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
-  const email = String(formData.get("email") ?? "");
-
-  if (supabase && email) {
-    await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${getAppUrl()}/login`,
-    });
-  }
-
-  redirect("/login");
-}
-
-export async function inviteMemberAction(
-  _previousState: AuthActionState,
-  formData: FormData,
-): Promise<AuthActionState> {
-  const user = await requireCurrentUser();
-  const membership = await getActiveMembership(user.id);
-  const supabase = await createSupabaseServerClient();
-
-  if (!supabase || !membership) {
-    return { ok: false, message: "Tenant context is unavailable." };
-  }
-
-  const parsed = inviteMemberSchema.safeParse({
-    email: formData.get("email"),
-    role: formData.get("role"),
-  });
-
-  if (!parsed.success) {
-    return { ok: false, message: "Invalid invitation." };
-  }
-
-  const { error } = await supabase.rpc("invite_tenant_member", {
-    target_tenant_id: membership.tenantId,
-    invitee_email: parsed.data.email,
-    role_key: parsed.data.role,
-    actor_user_id: user.id,
-  });
-
-  if (error) {
-    return { ok: false, message: error.message };
-  }
-
-  revalidatePath("/dashboard/users");
-  return { ok: true, message: "Invitation recorded." };
 }

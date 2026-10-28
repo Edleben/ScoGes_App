@@ -1,13 +1,22 @@
 import { spawn } from "node:child_process";
 import { setTimeout as wait } from "node:timers/promises";
-import { chromium } from "@playwright/test";
+import { createRequire } from "node:module";
 
-const baseUrl = "http://127.0.0.1:3000";
+const require = createRequire(import.meta.url);
+const baseUrl = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
+const serverUrl = new URL(baseUrl);
+if (
+  !["127.0.0.1", "localhost"].includes(serverUrl.hostname) ||
+  serverUrl.protocol !== "http:"
+) {
+  throw new Error("E2E server must use a local HTTP URL.");
+}
 
 function spawnCommand(command, args) {
   return spawn(command, args, {
     stdio: "inherit",
-    shell: process.platform === "win32",
+    shell: false,
+    windowsHide: true,
   });
 }
 
@@ -16,7 +25,7 @@ async function waitForServer(url) {
 
   while (Date.now() < deadline) {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
       if (response.ok) {
         return;
       }
@@ -32,7 +41,7 @@ async function waitForServer(url) {
 
 async function isServerReady(url) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
     return response.ok;
   } catch {
     return false;
@@ -45,11 +54,16 @@ async function stopProcessTree(child) {
   }
 
   if (process.platform === "win32") {
-    const killer = spawn("cmd.exe", ["/c", "taskkill", "/pid", String(child.pid), "/T", "/F"], {
-      stdio: "ignore",
-      detached: true,
-      shell: false,
-    });
+    const killer = spawn(
+      "cmd.exe",
+      ["/c", "taskkill", "/pid", String(child.pid), "/T", "/F"],
+      {
+        stdio: "ignore",
+        detached: true,
+        shell: false,
+        windowsHide: true,
+      },
+    );
     killer.unref();
     await wait(1_000);
     child.kill();
@@ -62,24 +76,32 @@ async function stopProcessTree(child) {
 }
 
 async function runSmokeTest() {
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
-
-  try {
-    await page.goto(baseUrl);
-    await page.getByRole("heading", { name: /EDXSTORE School Management SaaS/i }).waitFor();
-    await page.getByRole("link", { name: /Acceder a la plateforme/i }).click();
-    await page.waitForURL(/\/login$/);
-    await page.getByRole("heading", { name: /Connexion/i }).waitFor();
-    console.log("E2E smoke passed: public landing page links to login.");
-  } finally {
-    await browser.close();
-  }
+  const child = spawnCommand(process.execPath, [
+    require.resolve("@playwright/test/cli"),
+    "test",
+  ]);
+  await new Promise((resolve, reject) => {
+    child.once("error", reject);
+    child.once("exit", (code) =>
+      code === 0
+        ? resolve()
+        : reject(new Error("Playwright E2E suite failed.")),
+    );
+  });
 }
 
 async function main() {
   const serverAlreadyRunning = await isServerReady(baseUrl);
-  const server = serverAlreadyRunning ? null : spawnCommand("next", ["dev", "--hostname", "127.0.0.1"]);
+  const server = serverAlreadyRunning
+    ? null
+    : spawnCommand(process.execPath, [
+        require.resolve("next/dist/bin/next"),
+        process.env.E2E_SERVER_MODE === "production" ? "start" : "dev",
+        "--hostname",
+        serverUrl.hostname,
+        "--port",
+        serverUrl.port || "3000",
+      ]);
   let exitCode = 0;
 
   try {
@@ -89,12 +111,14 @@ async function main() {
     await runSmokeTest();
   } catch (error) {
     exitCode = 1;
-    throw error;
+    console.error(
+      error instanceof Error ? error.message : "E2E verification failed.",
+    );
   } finally {
     if (server) {
       await stopProcessTree(server);
     }
-    process.exit(exitCode);
+    process.exitCode = exitCode;
   }
 }
 

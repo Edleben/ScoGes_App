@@ -8,6 +8,8 @@ type FormFieldProps = {
   placeholder?: string;
   defaultValue?: string;
   autoComplete?: string;
+  minLength?: number;
+  maxLength?: number;
 };
 
 export function FormField({
@@ -18,6 +20,8 @@ export function FormField({
   placeholder,
   defaultValue,
   autoComplete,
+  minLength,
+  maxLength,
 }: FormFieldProps) {
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-800">
@@ -33,6 +37,8 @@ export function FormField({
         placeholder={placeholder}
         defaultValue={defaultValue}
         autoComplete={autoComplete}
+        minLength={minLength}
+        maxLength={maxLength}
       />
     </label>
   );

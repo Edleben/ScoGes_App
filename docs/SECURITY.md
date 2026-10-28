@@ -14,7 +14,7 @@ Client-provided `tenant_id`, role, permission, amount, or status values are neve
 
 ## Authentication
 
-Supabase Auth is the authentication provider. Public Supabase URL and publishable key are browser-visible. The service-role key is server-only and must never be exposed as `NEXT_PUBLIC_*`.
+Supabase Auth is the authentication provider. Public Supabase URL and publishable key are browser-visible. The administrative `SUPABASE_SECRET_KEY` (`sb_secret_...`, preferred over the legacy service-role key) is server-only and must never be exposed as `NEXT_PUBLIC_*`. Application auth actions do not use administrative keys; isolated live test fixtures use the secret key for setup/cleanup only.
 
 ## Authorization
 
@@ -38,4 +38,25 @@ Only `.env.example` is committed. Real `.env` and `.env.local` files are ignored
 
 ## Known Limitations
 
-Supabase migrations are present but not applied in this repository. Production backup, restore drills, CSP hardening, rate limiting implementation, and storage policies must be completed before pilot production.
+The foundation and membership self-read migrations were applied to the configured database on 2026-10-28. Other environments must apply them independently. Production backup, restore drills, CSP hardening, rate limiting implementation, and storage policies must be completed before pilot production.
+
+## Membership Self-Resolution
+
+Active users can read their own membership and assigned roles without `users.read`.
+Reading other members and their profiles still requires `users.read` in the same tenant.
+Inactive memberships do not gain self-access. Database failures raise a safe error
+instead of being interpreted as missing membership and redirected to onboarding.
+
+Real database authorization tests and their limits are documented in
+[Database testing](DATABASE_TESTING.md). SQL RLS/RPC tests run under database roles;
+unit helper tests alone are not evidence of database isolation.
+
+## Authentication Lifecycle
+
+Signup/recovery, PKCE callbacks, password updates, session refresh, SMTP delivery,
+and invitation acceptance are implemented as described in
+[Authentication lifecycle](AUTHENTICATION.md). Invitation acceptance binds the verified
+recipient identity to the database-stored invitation; tenant/role fields from the
+browser are not authoritative. Passwords/tokens are excluded from application and
+development action logs. Hosted Auth SMTP/redirect settings and live mailbox delivery
+remain external configuration requirements; unverified delivery is not reported as working.

@@ -1,6 +1,7 @@
 import { InviteMemberForm } from "@/components/shared/forms";
 import { getActiveMembership, requireCurrentUser } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getLocale } from "@/i18n/messages";
 
 type MemberRow = {
   id: string;
@@ -8,7 +9,12 @@ type MemberRow = {
   profiles: { email: string; full_name: string | null } | null;
 };
 
-export default async function UsersPage() {
+export default async function UsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ locale?: string }>;
+}) {
+  const locale = getLocale((await searchParams).locale);
   const user = await requireCurrentUser();
   const membership = await getActiveMembership(user.id);
   const supabase = await createSupabaseServerClient();
@@ -28,7 +34,8 @@ export default async function UsersPage() {
       <div>
         <h1 className="text-3xl font-bold">Administration des membres</h1>
         <p className="mt-2 text-[var(--muted)]">
-          Les invitations et roles sont controles cote serveur avec le tenant actif.
+          Les invitations et roles sont controles cote serveur avec le tenant
+          actif.
         </p>
 
         <div className="mt-6 overflow-hidden rounded-md border border-[var(--border)] bg-white">
@@ -48,10 +55,15 @@ export default async function UsersPage() {
                 </tr>
               ) : (
                 members?.map((member) => (
-                  <tr className="border-t border-[var(--border)]" key={member.id}>
+                  <tr
+                    className="border-t border-[var(--border)]"
+                    key={member.id}
+                  >
                     <td className="p-3">
                       <span className="font-semibold">
-                        {member.profiles?.full_name ?? member.profiles?.email ?? "Profil incomplet"}
+                        {member.profiles?.full_name ??
+                          member.profiles?.email ??
+                          "Profil incomplet"}
                       </span>
                     </td>
                     <td className="p-3">{member.status}</td>
@@ -65,7 +77,7 @@ export default async function UsersPage() {
 
       <aside>
         <h2 className="mb-3 text-lg font-bold">Inviter un membre</h2>
-        <InviteMemberForm />
+        <InviteMemberForm locale={locale} />
       </aside>
     </section>
   );
