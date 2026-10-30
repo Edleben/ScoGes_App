@@ -60,3 +60,7 @@ recipient identity to the database-stored invitation; tenant/role fields from th
 browser are not authoritative. Passwords/tokens are excluded from application and
 development action logs. Hosted Auth SMTP/redirect settings and live mailbox delivery
 remain external configuration requirements; unverified delivery is not reported as working.
+
+## Administration writes
+
+Role/status/settings mutations now use permission-checked RPC transactions with tenant-row serialization, last-active-administrator protection, stale revision checks and atomic audit writes. Invitation acceptance shares the authorization lock. Revocation removes tenant access through live membership/RLS checks while preserving other memberships. See [Administration](ADMINISTRATION.md).

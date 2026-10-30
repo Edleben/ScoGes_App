@@ -1,11 +1,7 @@
 export type Locale = "fr" | "en";
 
 export type TenantRole =
-  | "tenant_admin"
-  | "finance_manager"
-  | "cashier"
-  | "registrar"
-  | "auditor";
+  "tenant_admin" | "finance_manager" | "cashier" | "registrar" | "auditor";
 
 export type Permission =
   | "tenant.settings.read"
@@ -47,4 +43,5 @@ export type AuditAction =
   | "tenant.settings.updated"
   | "member.invited"
   | "member.role_changed"
-  | "member.deactivated";
+  | "member.deactivated"
+  | "member.revoked";

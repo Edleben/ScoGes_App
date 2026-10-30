@@ -73,3 +73,10 @@ Added a Sprint monitoring dashboard for management and delivery tracking:
 - Added CI configuration guards, redacted browser diagnostics, short-lived safe reports, pinned actions/tools, and changed-file formatting checks.
 - Approved minimum dependency security updates are included; verification results are reported separately.
 - No application feature scope or hosted database schema was changed. See [CI operations](CI.md).
+
+## 2026-10-30 Sprint 0 administration
+
+- Added tenant-scoped role-set changes, membership deactivation/revocation, settings forms and paginated member history with explicit server-side permission/error states.
+- Added an append-only migration with transactional audit writes, last-admin protection, tenant locking, stale revisions and invitation acceptance serialization.
+- Added schema/action tests, negative SQL authorization and audit rollback assertions, CI-only concurrency fixtures, and administration browser journeys.
+- Hosted database migration remains a reviewed deployment step; local SQL verification rolls back all changes. See [Administration operations](ADMINISTRATION.md).

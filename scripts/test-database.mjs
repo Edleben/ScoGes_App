@@ -72,10 +72,27 @@ try {
         readFileSync(`supabase/migrations/${migration}`, "utf8"),
       );
     }
+    const administration = await client.query(
+      "select to_regprocedure('public.administer_tenant_membership(uuid,uuid,timestamptz,text[],text)') is not null as installed",
+    );
+    requireAppliedSchema(administration.rows[0].installed);
+    if (!administration.rows[0].installed) {
+      const migration = readdirSync("supabase/migrations").find((name) =>
+        name.endsWith("_sprint_0_administration.sql"),
+      );
+      if (!migration) throw new Error("Administration migration is missing.");
+      await client.query(
+        readFileSync(`supabase/migrations/${migration}`, "utf8"),
+      );
+    }
     await client.query(
       readFileSync("supabase/tests/authentication_lifecycle.sql", "utf8"),
     );
     console.log("Invitation lifecycle assertions: passed");
+    await client.query(
+      readFileSync("supabase/tests/administration.sql", "utf8"),
+    );
+    console.log("Administration and transactional audit assertions: passed");
   }
   console.log("Database authorization assertions: passed");
 } catch (error) {
@@ -92,4 +109,10 @@ try {
   console.log(
     "Test transaction rolled back; no fixtures or schema changes retained.",
   );
+}
+
+if (!process.exitCode && env.CI_ENFORCE_INTEGRATION === "1") {
+  const { testAdministrationConcurrency } =
+    await import("./tests/administration-concurrency.mjs");
+  await testAdministrationConcurrency(env);
 }
