@@ -114,3 +114,7 @@ All new work belongs on `edwakson/ScoGes_App` unless the owner changes that poli
 Update the typed tracker and Markdown tracker together when milestone state changes; the drift test checks all IDs/status/progress rows. Record new evidence in `IMPLEMENTATION_LOG.md` and relevant domain documents. Keep dated historical results; clearly mark newer snapshots. The product specification and engineering frameworks define requirements and method, not live deployment status.
 
 Handoff UI verification note: one local focused attempt timed out at the hosted login transition before reaching the tracker; an unchanged rerun passed the updated tracker assertions. No authentication implementation changed in this slice. If this recurs, inspect safe response/timing evidence before assigning a cause or weakening checks. Full isolated CI remains the required review gate.
+
+## Sprint 1 proposal checkpoint — 2026-10-30
+
+PR #4 is merged as `2c751624dde35d38abf47aafaac7deed45c550c1`; its review CI passed 69 unit/component/contract, 4 CI safety and 15 Chromium tests. The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed, inactive and subject to the [foundation completion gate](SPRINT_0_COMPLETION_GATE.md). The gate remains open for bilingual foundation completion and real email lifecycle validation. No Sprint 1 code, migration or permission grant is authorized by this proposal. Sprint 0 remains active; tracker statuses and percentages remain unchanged. Resolve documented business decisions before their affected implementation slices.
