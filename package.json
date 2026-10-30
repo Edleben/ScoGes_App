@@ -12,6 +12,8 @@
     "test": "vitest run",
     "test:e2e": "node scripts/run-e2e.mjs",
     "test:db": "node scripts/test-database.mjs",
+    "test:ci-tools": "node --test tests/ci/*.test.mjs",
+    "format:changed": "node scripts/ci/check-format.mjs",
     "check:supabase": "node scripts/check-supabase.mjs",
     "check:smtp": "node scripts/check-smtp.mjs",
     "format": "prettier --check ."
@@ -22,12 +24,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.46.0",
-    "next": "^16.3.5",
+    "next": "^16.4.1",
     "nodemailer": "^10.2.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "tailwind-merge": "^3.7.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
@@ -40,7 +42,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.3.5",
+    "eslint-config-next": "^16.4.1",
     "jsdom": "^30.0.1",
     "pg": "^8.23.1",
     "prettier": "^3.9.7",

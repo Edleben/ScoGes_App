@@ -16,6 +16,14 @@ const configured = Boolean(
   env.NEXT_PUBLIC_SUPABASE_URL &&
   env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
 );
+if (
+  env.CI_ENFORCE_INTEGRATION === "1" &&
+  (!configured || !env.CI_TEST_PASSWORD || !env.CI_TEST_UPDATED_PASSWORD)
+) {
+  throw new Error(
+    "CI requires configured isolated authentication fixtures; skipping is forbidden.",
+  );
+}
 test.use({ trace: "off", screenshot: "off", video: "off" });
 test.describe("live authentication lifecycle", () => {
   test.skip(
@@ -30,7 +38,7 @@ test.describe("live authentication lifecycle", () => {
     });
   async function account() {
     const email = `edxstore-e2e-${randomUUID()}@example.invalid`,
-      password = randomUUID() + "Aa1!";
+      password = env.CI_TEST_PASSWORD || randomUUID() + "Aa1!";
     const { data, error } = await admin().auth.admin.createUser({
       email,
       password,
@@ -159,7 +167,7 @@ test.describe("live authentication lifecycle", () => {
       .click();
     await expect(page).toHaveURL(/\/onboarding$/);
     await page.goto("/auth/reset-password?locale=en");
-    const password = randomUUID() + "Bb2!";
+    const password = env.CI_TEST_UPDATED_PASSWORD || randomUUID() + "Bb2!";
     await page.getByLabel("Password", { exact: true }).fill(password);
     await page.getByLabel("Confirm password").fill(password);
     await page.getByRole("button", { name: "Continue", exact: true }).click();

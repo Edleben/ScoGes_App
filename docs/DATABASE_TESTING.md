@@ -13,8 +13,9 @@ Keep credentials in ignored `.env.local`, or set environment variables directly:
 The app continues to use the Supabase HTTPS client; `pg` is a development dependency
 used only by the database verification script. The service-role API key is not used.
 
-Database tests force TLS with certificate and hostname verification. URL SSL overrides
-are removed before connecting; certificate verification is never disabled. The public
+Hosted database tests force TLS with certificate and hostname verification. URL SSL overrides
+are removed before connecting. Only disposable loopback databases may opt into plaintext
+with `DATABASE_TEST_LOCAL=1`; hosted endpoints are rejected in that mode. The public
 CA was downloaded from
 `https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt`.
 For a different CA, download the project's certificate from Database Settings and use
@@ -67,3 +68,9 @@ It now also tests the authentication-lifecycle migration and invitation acceptan
 in the same rolled-back transaction. See [Authentication lifecycle](AUTHENTICATION.md)
 for the browser tests and external configuration requirements. Live browser tests
 are explicitly skipped while the required test-account service-role key is missing.
+
+## Isolated CI
+
+GitHub CI applies all migrations to disposable local Supabase before testing.
+`CI_ENFORCE_INTEGRATION=1` rejects missing schema instead of loading temporary
+migrations, so tests cannot conceal a broken migration sequence. See [CI](CI.md).

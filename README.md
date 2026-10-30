@@ -46,3 +46,5 @@ in [Authentication lifecycle](docs/AUTHENTICATION.md).
 ## Sprint Boundary
 
 This repository currently implements Sprint 0 only: platform foundation, auth scaffolding, tenant onboarding, RBAC baseline, audit baseline, UI shell, tests, CI, and documentation. Sprint 1 domain features must not be started without an explicit Sprint 1 prompt.
+
+CI events, required checks, isolation, artifacts, and merge protection are documented in [Continuous integration](docs/CI.md).
