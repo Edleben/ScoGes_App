@@ -11,7 +11,7 @@ Keep credentials in ignored `.env.local`, or set environment variables directly:
   Supabase Root 2021 CA. This certificate is public, not a private key or credential.
 
 The app continues to use the Supabase HTTPS client; `pg` is a development dependency
-used only by the database verification script. The service-role API key is not used.
+used only by the database verification script. This runner uses `DATABASE_URL`, not an Auth administrative API key. Browser fixture setup/cleanup uses the separate server-only `SUPABASE_SECRET_KEY`.
 
 Hosted database tests force TLS with certificate and hostname verification. URL SSL overrides
 are removed before connecting. Only disposable loopback databases may opt into plaintext
@@ -63,14 +63,16 @@ After deployment: Auth and membership schema checks returned HTTP 200; database
 authorization assertions passed; every public table had RLS enabled; test fixtures
 were rolled back. No business tenant or membership records were retained.
 
-The database script is opt-in and is not part of ordinary credential-free CI.
-It now also tests the authentication-lifecycle migration and invitation acceptance
-in the same rolled-back transaction. See [Authentication lifecycle](AUTHENTICATION.md)
-for the browser tests and external configuration requirements. Live browser tests
-are explicitly skipped while the required test-account service-role key is missing.
+Hosted execution is opt-in and requires the configured development/test connection. Ordinary CI runs this script against disposable local Supabase without production secrets. Authentication and administration SQL suites share the rolled-back transaction, including audit-failure rollback and revoked access checks. Browser fixtures require `SUPABASE_SECRET_KEY`; manual runs may skip when it is missing, while CI fails instead of skipping. See [Authentication lifecycle](AUTHENTICATION.md).
 
 ## Isolated CI
 
 GitHub CI applies all migrations to disposable local Supabase before testing.
 `CI_ENFORCE_INTEGRATION=1` rejects missing schema instead of loading temporary
 migrations, so tests cannot conceal a broken migration sequence. See [CI](CI.md).
+
+## Concurrency fixtures and current evidence
+
+After the transactional suite, explicit isolated CI runs `scripts/tests/administration-concurrency.mjs` with separate connections. It commits synthetic race fixtures only on an opted-in loopback database, verifies that concurrent demotion/deactivation retains an active administrator, checks audit counts, and cleans up by exact IDs. Never enable this mode against a hosted database.
+
+The dated baseline is [SPRINT_0_VALIDATION.md](SPRINT_0_VALIDATION.md); the migration chain is in [DATA_MODEL.md](DATA_MODEL.md). Recheck environment identity privately as described in [AI_HANDOFF.md](AI_HANDOFF.md).

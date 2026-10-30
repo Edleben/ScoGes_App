@@ -133,3 +133,7 @@ Previously issued links cannot be recovered from stored digests; reissue them.
 ## Current validation snapshot
 
 The dated 8-test result above is historical. Administration deployment and the expanded authenticated onboarding, bilingual and failure-state coverage are recorded in [Sprint 0 validation](SPRINT_0_VALIDATION.md). Real confirmation/recovery email-link exchange and recipient inbox receipt remain distinct, unverified acceptance checks.
+
+## Cross-agent continuation
+
+Use [AI_HANDOFF.md](AI_HANDOFF.md) for the current branch, migration/environment boundary and safe runbook. The [tracker](PROJECT_TRACKER.md) keeps email-link/receipt validation open. SMTP credentials or an accepted transport result do not establish actual confirmation/recovery/inbox verification.

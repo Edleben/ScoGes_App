@@ -32,3 +32,14 @@ No financial production tables are created in Sprint 0. Billing, invoices, payme
 ## Administration lifecycle
 
 The administration migration adds two narrow write RPCs and a monotonic revision trigger on memberships/settings; no tables or financial entities are added. It preserves revoked membership records and role mappings, extends authorized directory profile reads to revoked members, and records safe before/after audit metadata in each write transaction. See [Administration](ADMINISTRATION.md).
+
+## Verified migration chain
+
+| Version        | Scope                                                                        | Hosted checkpoint        |
+| -------------- | ---------------------------------------------------------------------------- | ------------------------ |
+| 20260917000100 | Foundation tables, catalog, RLS and onboarding RPC                           | Applied                  |
+| 20261028013153 | Active self-membership/role resolution                                       | Applied                  |
+| 20261028022102 | Invitation digest/delivery/acceptance lifecycle                              | Applied                  |
+| 20261030185852 | Transactional administration, monotonic revisions and shared invitation lock | Applied once after PR #2 |
+
+All four were verified in the configured hosted migration history on 2026-10-30. This dated record is not permission to assume another environment is migrated. Check actual history before deployment. Role sets remain normalized; inactive/revoked memberships are retained. Administrative audit metadata records curated before/after values, actor/target and request IDs without credentials. See [handoff](AI_HANDOFF.md) and [tracker](PROJECT_TRACKER.md).

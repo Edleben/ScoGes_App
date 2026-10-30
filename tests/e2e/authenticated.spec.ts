@@ -528,6 +528,18 @@ test.describe("live authentication lifecycle", () => {
         locale === "fr" ? "Vérifiez les champs" : "Check the fields",
       );
     }
+    await page.goto("/dashboard/project");
+    const checkpoint = page.getByRole("region", {
+      name: "État de validation — Sprint 0",
+    });
+    await expect(
+      checkpoint.getByText("4 jalons livrés sur 6", { exact: true }),
+    ).toBeVisible();
+    await expect(checkpoint.getByRole("listitem")).toHaveCount(2);
+    await expect(
+      checkpoint.getByRole("link", { name: "Validation des parcours (PR #3)" }),
+    ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/3");
+    await expect(checkpoint).toContainText("Checklist manuelle");
     await page.goto("/dashboard/users?page=9999");
     await expect(
       page.getByRole("cell", { name: "Aucun membre à afficher.", exact: true }),

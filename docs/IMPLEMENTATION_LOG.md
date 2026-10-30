@@ -88,3 +88,14 @@ Added a Sprint monitoring dashboard for management and delivery tracking:
 - Corrected onboarding's raw database-error exposure with localized safe errors, a duplicate-slug message and validated RPC result identifiers. Successful creation/actor/redirect behavior is preserved.
 - Reconciled the tracker: four delivered milestones plus two planned acceptance items yield 67%; Sprint 0 remains in progress. Full translations and real email-link/receipt validation remain unverified. No later sprint was started.
 - See [Sprint 0 validation evidence](SPRINT_0_VALIDATION.md) for executed checks, failures/debt, environment limits and final browser/CI results.
+
+## 2026-10-30 Project records and shared coding-agent handoff
+
+- Verified PR #3 merged and synchronized the feature branch with its main merge without rewriting history.
+- Added a Markdown tracker for every sprint/milestone and a drift invariant against UI data; retained Sprint 0 at 67% with translation and email acceptance work open.
+- Added an accessible dated UI checkpoint with reviewed evidence links and explicit manual-checklist semantics.
+- Added one shared handoff, Claude/Antigravity entry files and AGENTS navigation; documented environment identity, schema, security invariants, verification, branch policy and stop conditions.
+- Reconciled operational architecture/data/security/auth/admin/database-testing/CI/decision documents and indexed governing specifications/frameworks without rewriting their requirements.
+- No schema, dependency, authentication, authorization, financial or later-sprint behavior changes are introduced. This handoff records verification in its PR/CI checks; PR #3 remains the dated functional baseline.
+
+- Local handoff checks: lint, generated types, TypeScript, production build and 69 unit/component/contract tests passed; the relative-link audit found no broken targets. The focused authenticated tracker journey passed on an unchanged rerun after one initial hosted login-transition timeout. This is not reported as a full new hosted-suite pass; current full-suite results belong to the PR/CI checks.

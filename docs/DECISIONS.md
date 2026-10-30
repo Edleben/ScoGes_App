@@ -50,3 +50,9 @@ Minimum security versions: Next.js/eslint-config-next 16.4.1 and Zod 4.6.6. Targ
 ## ADR-0007: Transactional tenant administration
 
 Use narrow authenticated RPCs for role/status/settings writes so mutation and audit insertion commit or fail together. Serialize membership authorization changes on the tenant row, share that lock with invitation acceptance, and retain one active administrator. Use exact monotonic revisions to reject stale forms. Preserve revoked membership history rather than deleting global identities. Existing RLS and the permission-aware server layer remain independent controls. Details: [Administration](ADMINISTRATION.md).
+
+## ADR-0008: Shared agent handoff and synchronized records
+
+Keep one shared handoff for Claude, Codex and Antigravity, referenced by agent entry files and AGENTS.md. Governing product/sprint/STABLE documents retain their authority; dated operational status belongs in the tracker, validation report and implementation log.
+
+The typed tracker defines UI milestones; a unit test checks Markdown IDs/status/progress against it. UI evidence is a reviewed checkpoint, not an automated deployment/CI feed. Preserve historical verification, expose acceptance gaps and recheck actual state before resuming or changing completion claims.

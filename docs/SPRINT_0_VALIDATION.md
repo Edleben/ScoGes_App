@@ -19,7 +19,7 @@ Sprint 0 is operational at the foundation level, with remaining acceptance work.
 | Full repository formatting    | Failed: 29 pre-existing files            | Check only; canonical specifications and unrelated files are not rewritten                                                                |
 | Changed-file formatting       | Passed                                   | CI ratchet; excludes generated lockfile                                                                                                   |
 | Chromium end-to-end           | 15 passed; zero failed, skipped or flaky | Production server on isolated loopback port, configured hosted development backend; synthetic users/tenants only                          |
-| Isolated CI                   | Required gate; see this PR’s checks      | Fresh migrations, security advisors, multi-connection administrator-removal races and Chromium; no production secrets                     |
+| Isolated CI                   | PR #3 push and PR gates passed           | Fresh migrations, security advisors, multi-connection administrator-removal races and Chromium; no production secrets                     |
 
 Local dependency bootstrapping initially stalled in the managed pnpm launcher. Duplicate validation commands were stopped; one frozen-lockfile install restored a consistent environment. Those interrupted commands are not counted as passing checks.
 
@@ -71,3 +71,9 @@ UI-created fixtures are discovered only through exact synthetic actor IDs plus t
 Final hosted checks confirmed zero synthetic E2E users/tenants remaining and the same four applied migrations. The final 15-test browser run had no failures, skips or flaky results. No real email was sent.
 
 The first onboarding browser assertion assumed retained form values; the corrected test explicitly resubmits the complete form after each validation response. The full suite subsequently passed. The E2E runner now forwards standard Playwright arguments, enabling focused diagnosis without changing normal full-suite behavior.
+
+## Reviewed checkpoint and handoff
+
+This functional validation shipped in [merged PR #3](https://github.com/Edleben/ScoGes_App/pull/3), merge commit `92efae9454af9ece48836868c0e151c2e6db010b`. [PR CI](https://github.com/Edleben/ScoGes_App/actions/runs/41133779878) and [push CI](https://github.com/Edleben/ScoGes_App/actions/runs/41133709974) passed all required jobs, including security advisors and administrator-removal races. The 68-test unit count belongs to that baseline; subsequent handoff consistency checks increase the current total.
+
+Use [PROJECT_TRACKER.md](PROJECT_TRACKER.md) for milestone rows and [AI_HANDOFF.md](AI_HANDOFF.md) to restart safely. Preserve this dated evidence rather than replacing it with assumptions from another agent conversation.
