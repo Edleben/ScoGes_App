@@ -56,3 +56,7 @@ This Markdown tracker and the UI consume the same milestone definitions in `src/
 The onboarding form currently resets edited fields after validation failure; preserve/re-enter the complete form in tests and record any future UX change explicitly. Full formatting debt (29 files at the checkpoint), two moderate development dependency advisories, the existing timestamp-helper search-path warning, and pilot operational hardening remain documented separately.
 
 See [validation evidence](SPRINT_0_VALIDATION.md), [agent handoff](AI_HANDOFF.md), and [documentation map](README.md). Do not start Sprint 1 without the owner's explicit instruction.
+
+## Sprint 1 planning
+
+A [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) is ready for review. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) remains open. Preparing this prompt does not change any milestone status, activate Sprint 1 or authorize its implementation.

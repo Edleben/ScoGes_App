@@ -99,3 +99,9 @@ Added a Sprint monitoring dashboard for management and delivery tracking:
 - No schema, dependency, authentication, authorization, financial or later-sprint behavior changes are introduced. This handoff records verification in its PR/CI checks; PR #3 remains the dated functional baseline.
 
 - Local handoff checks: lint, generated types, TypeScript, production build and 69 unit/component/contract tests passed; the relative-link audit found no broken targets. The focused authenticated tracker journey passed on an unchanged rerun after one initial hosted login-transition timeout. This is not reported as a full new hosted-suite pass; current full-suite results belong to the PR/CI checks.
+
+## 2026-10-30 — Bounded Sprint 1 proposal
+
+Prepared an inactive [Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) covering academic references, students/guardians, enrollments and CSV/XLSX imports, with explicit exclusions, business decision points, tenant/audit safeguards and verification criteria. Added the [foundation completion gate](SPRINT_0_COMPLETION_GATE.md): bilingual completion and real email lifecycle acceptance remain open. Sprint 0 stays active; all tracker percentages remain unchanged. This documentation task makes no application, dependency, schema or hosted-environment change.
+
+Verification: all 4 tracker invariant tests passed; formatting passed for all 6 changed/new Markdown files; 48 relative document links resolved; `git diff --check` passed. Vitest emitted a Vite config-loader compatibility warning without failing. Full application, browser and database suites were not rerun for this documentation-only proposal; historical CI results are dated evidence, not a new completion-gate pass.
