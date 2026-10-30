@@ -46,3 +46,7 @@ Decision: run push, PR and merge-queue checks with an aggregate required gate, r
 Checks cover application code, migration order, tenant isolation and browser authentication. Upload only safe reports; keep auth traces and raw reports private to the disposable runner. Formatting applies to changed files to avoid unrelated canonical-document rewrites.
 
 Minimum security versions: Next.js/eslint-config-next 16.4.1 and Zod 4.6.6. Targeted pnpm overrides patch vulnerable transitive Vite, Undici and source-map-js versions; remove them when upstream resolutions are safe. These are security maintenance within Sprint 0, not a new product feature.
+
+## ADR-0007: Transactional tenant administration
+
+Use narrow authenticated RPCs for role/status/settings writes so mutation and audit insertion commit or fail together. Serialize membership authorization changes on the tenant row, share that lock with invitation acceptance, and retain one active administrator. Use exact monotonic revisions to reject stale forms. Preserve revoked membership history rather than deleting global identities. Existing RLS and the permission-aware server layer remain independent controls. Details: [Administration](ADMINISTRATION.md).

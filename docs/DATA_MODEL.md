@@ -28,3 +28,7 @@ membership. See [Authentication lifecycle](AUTHENTICATION.md).
 ## Financial Model Boundary
 
 No financial production tables are created in Sprint 0. Billing, invoices, payments, allocations, receipts, refunds, and SaaS subscription billing belong to later sprints and must remain structurally separate.
+
+## Administration lifecycle
+
+The administration migration adds two narrow write RPCs and a monotonic revision trigger on memberships/settings; no tables or financial entities are added. It preserves revoked membership records and role mappings, extends authorized directory profile reads to revoked members, and records safe before/after audit metadata in each write transaction. See [Administration](ADMINISTRATION.md).

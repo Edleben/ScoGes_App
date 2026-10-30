@@ -1,46 +1,67 @@
 import { requireCurrentUser, getActiveMembership } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-export default async function SettingsPage() {
-  const user = await requireCurrentUser();
-  const membership = await getActiveMembership(user.id);
+import { getLocale, t } from "@/i18n/messages";
+import { hasPermission } from "@/modules/identity/permissions";
+import { adminText } from "@/modules/administration/messages";
+import {
+  SettingsForm,
+  type SettingsValues,
+} from "@/modules/administration/forms";
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ locale?: string }>;
+}) {
+  const locale = getLocale((await searchParams).locale);
+  const user = await requireCurrentUser(),
+    membership = await getActiveMembership(user.id);
+  if (!membership || !hasPermission(membership.roles, "tenant.settings.read"))
+    return <p role="alert">{t(locale, "state.permissionDenied")}</p>;
   const supabase = await createSupabaseServerClient();
-
-  const { data: settings } =
-    supabase && membership
-      ? await supabase
-          .from("tenant_settings")
-          .select("country,base_currency,timezone,default_locale")
-          .eq("tenant_id", membership.tenantId)
-          .maybeSingle<{
-            country: string;
-            base_currency: string;
-            timezone: string;
-            default_locale: string;
-          }>()
-      : { data: null };
-
+  if (!supabase) return <p role="alert">{adminText(locale, "unavailable")}</p>;
+  const { data: settings, error } = await supabase
+    .from("tenant_settings")
+    .select("country,base_currency,timezone,default_locale,updated_at")
+    .eq("tenant_id", membership.tenantId)
+    .maybeSingle<SettingsValues & { updated_at: string }>();
+  if (error || !settings)
+    return <p role="alert">{adminText(locale, "unavailable")}</p>;
   return (
-    <section>
-      <h1 className="text-3xl font-bold">Parametres du tenant</h1>
-      <p className="mt-2 text-[var(--muted)]">
-        Lecture des parametres institutionnels de base. La modification est reservee aux actions
-        controlees par permission.
-      </p>
-
-      <dl className="mt-6 grid gap-4 md:grid-cols-2">
-        {[
-          ["Pays", settings?.country ?? "Non configure"],
-          ["Devise", settings?.base_currency ?? "Non configuree"],
-          ["Fuseau horaire", settings?.timezone ?? "Non configure"],
-          ["Langue", settings?.default_locale ?? "fr"],
-        ].map(([label, value]) => (
-          <div className="rounded-md border border-[var(--border)] bg-white p-5" key={label}>
-            <dt className="text-sm font-semibold text-[var(--muted)]">{label}</dt>
-            <dd className="mt-2 text-lg font-bold">{value}</dd>
-          </div>
-        ))}
-      </dl>
+    <section lang={locale}>
+      <h1 className="mb-6 text-3xl font-bold">
+        {adminText(locale, "settings")}
+      </h1>
+      {hasPermission(membership.roles, "tenant.settings.write") ? (
+        <SettingsForm
+          key={membership.tenantId}
+          tenantId={membership.tenantId}
+          updatedAt={settings.updated_at}
+          values={settings}
+          locale={locale}
+        />
+      ) : (
+        <dl className="grid gap-4 md:grid-cols-2">
+          {[
+            ["country", settings.country],
+            ["currency", settings.base_currency],
+            ["timezone", settings.timezone],
+            ["language", settings.default_locale],
+          ].map(([key, value]) => (
+            <div
+              key={key}
+              className="rounded-md border border-[var(--border)] bg-white p-5"
+            >
+              <dt>
+                {adminText(
+                  locale,
+                  key as "country" | "currency" | "timezone" | "language",
+                )}
+              </dt>
+              <dd className="mt-2 font-bold">{value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   );
 }
