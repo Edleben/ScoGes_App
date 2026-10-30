@@ -1,5 +1,8 @@
 "use server";
 
+import { z } from "zod";
+import { getLocale, t } from "@/i18n/messages";
+import { authText } from "@/modules/identity/auth-messages";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { tenantOnboardingSchema } from "@/modules/tenants/schemas";
@@ -16,11 +19,11 @@ export async function createTenantAction(
   formData: FormData,
 ): Promise<ActionState> {
   const user = await requireCurrentUser();
-  const supabase = await createSupabaseServerClient();
-
-  if (!supabase) {
-    return { ok: false, message: "Supabase is not configured." };
-  }
+  const locale = getLocale(String(formData.get("locale") ?? "fr"));
+  const unavailable = () => ({
+    ok: false,
+    message: authText(locale, "unavailable"),
+  });
 
   const parsed = tenantOnboardingSchema.safeParse({
     name: formData.get("name"),
@@ -32,21 +35,33 @@ export async function createTenantAction(
   });
 
   if (!parsed.success) {
-    return { ok: false, message: "Invalid tenant data." };
+    return {
+      ok: false,
+      message: t(locale, "onboarding.invalid"),
+    };
   }
 
-  const { data, error } = await supabase.rpc("create_tenant_with_admin", {
-    tenant_name: parsed.data.name,
-    tenant_slug: parsed.data.slug,
-    tenant_country: parsed.data.country,
-    tenant_base_currency: parsed.data.baseCurrency,
-    tenant_timezone: parsed.data.timezone,
-    tenant_default_locale: parsed.data.defaultLocale,
-    actor_user_id: user.id,
-  });
-
-  if (error || !data) {
-    return { ok: false, message: error?.message ?? "Tenant creation failed." };
+  try {
+    const supabase = await createSupabaseServerClient();
+    if (!supabase) return unavailable();
+    const { data, error } = await supabase.rpc("create_tenant_with_admin", {
+      tenant_name: parsed.data.name,
+      tenant_slug: parsed.data.slug,
+      tenant_country: parsed.data.country,
+      tenant_base_currency: parsed.data.baseCurrency,
+      tenant_timezone: parsed.data.timezone,
+      tenant_default_locale: parsed.data.defaultLocale,
+      actor_user_id: user.id,
+    });
+    if (error?.code === "23505")
+      return {
+        ok: false,
+        message: t(locale, "onboarding.slugUsed"),
+      };
+    if (error || !z.string().uuid().safeParse(data).success)
+      return unavailable();
+  } catch {
+    return unavailable();
   }
 
   revalidatePath("/dashboard");

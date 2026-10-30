@@ -76,6 +76,17 @@ test.describe("live authentication lifecycle", () => {
   }
   test.afterEach(async () => {
     // Cleanup is restricted to exact IDs created by this test; no real tenant data.
+    // Recover UI-created tenants even if an assertion failed before registration.
+    for (const userId of users) {
+      const discovered = await admin()
+        .from("tenants")
+        .select("id")
+        .eq("created_by", userId)
+        .like("slug", "e2e-%");
+      if (discovered.error) throw new Error("UI fixture discovery failed.");
+      for (const tenant of discovered.data ?? [])
+        if (!tenants.includes(tenant.id)) tenants.push(tenant.id);
+    }
     for (const id of tenants.splice(0)) {
       const audit = await admin()
         .from("audit_events")
@@ -194,6 +205,8 @@ test.describe("live authentication lifecycle", () => {
     page,
     browser,
   }) => {
+    // Hosted fixture setup includes multiple real network round trips; CI retains its tighter budget.
+    test.setTimeout(env.CI_ENFORCE_INTEGRATION === "1" ? 30_000 : 60_000);
     const owner = await account(),
       member = await account();
     const target = await tenant(owner, "E2E managed institution");
@@ -365,5 +378,206 @@ test.describe("live authentication lifecycle", () => {
     await expect(
       row.getByRole("checkbox", { name: "Administrateur", exact: true }),
     ).toBeChecked();
+  });
+
+  test("authenticated browser onboarding rejects invalid/duplicate data and creates an audited administrator", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    const owner = await account(),
+      reservedOwner = await account();
+    const existing = await tenant(reservedOwner, "E2E reserved institution");
+    const reserved = await admin()
+      .from("tenants")
+      .select("slug")
+      .eq("id", existing)
+      .single();
+    if (reserved.error) throw new Error("Reserved slug setup failed.");
+    await page.goto("/login");
+    await page.getByLabel("Adresse e-mail").fill(owner.email);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(owner.password);
+    await page
+      .getByRole("button", { name: "Se connecter", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/onboarding$/);
+    await page.getByLabel("Nom de l'institution").fill("X");
+    await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
+    await page
+      .getByRole("button", { name: "Creer l'institution", exact: true })
+      .click();
+    await expect(page.getByRole("status")).toContainText(
+      "Vérifiez les informations",
+    );
+    await page
+      .getByLabel("Nom de l'institution")
+      .fill("E2E browser institution");
+    await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
+    await page
+      .getByRole("button", { name: "Creer l'institution", exact: true })
+      .click();
+    await expect(page.getByRole("status")).toContainText(
+      "Ce slug est déjà utilisé",
+    );
+    const before = await owner.client
+      .from("memberships")
+      .select("id")
+      .eq("user_id", owner.id);
+    expect(before.error).toBeNull();
+    expect(before.data).toHaveLength(0);
+    const slug = `e2e-${randomUUID()}`;
+    await page
+      .getByLabel("Nom de l'institution")
+      .fill("E2E browser institution");
+    await page.getByLabel("Slug", { exact: true }).fill(slug);
+    await page
+      .getByRole("button", { name: "Creer l'institution", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await expect(
+      page.getByText("E2E browser institution", { exact: true }),
+    ).toBeVisible();
+    const created = await admin()
+      .from("tenants")
+      .select("id")
+      .eq("slug", slug)
+      .eq("created_by", owner.id)
+      .single();
+    if (created.error) throw new Error("Browser-created tenant missing.");
+    tenants.push(created.data.id);
+    const permission = await owner.client.rpc("current_user_has_permission", {
+      target_tenant_id: created.data.id,
+      permission_key: "users.manage_roles",
+    });
+    expect(permission.error).toBeNull();
+    expect(permission.data).toBe(true);
+    const settings = await owner.client
+      .from("tenant_settings")
+      .select("country,base_currency,timezone,default_locale")
+      .eq("tenant_id", created.data.id)
+      .single();
+    expect(settings.error).toBeNull();
+    expect(settings.data).toMatchObject({
+      country: "TG",
+      base_currency: "XOF",
+      timezone: "Africa/Lome",
+      default_locale: "fr",
+    });
+    const audit = await owner.client
+      .from("audit_events")
+      .select("actor_user_id")
+      .eq("tenant_id", created.data.id)
+      .eq("action", "tenant.created");
+    expect(audit.error).toBeNull();
+    expect(audit.data).toEqual([{ actor_user_id: owner.id }]);
+  });
+  test("French and English administration pages render real data and localized validation", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    const owner = await account();
+    await tenant(owner, "E2E bilingual institution");
+    await page.goto("/login");
+    await page.getByLabel("Adresse e-mail").fill(owner.email);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(owner.password);
+    await page
+      .getByRole("button", { name: "Se connecter", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/dashboard$/);
+    for (const locale of ["fr", "en"] as const) {
+      await page.goto(`/dashboard/users?locale=${locale}`);
+      await expect(
+        page.getByRole("heading", {
+          name:
+            locale === "fr"
+              ? "Administration des membres"
+              : "Member administration",
+        }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("row").filter({ hasText: owner.email }),
+      ).toContainText(locale === "fr" ? "Actif" : "Active");
+      await expect(
+        page.getByRole("checkbox", {
+          name: locale === "fr" ? "Administrateur" : "Administrator",
+          exact: true,
+        }),
+      ).toBeChecked();
+      await page.goto(`/dashboard/settings?locale=${locale}`);
+      await expect(
+        page.getByRole("heading", {
+          name:
+            locale === "fr"
+              ? "Paramètres de l’institution"
+              : "Institution settings",
+        }),
+      ).toBeVisible();
+      const country = page.getByLabel(
+        locale === "fr" ? "Pays ISO-2" : "ISO-2 country",
+      );
+      await expect(country).toHaveValue("TG");
+      await page
+        .getByLabel(locale === "fr" ? "Fuseau horaire" : "Time zone")
+        .fill("Invalid/Zone");
+      await page
+        .getByRole("button", {
+          name:
+            locale === "fr" ? "Enregistrer les paramètres" : "Save settings",
+        })
+        .click();
+      await expect(page.getByRole("status")).toContainText(
+        locale === "fr" ? "Vérifiez les champs" : "Check the fields",
+      );
+    }
+    await page.goto("/dashboard/users?page=9999");
+    await expect(
+      page.getByRole("cell", { name: "Aucun membre à afficher.", exact: true }),
+    ).toBeVisible();
+  });
+  test("stale settings forms cannot overwrite a more recent committed change", async ({
+    page,
+  }) => {
+    test.setTimeout(60_000);
+    const owner = await account();
+    const target = await tenant(owner, "E2E stale settings institution");
+    await page.goto("/login");
+    await page.getByLabel("Adresse e-mail").fill(owner.email);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(owner.password);
+    await page
+      .getByRole("button", { name: "Se connecter", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/dashboard$/);
+    await page.goto("/dashboard/settings?locale=en");
+    const snapshot = await owner.client
+      .from("tenant_settings")
+      .select("updated_at")
+      .eq("tenant_id", target)
+      .single();
+    if (snapshot.error) throw new Error("Settings snapshot unavailable.");
+    const updated = await owner.client.rpc("update_tenant_settings", {
+      target_tenant_id: target,
+      expected_updated_at: snapshot.data.updated_at,
+      new_country: "US",
+      new_base_currency: "USD",
+      new_timezone: "UTC",
+      new_default_locale: "en",
+    });
+    expect(updated.error).toBeNull();
+    expect(updated.data).toBe(true);
+    await page
+      .getByRole("button", { name: "Save settings", exact: true })
+      .click();
+    await expect(page.getByRole("status")).toContainText(
+      "details have changed",
+    );
+    await page.reload();
+    await expect(page.getByLabel("ISO-2 country")).toHaveValue("US");
+    await expect(page.getByLabel("ISO-3 currency")).toHaveValue("USD");
+    const audit = await owner.client
+      .from("audit_events")
+      .select("id")
+      .eq("tenant_id", target)
+      .eq("action", "tenant.settings.updated");
+    expect(audit.error).toBeNull();
+    expect(audit.data).toHaveLength(1);
   });
 });

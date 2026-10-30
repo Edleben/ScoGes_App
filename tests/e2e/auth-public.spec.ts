@@ -49,3 +49,27 @@ test("invalid invitation has no enabled acceptance action", async ({
     page.getByRole("button", { name: "Open invitation" }),
   ).toBeDisabled();
 });
+
+for (const locale of ["fr", "en"] as const) {
+  test(`invalid sign-in reports a safe ${locale} failure`, async ({ page }) => {
+    await page.goto(`/login?locale=${locale}`);
+    await page
+      .getByLabel(locale === "fr" ? "Adresse e-mail" : "Email address")
+      .fill("nonexistent-validation@example.invalid");
+    await page
+      .getByLabel(locale === "fr" ? "Mot de passe" : "Password", {
+        exact: true,
+      })
+      .fill("Unmatched-LoginAa1!");
+    await page
+      .getByRole("button", {
+        name: locale === "fr" ? "Se connecter" : "Sign in",
+        exact: true,
+      })
+      .click();
+    await expect(page.getByRole("status")).toContainText(
+      locale === "fr" ? "incorrect" : "Incorrect email or password",
+    );
+    await expect(page).toHaveURL(/\/login/);
+  });
+}

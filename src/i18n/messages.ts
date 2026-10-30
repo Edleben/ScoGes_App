@@ -16,14 +16,19 @@ export const messages = {
     "auth.submit": "Se connecter",
     "auth.reset": "Demander une réinitialisation",
     "onboarding.title": "Créer votre institution",
-    "onboarding.description": "Ces informations initialisent le tenant et ses paramètres.",
+    "onboarding.invalid": "Vérifiez les informations de l’institution.",
+    "onboarding.slugUsed": "Ce slug est déjà utilisé. Choisissez-en un autre.",
+    "onboarding.description":
+      "Ces informations initialisent le tenant et ses paramètres.",
     "dashboard.title": "Tableau de bord fondation",
-    "dashboard.subtitle": "Vue de Sprint 0 sans indicateurs financiers simulés.",
+    "dashboard.subtitle":
+      "Vue de Sprint 0 sans indicateurs financiers simulés.",
     "settings.title": "Paramètres du tenant",
     "users.title": "Administration des membres",
     "users.invite": "Inviter un membre",
     "state.empty": "Aucune donnée à afficher pour le moment.",
-    "state.permissionDenied": "Vous n'avez pas la permission d'accéder à cette section.",
+    "state.permissionDenied":
+      "Vous n'avez pas la permission d'accéder à cette section.",
   },
   en: {
     "app.name": "EDXSTORE Schooling",
@@ -40,14 +45,18 @@ export const messages = {
     "auth.submit": "Sign in",
     "auth.reset": "Request password reset",
     "onboarding.title": "Create your institution",
-    "onboarding.description": "These details initialize the tenant and settings.",
+    "onboarding.invalid": "Check the institution details.",
+    "onboarding.slugUsed": "This slug is already used. Choose another one.",
+    "onboarding.description":
+      "These details initialize the tenant and settings.",
     "dashboard.title": "Foundation dashboard",
     "dashboard.subtitle": "Sprint 0 view without fabricated financial metrics.",
     "settings.title": "Tenant settings",
     "users.title": "Member administration",
     "users.invite": "Invite member",
     "state.empty": "No data to display yet.",
-    "state.permissionDenied": "You do not have permission to access this section.",
+    "state.permissionDenied":
+      "You do not have permission to access this section.",
   },
 } as const;
 
