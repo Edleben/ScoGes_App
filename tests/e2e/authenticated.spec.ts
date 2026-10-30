@@ -232,7 +232,9 @@ test.describe("live authentication lifecycle", () => {
       const memberPage = await memberContext.newPage();
       await login(memberPage, member);
       await memberPage.goto("/dashboard/users");
-      await expect(memberPage.getByRole("alert")).toContainText("permission");
+      await expect(
+        memberPage.getByRole("alert").filter({ hasText: "permission" }),
+      ).toContainText("permission");
       await memberPage.goto("/dashboard/settings");
       await expect(
         memberPage.getByRole("button", { name: "Enregistrer les paramètres" }),
