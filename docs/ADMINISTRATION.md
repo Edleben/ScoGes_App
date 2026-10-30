@@ -26,7 +26,7 @@ Apply through the normal reviewed migration process after validating the PR. Thi
 
 - Unit tests: form schemas, permissions, forged/stale context, safe errors, normalized settings and honest no-op responses.
 - `pnpm test:db`: transactional SQL assertions under real database roles, including tenant crossover, active low-privilege and anonymous access, last-admin guards, fresh revisions, audit attribution, no-op behavior, audit-insertion failure rollback, and revoked-session access denial. Fixtures and temporary DDL roll back on hosted development tests.
-- Isolated CI also races two administrator removals/demotions using separate database connections. Committed synthetic race fixtures are allowed only with explicit loopback CI configuration and cleaned by exact IDs.
+- Isolated CI runs local Supabase security advisors, failing on error-level issues. It also races two administrator removals/demotions using separate database connections. Committed synthetic race fixtures are allowed only with explicit loopback CI configuration and cleaned by exact IDs.
 - Browser tests exercise role changes, read-only permissions, deactivation/revocation, continued access to another tenant, settings persistence, audit history and last-admin errors. Existing authentication/invitation tests remain in the suite. These new browser tests require the migration, so use isolated CI until the hosted migration is deployed.
 
 No Sprint 1 or financial-domain functionality is introduced.

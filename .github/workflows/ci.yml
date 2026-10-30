@@ -119,6 +119,8 @@ jobs:
           supabase status -o env > "$RUNNER_TEMP/supabase-status.env"
           chmod 600 "$RUNNER_TEMP/supabase-status.env"
           node scripts/ci/export-environment.mjs "$RUNNER_TEMP/supabase-status.env"
+      - name: Check local database security advisors
+        run: supabase db advisors --local --type security --level warn --fail-on error
       - name: Start isolated TLS SMTP fixture
         run: bash scripts/ci/start-smtp.sh
       - name: Verify Auth and schema connectivity
