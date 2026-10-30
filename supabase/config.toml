@@ -1,0 +1,64 @@
+# Local development/CI only. This configuration is never pushed to a hosted project.
+project_id = "scoges-ci"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+auto_expose_new_tables = true
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[db.migrations]
+enabled = true
+schema_paths = []
+
+[db.seed]
+enabled = false
+
+[realtime]
+enabled = false
+
+[studio]
+enabled = false
+
+[local_smtp]
+enabled = true
+port = 54324
+
+[storage]
+enabled = false
+
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3102"
+additional_redirect_urls = ["http://127.0.0.1:3102/auth/callback**", "http://localhost:3000/auth/callback**"]
+enable_signup = true
+enable_anonymous_sign_ins = false
+minimum_password_length = 8
+enable_refresh_token_rotation = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = false
+max_frequency = "1s"
+
+# Disposable fixture limits; production Auth settings are unchanged.
+[auth.rate_limit]
+email_sent = 100
+sign_in_sign_ups = 200
+token_refresh = 300
+token_verifications = 100
+
+[edge_runtime]
+enabled = false
+
+[analytics]
+enabled = false

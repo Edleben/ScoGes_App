@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { parseEnv } from "node:util";
 import pg from "pg";
+import { databaseTestOptions } from "./ci/environment.mjs";
 
 const env = {
   ...(existsSync(".env.local")
@@ -10,28 +11,17 @@ const env = {
 };
 if (!env.DATABASE_URL)
   throw new Error("DATABASE_URL is required for database tests.");
-// Explicit TLS prevents a bare DATABASE_URL from silently using plaintext.
-// Remove URL SSL overrides so certificate and hostname verification stay enabled.
-const connectionUrl = new URL(env.DATABASE_URL);
-for (const key of [
-  "sslmode",
-  "sslcert",
-  "sslkey",
-  "sslrootcert",
-  "ssl",
-  "uselibpqcompat",
-])
-  connectionUrl.searchParams.delete(key);
-const ca = readFileSync(
-  env.DATABASE_SSL_ROOT_CERT || "supabase/certs/prod-ca-2021.crt",
-  "utf8",
-);
-const client = new pg.Client({
-  connectionString: connectionUrl.toString(),
-  ssl: { ca, rejectUnauthorized: true },
-  connectionTimeoutMillis: 15000,
-  statement_timeout: 30000,
-});
+// TLS stays mandatory for hosted databases. Only explicitly opted-in loopback
+// Docker fixtures can use the local database's unencrypted socket.
+const client = new pg.Client(databaseTestOptions(env));
+function requireAppliedSchema(installed) {
+  if (env.CI_ENFORCE_INTEGRATION === "1" && !installed) {
+    throw Object.assign(
+      new Error("CI requires migrations to be applied before testing."),
+      { code: "CI_SCHEMA_MISSING" },
+    );
+  }
+}
 try {
   await client.connect();
   console.log("PostgreSQL connection: passed");
@@ -40,6 +30,7 @@ try {
     "select to_regclass('public.memberships') is not null as installed",
   );
   console.log(`Foundation schema installed: ${rows[0].installed}`);
+  requireAppliedSchema(rows[0].installed);
   if (!rows[0].installed) {
     // A fresh database can be tested without installing anything permanently.
     await client.query(
@@ -57,6 +48,7 @@ try {
     const installed = await client.query(
       "select 1 from pg_policies where schemaname='public' and tablename='memberships' and policyname='users can read own active membership'",
     );
+    requireAppliedSchema(installed.rowCount);
     if (!installed.rowCount)
       await client.query(
         readFileSync(`supabase/migrations/${migration}`, "utf8"),
@@ -69,6 +61,7 @@ try {
     const { rows } = await client.query(
       "select to_regprocedure('public.accept_tenant_invitation(text)') is not null as installed",
     );
+    requireAppliedSchema(rows[0].installed);
     if (!rows[0].installed) {
       const migration = readdirSync("supabase/migrations").find((name) =>
         name.endsWith("_authentication_lifecycle.sql"),

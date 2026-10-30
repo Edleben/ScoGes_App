@@ -65,3 +65,11 @@ Added a Sprint monitoring dashboard for management and delivery tracking:
 - Verified cleanup: no E2E accounts, tenants or memberships remained after testing. No existing business data or credentials were changed.
 - Unit/contract tests: 35 passed. Real email delivery/receipt and hosted confirmation/recovery links remain separate checks requiring an authorized test recipient and mailbox verification.
 - After explicit recipient authorization, sent two separate technical SMTP control messages; both were accepted by the SMTP server. Test reference: `SCG-1793161266969-b8a9809f`. These were diagnostic messages, not confirmation/recovery or active invitation links; inbox receipt is a separate check.
+
+## 2026-10-30 CI validation gates
+
+- Added push, PR, merge-queue and manual validation with an aggregate required gate.
+- Added disposable local Supabase migrations, RLS/database tests, TLS SMTP verification and production-mode Chromium tests without production secrets.
+- Added CI configuration guards, redacted browser diagnostics, short-lived safe reports, pinned actions/tools, and changed-file formatting checks.
+- Approved minimum dependency security updates are included; verification results are reported separately.
+- No application feature scope or hosted database schema was changed. See [CI operations](CI.md).

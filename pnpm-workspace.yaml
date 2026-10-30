@@ -5,3 +5,9 @@ allowBuilds:
   unrs-resolver: true
 
 confirmModulesPurge: false
+
+# Minimum security patches; remove each override when parent ranges resolve safely.
+overrides:
+  "vite@>=8.3.0 <8.3.3": 8.3.3
+  "undici@>=8.0.0 <8.12.2": 8.12.2
+  "source-map-js@>=1.0.0 <1.2.2": 1.2.2

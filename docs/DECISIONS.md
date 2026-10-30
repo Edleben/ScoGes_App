@@ -38,3 +38,11 @@ cookie is revalidated against the user's active membership before use.
 Nodemailer supplies SMTP transport missing from the existing stack; it is isolated
 under infrastructure, requires TLS and uses bounded timeouts. No new email vendor,
 queue, service-role application access or later-sprint domain is introduced.
+
+## ADR-0006: Isolated required CI validation
+
+Decision: run push, PR and merge-queue checks with an aggregate required gate, read-only GitHub permissions, disposable local Supabase and TLS SMTP fixtures, and no production secrets. Require successful validation and a PR before updating main.
+
+Checks cover application code, migration order, tenant isolation and browser authentication. Upload only safe reports; keep auth traces and raw reports private to the disposable runner. Formatting applies to changed files to avoid unrelated canonical-document rewrites.
+
+Minimum security versions: Next.js/eslint-config-next 16.4.1 and Zod 4.6.6. Targeted pnpm overrides patch vulnerable transitive Vite, Undici and source-map-js versions; remove them when upstream resolutions are safe. These are security maintenance within Sprint 0, not a new product feature.
