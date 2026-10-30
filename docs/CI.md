@@ -8,7 +8,7 @@ CI runs for every branch push, pull requests targeting `main`, merge-queue candi
 - **Isolated integration and browser tests:** disposable local Supabase, every migration applied from scratch, public Auth/schema connectivity, authenticated TLS SMTP verification, transactional database constraints/RLS/negative authorization tests, and the complete Chromium suite against a production build.
 - **Required validation:** succeeds only when both jobs succeed. Missing configuration, skipped/flaky browser tests, failed migrations, and cancelled dependencies cannot produce a green gate.
 
-Configure `main` branch protection to require **Required validation**, an up-to-date branch, and a pull request, including for administrators. Workflow YAML alone cannot enforce merge restrictions. Merge queues are supported through `merge_group`.
+`main` branch protection is configured to require **Required validation** from the GitHub Actions app, an up-to-date branch, and a pull request, including for administrators. Force pushes and deletion are disabled. No additional reviewer is required (zero approvals), so the owner can merge a validated PR. Workflow YAML alone cannot enforce these restrictions; the repository settings were applied and read back through GitHub's API on 2026-10-30. Merge queues are supported through `merge_group`.
 
 ## Isolation and credentials
 
