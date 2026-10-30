@@ -66,6 +66,17 @@ Recommended repository structure:
 
 If file names differ, locate the equivalent document instead of assuming it is missing.
 
+Operational restart documents for every coding agent:
+
+- [Documentation map](docs/README.md)
+- [Shared AI handoff](docs/AI_HANDOFF.md)
+- [Project tracker](docs/PROJECT_TRACKER.md)
+- [Executed Sprint 0 validation](docs/SPRINT_0_VALIDATION.md)
+
+Read these after the governing requirements and before implementation. They are dated operational evidence, not authorization to start a later sprint or deploy. Claude and Antigravity entry files point to this same instruction set.
+
+Repository delivery policy: use `edwakson/ScoGes_App` for changes unless the owner explicitly changes the branch policy. Update `main` only through a PR after required tests/validations succeed; never push directly or force-push main. Preserve uncommitted work and recheck remote state before continuing a handoff.
+
 ### Source roles
 
 - **Cahier des charges / Product Specification**  

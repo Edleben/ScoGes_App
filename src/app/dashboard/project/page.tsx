@@ -1,9 +1,16 @@
-import { Activity, CheckCircle2, CircleDashed, ListChecks, TimerReset } from "lucide-react";
+import {
+  Activity,
+  CheckCircle2,
+  CircleDashed,
+  ListChecks,
+  TimerReset,
+} from "lucide-react";
 import {
   getProjectTrackerSummary,
   getStatusClassName,
   getStatusLabel,
   sprintTrackers,
+  trackerCheckpoint,
   type SprintTracker,
 } from "@/modules/project-tracker/tracker-data";
 import { cn } from "@/lib/utils";
@@ -18,7 +25,10 @@ function ProgressBar({ value }: { value: number }) {
       className="h-2 w-full overflow-hidden rounded-full bg-slate-200"
       role="progressbar"
     >
-      <div className="h-full rounded-full bg-[var(--primary)]" style={{ width: `${value}%` }} />
+      <div
+        className="h-full rounded-full bg-[var(--primary)]"
+        style={{ width: `${value}%` }}
+      />
     </div>
   );
 }
@@ -43,7 +53,9 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
         </span>
       </div>
 
-      <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{sprint.summary}</p>
+      <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+        {sprint.summary}
+      </p>
 
       <div className="mt-5 grid gap-2">
         <div className="flex items-center justify-between text-sm font-semibold">
@@ -55,11 +67,16 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
 
       <div className="mt-5 grid gap-3">
         {sprint.features.map((feature) => (
-          <div className="rounded-md border border-[var(--border)] p-3" key={feature.id}>
+          <div
+            className="rounded-md border border-[var(--border)] p-3"
+            key={feature.id}
+          >
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
                 <h3 className="font-semibold">{feature.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{feature.description}</p>
+                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  {feature.description}
+                </p>
               </div>
               <span
                 className={cn(
@@ -72,7 +89,9 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
             </div>
             <div className="mt-3 flex items-center gap-3">
               <ProgressBar value={feature.progress} />
-              <span className="w-12 text-right text-sm font-bold">{feature.progress}%</span>
+              <span className="w-12 text-right text-sm font-bold">
+                {feature.progress}%
+              </span>
             </div>
             <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
               Domaine: {feature.ownerArea}
@@ -86,6 +105,13 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
 
 export default function ProjectTrackerPage() {
   const summary = getProjectTrackerSummary();
+  const sprint0 = sprintTrackers[0];
+  const completed = sprint0.features.filter(
+    (feature) => feature.status === "done",
+  ).length;
+  const remaining = sprint0.features.filter(
+    (feature) => feature.status !== "done",
+  );
 
   return (
     <section>
@@ -93,12 +119,56 @@ export default function ProjectTrackerPage() {
         <p className="text-sm font-semibold uppercase tracking-wide text-[var(--accent)]">
           Monitoring projet
         </p>
-        <h1 className="mt-2 text-3xl font-bold">Tracker des sprints et features</h1>
+        <h1 className="mt-2 text-3xl font-bold">
+          Tracker des sprints et features
+        </h1>
         <p className="mt-2 max-w-3xl text-[var(--muted)]">
-          Tableau de pilotage pour suivre ce qui est livre, ce qui reste a faire, et la progression
-          quantitative de chaque sprint sans demarrer les travaux des sprints suivants.
+          Tableau de pilotage pour suivre ce qui est livre, ce qui reste a
+          faire, et la progression quantitative de chaque sprint sans demarrer
+          les travaux des sprints suivants.
         </p>
       </div>
+
+      <section
+        aria-labelledby="sprint0-checkpoint-title"
+        className="mb-6 rounded-md border border-[var(--border)] bg-white p-5"
+      >
+        <h2 id="sprint0-checkpoint-title" className="text-xl font-bold">
+          État de validation — Sprint 0
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          Point daté du{" "}
+          <time dateTime={trackerCheckpoint.validatedOn}>
+            {trackerCheckpoint.validatedOn}
+          </time>
+          . Checklist manuelle de livraison; la validation finale du sprint
+          reste ouverte.
+        </p>
+        <p className="mt-3 font-semibold">
+          {completed} jalons livrés sur {sprint0.features.length}
+        </p>
+        <p className="mt-1 text-sm">
+          {sprint0.progress}% : moyenne non pondérée des jalons. Les tests
+          réussis ne valident pas les parcours encore ouverts.
+        </p>
+        <h3 className="mt-4 font-semibold">Prochaines actions de Sprint 0</h3>
+        <ul className="mt-2 list-disc space-y-2 pl-5">
+          {remaining.map((feature) => (
+            <li key={feature.id}>
+              <span className="font-medium">{feature.title}</span> —{" "}
+              {feature.description}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 flex flex-wrap gap-4 text-sm underline">
+          <a href={trackerCheckpoint.validationPr}>
+            Validation des parcours (PR #3)
+          </a>
+          <a href={trackerCheckpoint.validationRun}>
+            Résultats CI du point de validation
+          </a>
+        </div>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
@@ -125,9 +195,14 @@ export default function ProjectTrackerPage() {
         ].map((metric) => {
           const Icon = metric.icon;
           return (
-            <article className="rounded-md border border-[var(--border)] bg-white p-5" key={metric.label}>
+            <article
+              className="rounded-md border border-[var(--border)] bg-white p-5"
+              key={metric.label}
+            >
               <Icon aria-hidden className="text-[var(--primary)]" size={22} />
-              <p className="mt-4 text-sm font-semibold text-[var(--muted)]">{metric.label}</p>
+              <p className="mt-4 text-sm font-semibold text-[var(--muted)]">
+                {metric.label}
+              </p>
               <p className="mt-1 text-3xl font-bold">{metric.value}</p>
             </article>
           );
@@ -140,8 +215,10 @@ export default function ProjectTrackerPage() {
           <div>
             <h2 className="font-bold">Lecture du tracker</h2>
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Les pourcentages representent l&apos;avancement fonctionnel planifie dans ce repository.
-              Ils doivent etre mis a jour a chaque livraison verifiee.
+              Les pourcentages suivent une checklist manuelle de jalons
+              techniques. Ils ne mesurent ni la couverture de tests ni une
+              aptitude à la production. Les détails ouverts restent visibles et
+              doivent être réévalués après chaque livraison vérifiée.
             </p>
           </div>
         </div>

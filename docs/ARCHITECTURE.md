@@ -23,7 +23,9 @@ Sprint 0 includes active implementation for:
 
 - `identity`: auth actions, invitations, permission helpers.
 - `tenants`: onboarding and tenant settings validation.
-- `audit`: audit event metadata handling.
+- `administration`: permission-checked member role/status and settings orchestration, validation and safe FR/EN responses.
+- `audit`: metadata handling and transactional database events.
+- `project-tracker`: manual milestones and reviewed evidence, checked against the Markdown tracker.
 
 Future domain folders should remain separate for `academics`, `people`, `billing`, `payments`, `collections`, `communications`, `reporting`, and `saas-billing`.
 
@@ -37,3 +39,9 @@ Authentication lifecycle routes and the session-refresh proxy are documented in
 [Authentication lifecycle](AUTHENTICATION.md). Invitation email uses an `EmailProvider`
 interface with a bounded, TLS-required SMTP adapter under `src/lib/email`. SMTP calls
 run outside database transactions; invitation issuance and acceptance use narrow RPCs.
+
+## Administration and status boundaries
+
+Administrative writes resolve the active owned membership server-side, then call narrow RPCs that recheck database permissions and tenant ownership. Tenant locks serialize authorization changes and invitation acceptance; monotonic revisions reject stale writes and audit insertion is atomic with each mutation. See [Administration](ADMINISTRATION.md).
+
+The tracker is engineering status data, not tenant financial analytics or runtime observability. `tracker-data.ts` powers the UI; a unit invariant compares it with [PROJECT_TRACKER.md](PROJECT_TRACKER.md). The [shared handoff](AI_HANDOFF.md) maps modules and verification steps for all coding agents.

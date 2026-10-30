@@ -8,7 +8,7 @@ Tenant isolation is enforced in layers:
 - `memberships` links users to tenants.
 - Role permissions are checked server-side before sensitive actions.
 - Tenant-scoped RLS policies restrict table reads.
-- RPC functions verify `auth.uid()` against the provided actor before writing.
+- RPC functions check `auth.uid()` and live permissions before writing; legacy actor parameters must match the authenticated principal.
 
 Client-provided `tenant_id`, role, permission, amount, or status values are never authoritative.
 
@@ -30,7 +30,7 @@ Application helpers in `src/modules/identity/authorization.ts` provide reusable 
 
 ## Audit
 
-Sprint 0 audit events cover tenant creation and member invitation. The audit metadata helper strips common secret-bearing fields.
+Sprint 0 audit events cover tenant creation, invitation issuance/delivery/acceptance, role assignment/change, settings updates and membership deactivation/revocation. Administrative events and their mutations share a transaction with safe before/after metadata and generated request IDs. The application metadata helper strips common secret-bearing fields; RPCs construct their metadata explicitly.
 
 ## Secrets
 
@@ -38,7 +38,7 @@ Only `.env.example` is committed. Real `.env` and `.env.local` files are ignored
 
 ## Known Limitations
 
-The foundation and membership self-read migrations were applied to the configured database on 2026-10-28. Other environments must apply them independently. Production backup, restore drills, CSP hardening, rate limiting implementation, and storage policies must be completed before pilot production.
+The four-migration chain in [DATA_MODEL.md](DATA_MODEL.md) was verified applied to the configured hosted project on 2026-10-30. Other environments must apply the reviewed chain independently. Production backup, restore drills, CSP hardening, rate limiting implementation, and storage policies must be completed before pilot production.
 
 ## Membership Self-Resolution
 
@@ -68,3 +68,7 @@ Role/status/settings mutations now use permission-checked RPC transactions with 
 ## Sprint 0 validation follow-up
 
 Onboarding no longer returns raw database/transport errors. Duplicate slugs receive safe localized feedback; other failures use the generic service-unavailable response, and malformed RPC results cannot produce a success redirect. Unit/component tests exercise provider failures without disrupting hosted services. See [Validation evidence](SPRINT_0_VALIDATION.md) for coverage limits and outstanding security/deployment debt.
+
+## Evidence and handoff limits
+
+The [validation report](SPRINT_0_VALIDATION.md) separates actual SQL/browser verification from mocked provider failures and unverified email receipt. The existing `public.touch_updated_at` search-path warning and two moderate development dependency advisories remain dated known debt; recheck before remediation. Preserve TLS, RLS, server permissions, audit rollback, last-admin protection and CI checks during any agent handoff. See [AI_HANDOFF.md](AI_HANDOFF.md).

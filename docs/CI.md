@@ -5,7 +5,7 @@ CI runs for every branch push, pull requests targeting `main`, merge-queue candi
 ## Required checks
 
 - **Quality and security:** frozen-lockfile install, workflow/shell validation, changed-file formatting, ESLint, generated Next.js route types and TypeScript, CI safety tests, all Vitest tests, production build, high/critical dependency audit (runtime and development tooling), and redacted Git-history secret scanning.
-- **Isolated integration and browser tests:** disposable local Supabase, every migration applied from scratch, public Auth/schema connectivity, authenticated TLS SMTP verification, transactional database constraints/RLS/negative authorization tests, and the complete Chromium suite against a production build.
+- **Isolated integration and browser tests:** disposable local Supabase, every migration applied from scratch, public Auth/schema connectivity, authenticated TLS SMTP verification, local security advisors, transactional database constraints/RLS/negative authorization and audit rollback tests, isolated multi-connection administrator-removal races, and the complete Chromium suite against a production build.
 - **Required validation:** succeeds only when both jobs succeed. Missing configuration, skipped/flaky browser tests, failed migrations, and cancelled dependencies cannot produce a green gate.
 
 `main` branch protection is configured to require **Required validation** from the GitHub Actions app, an up-to-date branch, and a pull request, including for administrators. Force pushes and deletion are disabled. No additional reviewer is required (zero approvals), so the owner can merge a validated PR. Workflow YAML alone cannot enforce these restrictions; the repository settings were applied and read back through GitHub's API on 2026-10-30. Merge queues are supported through `merge_group`.
@@ -29,3 +29,7 @@ Formatting is a ratchet over changed files (`pnpm format:changed`), excluding ge
 Local verification: `pnpm lint`, `pnpm exec next typegen`, `pnpm typecheck`, `pnpm test:ci-tools`, `pnpm test`, `pnpm build`, and `pnpm format:changed`. Full isolated integration requires Docker and is validated on GitHub's Linux runner. Dependency/service download outages fail visibly rather than silently skipping checks.
 
 At implementation, the audit has zero critical/high findings and two moderate `@vitest/mocker` advisories (patched in 5.0.3). The configured blocking threshold is high; moderate findings remain visible in the audit artifact and require follow-up.
+
+## Tracker/documentation maintenance
+
+The unit suite compares Markdown tracker rows with every UI sprint/milestone ID, status and progress value. This guards record consistency, not business-feature completion. New snapshot counts must come from an actual run; the reviewed PR #3 baseline remains 68 unit tests, 4 safety tests and 15 browser tests, while later consistency checks can increase totals. See [PROJECT_TRACKER.md](PROJECT_TRACKER.md), [validation evidence](SPRINT_0_VALIDATION.md) and [handoff](AI_HANDOFF.md).

@@ -19,6 +19,14 @@ export type SprintTracker = {
   features: ProjectFeature[];
 };
 
+// A dated repository checkpoint; refresh only from reviewed, executed evidence.
+export const trackerCheckpoint = {
+  validatedOn: "2026-10-30",
+  validationPr: "https://github.com/Edleben/ScoGes_App/pull/3",
+  validationRun:
+    "https://github.com/Edleben/ScoGes_App/actions/runs/41133779878",
+} as const;
+
 export const sprintTrackers: SprintTracker[] = [
   {
     id: "sprint-0",

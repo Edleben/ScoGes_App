@@ -30,3 +30,7 @@ Deployment confirmed on 2026-10-30 after PR #2 was merged: the migration was app
 - Browser tests exercise role changes, read-only permissions, deactivation/revocation, continued access to another tenant, settings persistence, audit history and last-admin errors. Existing authentication/invitation tests remain in the suite. These browser tests require the migration. Both isolated CI and the migrated hosted development project have been exercised.
 
 No Sprint 1 or financial-domain functionality is introduced.
+
+## Cross-agent continuation
+
+[PROJECT_TRACKER.md](PROJECT_TRACKER.md) records delivered administration milestones and remaining Sprint 0 acceptance work. [AI_HANDOFF.md](AI_HANDOFF.md) identifies the deployed migrations, test boundaries and invariants for Claude, Codex and Antigravity. This handoff adds no administrative capability, schema migration or financial behavior.
