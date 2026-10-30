@@ -64,3 +64,7 @@ remain external configuration requirements; unverified delivery is not reported 
 ## Administration writes
 
 Role/status/settings mutations now use permission-checked RPC transactions with tenant-row serialization, last-active-administrator protection, stale revision checks and atomic audit writes. Invitation acceptance shares the authorization lock. Revocation removes tenant access through live membership/RLS checks while preserving other memberships. See [Administration](ADMINISTRATION.md).
+
+## Sprint 0 validation follow-up
+
+Onboarding no longer returns raw database/transport errors. Duplicate slugs receive safe localized feedback; other failures use the generic service-unavailable response, and malformed RPC results cannot produce a success redirect. Unit/component tests exercise provider failures without disrupting hosted services. See [Validation evidence](SPRINT_0_VALIDATION.md) for coverage limits and outstanding security/deployment debt.

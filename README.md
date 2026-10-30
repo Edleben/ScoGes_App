@@ -50,3 +50,7 @@ This repository currently implements Sprint 0 only: platform foundation, auth sc
 CI events, required checks, isolation, artifacts, and merge protection are documented in [Continuous integration](docs/CI.md).
 
 Sprint 0 membership/settings controls and the reviewed migration deployment step are documented in [Administration](docs/ADMINISTRATION.md).
+
+## Sprint 0 validation status
+
+Foundation and administration checks are recorded in [Sprint 0 validation](docs/SPRINT_0_VALIDATION.md). Sprint 0 remains in progress: full UI translation and end-to-end email-link/receipt verification are still pending. The tracker reflects these acceptance gaps; Sprint 1 is not started.

@@ -129,3 +129,7 @@ tests are not evidence that these external integrations work.
 
 Rollback is by a new corrective migration, never by rewriting applied history.
 Previously issued links cannot be recovered from stored digests; reissue them.
+
+## Current validation snapshot
+
+The dated 8-test result above is historical. Administration deployment and the expanded authenticated onboarding, bilingual and failure-state coverage are recorded in [Sprint 0 validation](SPRINT_0_VALIDATION.md). Real confirmation/recovery email-link exchange and recipient inbox receipt remain distinct, unverified acceptance checks.

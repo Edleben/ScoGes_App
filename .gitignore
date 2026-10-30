@@ -9,3 +9,5 @@ dist/
 *.tsbuildinfo
 supabase/.temp/
 reports/
+
+.pnpm-store/

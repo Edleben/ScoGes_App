@@ -80,3 +80,11 @@ Added a Sprint monitoring dashboard for management and delivery tracking:
 - Added an append-only migration with transactional audit writes, last-admin protection, tenant locking, stale revisions and invitation acceptance serialization.
 - Added schema/action tests, negative SQL authorization and audit rollback assertions, CI-only concurrency fixtures, and administration browser journeys.
 - Hosted database migration remains a reviewed deployment step; local SQL verification rolls back all changes. See [Administration operations](ADMINISTRATION.md).
+
+## 2026-10-30 Administration deployment and Sprint 0 validation
+
+- After PR #2 was reviewed/merged, applied migration 20261030185852 once to the configured hosted project with verified TLS and Supabase migration history. Existing record counts were unchanged; SQL tests and all then-current 10 browser tests passed and test fixtures were cleaned up.
+- Added real browser onboarding (including invalid/duplicate input), French/English administration validation, stale browser writes, and localized invalid-credential checks. Added component tests for safe unavailable/denied responses.
+- Corrected onboarding's raw database-error exposure with localized safe errors, a duplicate-slug message and validated RPC result identifiers. Successful creation/actor/redirect behavior is preserved.
+- Reconciled the tracker: four delivered milestones plus two planned acceptance items yield 67%; Sprint 0 remains in progress. Full translations and real email-link/receipt validation remain unverified. No later sprint was started.
+- See [Sprint 0 validation evidence](SPRINT_0_VALIDATION.md) for executed checks, failures/debt, environment limits and final browser/CI results.

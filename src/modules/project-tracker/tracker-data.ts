@@ -24,15 +24,16 @@ export const sprintTrackers: SprintTracker[] = [
     id: "sprint-0",
     label: "Sprint 0",
     objective: "Fondations plateforme",
-    status: "done",
-    progress: 100,
+    status: "in_progress",
+    progress: 67,
     summary:
-      "Base Next.js, Supabase, auth, tenant model, RBAC, audit baseline, shell UI, tests et CI.",
+      "Fondations et administration validées. La traduction complète et les parcours e-mail restent à valider; Sprint 1 non démarré.",
     features: [
       {
         id: "workspace-quality",
         title: "Workspace et qualite",
-        description: "Next.js 16, TypeScript strict, pnpm, lint, tests, build et CI.",
+        description:
+          "Next.js 16, TypeScript strict, pnpm, lint, tests, build et CI.",
         status: "done",
         progress: 100,
         ownerArea: "Engineering",
@@ -40,7 +41,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "tenant-rbac",
         title: "Tenant, membership et RBAC",
-        description: "Tables fondation, roles, permissions, helpers serveur et RLS.",
+        description:
+          "Tables fondation, roles, permissions, helpers serveur et RLS.",
         status: "done",
         progress: 100,
         ownerArea: "Security",
@@ -48,7 +50,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "onboarding-audit",
         title: "Onboarding et audit",
-        description: "Creation institutionnelle, role tenant admin et evenements critiques.",
+        description:
+          "Onboarding navigateur, rôles, désactivation/révocation et audit transactionnel vérifiés.",
         status: "done",
         progress: 100,
         ownerArea: "Platform",
@@ -56,10 +59,29 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "foundation-ui",
         title: "Shell UI administration",
-        description: "Routes initiales, navigation, pages settings/users et smoke E2E.",
+        description:
+          "Shell français; authentification et administration vérifiées en français/anglais.",
         status: "done",
         progress: 100,
         ownerArea: "Product UI",
+      },
+      {
+        id: "bilingual-completion",
+        title: "Compléter la traduction de la fondation",
+        description:
+          "Onboarding, shell, tableau de bord et erreurs globales restent français; les liens du shell ne préservent pas la langue.",
+        status: "planned",
+        progress: 0,
+        ownerArea: "Product UI",
+      },
+      {
+        id: "email-lifecycle-validation",
+        title: "Valider les parcours e-mail de bout en bout",
+        description:
+          "La connexion SMTP est vérifiée. Les liens de confirmation/récupération et la réception effective des invitations restent à valider.",
+        status: "planned",
+        progress: 0,
+        ownerArea: "Identity / UAT",
       },
     ],
   },
@@ -75,7 +97,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "academic-references",
         title: "References academiques",
-        description: "Annees, programmes, niveaux, classes et statuts configurables.",
+        description:
+          "Annees, programmes, niveaux, classes et statuts configurables.",
         status: "planned",
         progress: 0,
         ownerArea: "Academics",
@@ -83,7 +106,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "students-guardians",
         title: "Eleves et responsables",
-        description: "CRUD tenant-safe, liens famille-eleve et recherche admin.",
+        description:
+          "CRUD tenant-safe, liens famille-eleve et recherche admin.",
         status: "planned",
         progress: 0,
         ownerArea: "People",
@@ -99,7 +123,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "imports",
         title: "Imports CSV/XLSX",
-        description: "Validation, dry-run, erreurs ligne par ligne et recapitulatif.",
+        description:
+          "Validation, dry-run, erreurs ligne par ligne et recapitulatif.",
         status: "planned",
         progress: 0,
         ownerArea: "Operations",
@@ -118,7 +143,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "fee-configuration",
         title: "Configuration des frais",
-        description: "Frais par annee, programme, niveau, classe, categorie ou eleve.",
+        description:
+          "Frais par annee, programme, niveau, classe, categorie ou eleve.",
         status: "planned",
         progress: 0,
         ownerArea: "Billing",
@@ -126,7 +152,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "invoices",
         title: "Factures",
-        description: "Brouillons, emission, statuts, lignes et calculs de soldes derivables.",
+        description:
+          "Brouillons, emission, statuts, lignes et calculs de soldes derivables.",
         status: "planned",
         progress: 0,
         ownerArea: "Billing",
@@ -134,7 +161,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "installments",
         title: "Echeanciers",
-        description: "Montants, dates dues, statuts et regles de paiement partiel.",
+        description:
+          "Montants, dates dues, statuts et regles de paiement partiel.",
         status: "planned",
         progress: 0,
         ownerArea: "Billing",
@@ -153,7 +181,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "payment-abstraction",
         title: "Abstraction paiement",
-        description: "Interfaces provider-portable pour offline, online et mobile money futur.",
+        description:
+          "Interfaces provider-portable pour offline, online et mobile money futur.",
         status: "planned",
         progress: 0,
         ownerArea: "Payments",
@@ -161,7 +190,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "allocations-reconciliation",
         title: "Allocations et rapprochement",
-        description: "Paiements partiels, doublons, exceptions et transactions reconciliables.",
+        description:
+          "Paiements partiels, doublons, exceptions et transactions reconciliables.",
         status: "planned",
         progress: 0,
         ownerArea: "Finance",
@@ -169,7 +199,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "receipts-webhooks",
         title: "Recus et webhooks",
-        description: "Generation de recus bilingues et traitement idempotent des webhooks.",
+        description:
+          "Generation de recus bilingues et traitement idempotent des webhooks.",
         status: "planned",
         progress: 0,
         ownerArea: "Payments",
@@ -196,7 +227,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "reminders",
         title: "Relances automatisees",
-        description: "Evenements, anti-doublons, email/SMS et templates bilingues.",
+        description:
+          "Evenements, anti-doublons, email/SMS et templates bilingues.",
         status: "planned",
         progress: 0,
         ownerArea: "Communications",
@@ -215,7 +247,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "reports",
         title: "Rapports",
-        description: "Encaissement, impayes, canaux, classes, exceptions et filtres.",
+        description:
+          "Encaissement, impayes, canaux, classes, exceptions et filtres.",
         status: "planned",
         progress: 0,
         ownerArea: "Reporting",
@@ -231,7 +264,8 @@ export const sprintTrackers: SprintTracker[] = [
       {
         id: "advanced-admin",
         title: "Administration avancee",
-        description: "Permissions fines, audit enrichi et operations support autorisees.",
+        description:
+          "Permissions fines, audit enrichi et operations support autorisees.",
         status: "planned",
         progress: 0,
         ownerArea: "Administration",
@@ -242,14 +276,25 @@ export const sprintTrackers: SprintTracker[] = [
 
 export function getProjectTrackerSummary() {
   const features = sprintTrackers.flatMap((sprint) => sprint.features);
-  const doneFeatures = features.filter((feature) => feature.status === "done").length;
-  const inProgressFeatures = features.filter((feature) => feature.status === "in_progress").length;
-  const plannedFeatures = features.filter((feature) => feature.status === "planned").length;
-  const blockedFeatures = features.filter((feature) => feature.status === "blocked").length;
+  const doneFeatures = features.filter(
+    (feature) => feature.status === "done",
+  ).length;
+  const inProgressFeatures = features.filter(
+    (feature) => feature.status === "in_progress",
+  ).length;
+  const plannedFeatures = features.filter(
+    (feature) => feature.status === "planned",
+  ).length;
+  const blockedFeatures = features.filter(
+    (feature) => feature.status === "blocked",
+  ).length;
   const progress =
     features.length === 0
       ? 0
-      : Math.round(features.reduce((total, feature) => total + feature.progress, 0) / features.length);
+      : Math.round(
+          features.reduce((total, feature) => total + feature.progress, 0) /
+            features.length,
+        );
 
   return {
     totalSprints: sprintTrackers.length,

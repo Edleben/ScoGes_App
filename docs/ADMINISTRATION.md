@@ -20,13 +20,13 @@ Each successful mutation writes one audit row in the same transaction: `member.r
 
 The migration also permits authorized `users.read` identities to identify revoked members. Self-profile access is unchanged; revoked identities gain no tenant directory or settings access.
 
-Apply through the normal reviewed migration process after validating the PR. This implementation does not install the migration permanently on the hosted `.env.local` project. An old hosted schema cannot use the new controls until that deployment step. PostgreSQL rollback of the migration requires a reviewed forward migration restoring prior RPC/trigger/policy definitions; do not reset the database or rewrite migration history.
+Deployment confirmed on 2026-10-30 after PR #2 was merged: the migration was applied once to the hosted project configured in `.env.local`, with verified TLS and Supabase migration history. Existing user/business record counts were unchanged; SQL regressions and all 10 then-current browser tests passed, with synthetic fixtures cleaned up. New environments still need this migration through the reviewed deployment process. PostgreSQL rollback of the migration requires a reviewed forward migration restoring prior RPC/trigger/policy definitions; do not reset the database or rewrite migration history.
 
 ## Verification
 
 - Unit tests: form schemas, permissions, forged/stale context, safe errors, normalized settings and honest no-op responses.
 - `pnpm test:db`: transactional SQL assertions under real database roles, including tenant crossover, active low-privilege and anonymous access, last-admin guards, fresh revisions, audit attribution, no-op behavior, audit-insertion failure rollback, and revoked-session access denial. Fixtures and temporary DDL roll back on hosted development tests.
 - Isolated CI runs local Supabase security advisors, failing on error-level issues. It also races two administrator removals/demotions using separate database connections. Committed synthetic race fixtures are allowed only with explicit loopback CI configuration and cleaned by exact IDs.
-- Browser tests exercise role changes, read-only permissions, deactivation/revocation, continued access to another tenant, settings persistence, audit history and last-admin errors. Existing authentication/invitation tests remain in the suite. These new browser tests require the migration, so use isolated CI until the hosted migration is deployed.
+- Browser tests exercise role changes, read-only permissions, deactivation/revocation, continued access to another tenant, settings persistence, audit history and last-admin errors. Existing authentication/invitation tests remain in the suite. These browser tests require the migration. Both isolated CI and the migrated hosted development project have been exercised.
 
 No Sprint 1 or financial-domain functionality is introduced.
