@@ -30,6 +30,15 @@ const fr = {
     "Adresse e-mail ou mot de passe incorrect, ou compte non confirmé.",
   unavailable:
     "Le service est temporairement indisponible. Réessayez plus tard.",
+  emailRateLimited:
+    "La limite d’envoi des e-mails a été atteinte. Patientez avant de réessayer. Si le problème persiste, contactez l’administrateur.",
+  rateLimited:
+    "Trop de demandes ont été effectuées. Patientez avant de réessayer.",
+  emailUnavailable:
+    "L’envoi de l’e-mail de confirmation est indisponible. Contactez l’administrateur.",
+  signupUnavailable:
+    "La création de comptes est actuellement désactivée. Contactez l’administrateur.",
+  passwordRejected: "Choisissez un mot de passe plus robuste, puis réessayez.",
   checkEmail:
     "Si la demande peut être traitée, un e-mail vous indiquera la marche à suivre. Vérifiez aussi vos courriers indésirables.",
   invalidLink:
@@ -82,6 +91,14 @@ const en: Record<AuthMessageKey, string> = {
   credentials: "Incorrect email or password, or unconfirmed account.",
   unavailable:
     "The service is temporarily unavailable. Please try again later.",
+  emailRateLimited:
+    "The email sending limit has been reached. Wait before trying again. If the problem persists, contact the administrator.",
+  rateLimited: "Too many requests have been made. Wait before trying again.",
+  emailUnavailable:
+    "The confirmation email cannot be sent. Contact the administrator.",
+  signupUnavailable:
+    "Account creation is currently disabled. Contact the administrator.",
+  passwordRejected: "Choose a stronger password, then try again.",
   checkEmail:
     "If the request can be processed, an email will explain the next steps. Check your spam folder too.",
   invalidLink:

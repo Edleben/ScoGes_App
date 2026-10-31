@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { createClient } from "@supabase/supabase-js";
 import { existsSync, readFileSync } from "node:fs";
 import { parseEnv } from "node:util";
@@ -100,6 +100,79 @@ test.describe("live authentication lifecycle", () => {
       if ((await admin().auth.admin.deleteUser(id)).error)
         throw new Error("Test account cleanup failed.");
   });
+
+  // Success must use disposable local Auth: never send signup mail to hosted services in CI.
+  if (env.CI_ENFORCE_INTEGRATION === "1") {
+    if (
+      !["127.0.0.1", "localhost", "[::1]"].includes(
+        new URL(env.NEXT_PUBLIC_SUPABASE_URL!).hostname,
+      )
+    )
+      throw new Error(
+        "Signup success fixtures require isolated loopback Auth.",
+      );
+    for (const locale of ["fr", "en"] as const) {
+      test(`real isolated ${locale} signup creates an unconfirmed account`, async ({
+        page,
+      }) => {
+        const email = `edxstore-signup-${randomUUID()}@example.invalid`;
+        const password = env.CI_TEST_PASSWORD!;
+        let created = false,
+          confirmationRequired = false;
+        try {
+          await page.goto(`/signup?locale=${locale}`);
+          await page
+            .getByLabel(locale === "fr" ? "Adresse e-mail" : "Email address")
+            .fill(email);
+          await page
+            .getByLabel(locale === "fr" ? "Mot de passe" : "Password", {
+              exact: true,
+            })
+            .fill(password);
+          await page
+            .getByLabel(
+              locale === "fr"
+                ? "Confirmer le mot de passe"
+                : "Confirm password",
+              { exact: true },
+            )
+            .fill(password);
+          await page
+            .getByRole("button", {
+              name: locale === "fr" ? "Continuer" : "Continue",
+              exact: true,
+            })
+            .click();
+          await expect(page.getByRole("status")).toContainText(
+            locale === "fr"
+              ? "Si la demande peut être traitée"
+              : "If the request can be processed",
+          );
+          await expect(page.locator("html")).toHaveAttribute("lang", locale);
+        } finally {
+          const result = await admin().auth.admin.listUsers({
+            page: 1,
+            perPage: 1000,
+          });
+          if (result.error)
+            throw new Error("Isolated signup fixture discovery failed.");
+          const user = result.data.users.find((user) => user.email === email);
+          if (user) {
+            users.push(user.id);
+            created = true;
+            confirmationRequired = !user.email_confirmed_at;
+          }
+        }
+        expect(created, "Signup must create an actual isolated account").toBe(
+          true,
+        );
+        expect(
+          confirmationRequired,
+          "Signup must retain email confirmation",
+        ).toBe(true);
+      });
+    }
+  }
   test("sign in, protected dashboard, sign out and access denial", async ({
     page,
   }) => {

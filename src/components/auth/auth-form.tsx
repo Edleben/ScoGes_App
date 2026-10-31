@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useSyncExternalStore } from "react";
+import { useActionState, useState, useSyncExternalStore } from "react";
 import type { Route } from "next";
 import {
   signInAction,
@@ -43,6 +43,7 @@ export function AuthForm({
   next?: string;
 }) {
   const [state, action, pending] = useActionState(actions[mode], { ok: false });
+  const [email, setEmail] = useState("");
   const token = useSyncExternalStore<string | null>(
     subscribe,
     fragmentToken,
@@ -66,6 +67,8 @@ export function AuthForm({
           required
           autoComplete="email"
           maxLength={254}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       )}
       {["login", "signup", "reset"].includes(mode) && (

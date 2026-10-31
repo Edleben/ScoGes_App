@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("authentication pages support French and English", async ({ page }) => {
   await page.goto("/login");

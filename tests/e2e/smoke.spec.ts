@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 for (const locale of ["fr", "en"] as const) {
   test(`public ${locale} landing page preserves language through login`, async ({
     page,
