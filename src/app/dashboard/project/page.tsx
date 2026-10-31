@@ -1,3 +1,7 @@
+import type { Locale } from "@/types/foundation";
+import { foundationText } from "@/i18n/foundation-messages";
+import { getRequestLocale } from "@/i18n/server";
+import { getLocalizedTrackers } from "@/modules/project-tracker/tracker-messages";
 import {
   Activity,
   CheckCircle2,
@@ -9,16 +13,15 @@ import {
   getProjectTrackerSummary,
   getStatusClassName,
   getStatusLabel,
-  sprintTrackers,
   trackerCheckpoint,
   type SprintTracker,
 } from "@/modules/project-tracker/tracker-data";
 import { cn } from "@/lib/utils";
 
-function ProgressBar({ value }: { value: number }) {
+function ProgressBar({ value, locale }: { value: number; locale: Locale }) {
   return (
     <div
-      aria-label={`Progression ${value}%`}
+      aria-label={`${foundationText(locale, "progress")} ${value}%`}
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={value}
@@ -33,7 +36,13 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
-function SprintCard({ sprint }: { sprint: SprintTracker }) {
+function SprintCard({
+  sprint,
+  locale,
+}: {
+  sprint: SprintTracker;
+  locale: Locale;
+}) {
   return (
     <article className="rounded-md border border-[var(--border)] bg-white p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -49,7 +58,7 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
             getStatusClassName(sprint.status),
           )}
         >
-          {getStatusLabel(sprint.status)}
+          {getStatusLabel(sprint.status, locale)}
         </span>
       </div>
 
@@ -59,10 +68,10 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
 
       <div className="mt-5 grid gap-2">
         <div className="flex items-center justify-between text-sm font-semibold">
-          <span>Progression du sprint</span>
+          <span>{foundationText(locale, "sprintProgress")}</span>
           <span>{sprint.progress}%</span>
         </div>
-        <ProgressBar value={sprint.progress} />
+        <ProgressBar locale={locale} value={sprint.progress} />
       </div>
 
       <div className="mt-5 grid gap-3">
@@ -84,17 +93,17 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
                   getStatusClassName(feature.status),
                 )}
               >
-                {getStatusLabel(feature.status)}
+                {getStatusLabel(feature.status, locale)}
               </span>
             </div>
             <div className="mt-3 flex items-center gap-3">
-              <ProgressBar value={feature.progress} />
+              <ProgressBar locale={locale} value={feature.progress} />
               <span className="w-12 text-right text-sm font-bold">
                 {feature.progress}%
               </span>
             </div>
             <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-              Domaine: {feature.ownerArea}
+              {foundationText(locale, "domain")}: {feature.ownerArea}
             </p>
           </div>
         ))}
@@ -103,7 +112,11 @@ function SprintCard({ sprint }: { sprint: SprintTracker }) {
   );
 }
 
-export default function ProjectTrackerPage() {
+export default async function ProjectTrackerPage() {
+  const locale = await getRequestLocale();
+  const sprintTrackers = getLocalizedTrackers(locale);
+  const text = (key: Parameters<typeof foundationText>[1]) =>
+    foundationText(locale, key);
   const summary = getProjectTrackerSummary();
   const sprint0 = sprintTrackers[0];
   const completed = sprint0.features.filter(
@@ -117,15 +130,11 @@ export default function ProjectTrackerPage() {
     <section>
       <div className="mb-8">
         <p className="text-sm font-semibold uppercase tracking-wide text-[var(--accent)]">
-          Monitoring projet
+          {text("projectMonitoring")}
         </p>
-        <h1 className="mt-2 text-3xl font-bold">
-          Tracker des sprints et features
-        </h1>
+        <h1 className="mt-2 text-3xl font-bold">{text("trackerTitle")}</h1>
         <p className="mt-2 max-w-3xl text-[var(--muted)]">
-          Tableau de pilotage pour suivre ce qui est livre, ce qui reste a
-          faire, et la progression quantitative de chaque sprint sans demarrer
-          les travaux des sprints suivants.
+          {text("trackerIntro")}
         </p>
       </div>
 
@@ -134,61 +143,59 @@ export default function ProjectTrackerPage() {
         className="mb-6 rounded-md border border-[var(--border)] bg-white p-5"
       >
         <h2 id="sprint0-checkpoint-title" className="text-xl font-bold">
-          État de validation — Sprint 0
+          {text("checkpoint")}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          Point daté du{" "}
+          {text("dated")}{" "}
           <time dateTime={trackerCheckpoint.validatedOn}>
             {trackerCheckpoint.validatedOn}
           </time>
-          . Checklist manuelle de livraison; la validation finale du sprint
-          reste ouverte.
+          . {text("manual")}
         </p>
         <p className="mt-3 font-semibold">
-          {completed} jalons livrés sur {sprint0.features.length}
+          {completed} {text("delivered")} {sprint0.features.length}
         </p>
         <p className="mt-1 text-sm">
-          {sprint0.progress}% : moyenne non pondérée des jalons. Les tests
-          réussis ne valident pas les parcours encore ouverts.
+          {sprint0.progress}% : {text("weighted")}
         </p>
-        <h3 className="mt-4 font-semibold">Prochaines actions de Sprint 0</h3>
-        <ul className="mt-2 list-disc space-y-2 pl-5">
-          {remaining.map((feature) => (
-            <li key={feature.id}>
-              <span className="font-medium">{feature.title}</span> —{" "}
-              {feature.description}
-            </li>
-          ))}
-        </ul>
+        <h3 className="mt-4 font-semibold">{text("next")}</h3>
+        {remaining.length === 0 ? (
+          <p className="mt-2 text-sm">{text("reviewPending")}</p>
+        ) : (
+          <ul className="mt-2 list-disc space-y-2 pl-5">
+            {remaining.map((feature) => (
+              <li key={feature.id}>
+                <span className="font-medium">{feature.title}</span> —{" "}
+                {feature.description}
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-4 flex flex-wrap gap-4 text-sm underline">
-          <a href={trackerCheckpoint.validationPr}>
-            Validation des parcours (PR #3)
-          </a>
-          <a href={trackerCheckpoint.validationRun}>
-            Résultats CI du point de validation
-          </a>
+          <a href={trackerCheckpoint.validationPr}>{text("validationPr")}</a>
+          <a href={trackerCheckpoint.validationRun}>{text("validationRun")}</a>
         </div>
       </section>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           {
-            label: "Progression globale",
+            label: text("globalProgress"),
             value: `${summary.progress}%`,
             icon: Activity,
           },
           {
-            label: "Sprints suivis",
+            label: text("sprints"),
             value: String(summary.totalSprints),
             icon: TimerReset,
           },
           {
-            label: "Features terminees",
+            label: text("doneFeatures"),
             value: `${summary.doneFeatures}/${summary.totalFeatures}`,
             icon: CheckCircle2,
           },
           {
-            label: "Features planifiees",
+            label: text("plannedFeatures"),
             value: String(summary.plannedFeatures),
             icon: CircleDashed,
           },
@@ -213,12 +220,9 @@ export default function ProjectTrackerPage() {
         <div className="flex items-center gap-3">
           <ListChecks aria-hidden className="text-[var(--primary)]" size={22} />
           <div>
-            <h2 className="font-bold">Lecture du tracker</h2>
+            <h2 className="font-bold">{text("reading")}</h2>
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Les pourcentages suivent une checklist manuelle de jalons
-              techniques. Ils ne mesurent ni la couverture de tests ni une
-              aptitude à la production. Les détails ouverts restent visibles et
-              doivent être réévalués après chaque livraison vérifiée.
+              {text("readingDescription")}
             </p>
           </div>
         </div>
@@ -226,7 +230,7 @@ export default function ProjectTrackerPage() {
 
       <div className="mt-6 grid gap-5">
         {sprintTrackers.map((sprint) => (
-          <SprintCard key={sprint.id} sprint={sprint} />
+          <SprintCard key={sprint.id} sprint={sprint} locale={locale} />
         ))}
       </div>
     </section>

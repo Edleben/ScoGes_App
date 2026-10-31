@@ -44,4 +44,4 @@ Update `src/modules/project-tracker/tracker-data.ts` and `PROJECT_TRACKER.md` to
 
 ## Next sprint proposal
 
-The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and inactive. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) is not passed; Sprint 0 remains active. Approval and implementation follow the documented gate, rather than the presence of a prompt file.
+The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and inactive. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence, including [hosted email verification](SPRINT_0_EMAIL_VALIDATION.md), and awaits final review/owner acceptance; Sprint 0 remains active. Approval and implementation follow the documented gate, rather than the presence of a prompt file.

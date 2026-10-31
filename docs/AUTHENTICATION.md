@@ -18,8 +18,7 @@
   and response. Server helpers still call `getUser`; RPCs and RLS enforce access.
 
 New forms, validation feedback, invitation email text and language links support
-French and English. Existing untranslated dashboard/onboarding content remains
-separate work; this change does not claim full Sprint 0 completion.
+French and English. Foundation screens and navigation are now bilingual; real hosted email lifecycle validation has passed; Sprint 0 closure awaits final review.
 
 ## Required external configuration
 
@@ -137,3 +136,17 @@ The dated 8-test result above is historical. Administration deployment and the e
 ## Cross-agent continuation
 
 Use [AI_HANDOFF.md](AI_HANDOFF.md) for the current branch, migration/environment boundary and safe runbook. The [tracker](PROJECT_TRACKER.md) keeps email-link/receipt validation open. SMTP credentials or an accepted transport result do not establish actual confirmation/recovery/inbox verification.
+
+## Signup troubleshooting — 2026-10-31
+
+An isolated signup against the configured hosted project returned HTTP 429, `over_email_send_rate_limit`; no account/session was created. Signup is enabled and confirmation remains required. This verifies an Auth email quota failure, not a database migration or locale failure. It does not establish whether the project uses built-in or custom SMTP: inspect Authentication SMTP and email rate-limit settings with project-owner access. The connected Supabase tool could not read this project’s logs, and no Management API token was configured; hosted settings were not changed.
+
+Application SMTP environment variables configure invitation delivery only. Hosted confirmation/recovery delivery is configured separately in Supabase Auth. Configure/verify custom SMTP and review the provider-backed quota there; do not disable confirmation or bypass limits with an administrative key. A quota refresh alone is not proof of reliable production delivery.
+
+Signup now distinguishes email/request throttling, unavailable confirmation delivery, disabled signup and rejected passwords with safe FR/EN messages. Unknown failures remain generic; existing-account responses remain indistinguishable. Structured server warnings contain only an allowlisted category and HTTP status, never raw provider messages, addresses or credentials. Failed submissions retain the entered email in component state; passwords reset and are never echoed or persisted.
+
+The reported root/body hydration warning was not reproduced in clean Chromium on the existing development server in either language (correct HTML language, no extra body attributes, zero hydration warnings). The local development log then identified `data-new-gr-c-s-check-loaded` and `data-gr-ext-installed` in the body hydration diff, identifying Grammarly DOM injection. Turn Grammarly off for localhost and reload; do not add blanket hydration-warning suppression. No raw development logs or personal data are committed. E2E fixtures now fail on hydration warnings and uncaught exceptions while reporting counts only. Positive public-signup tests run only against explicitly isolated loopback Auth in CI and verify a real unconfirmed account, with exact synthetic-account cleanup. They do not close hosted inbox/link acceptance.
+
+## Hosted email verification after owner SMTP setup — 2026-10-31
+
+The owner subsequently configured Supabase Auth SMTP. Real confirmation, recovery and application invitation receipt/link completion passed using unique tagged addresses in the authorized test mailbox, in French and English. Old passwords were rejected after recovery; invitation membership/role and replay rejection were verified. Mail was read through verified-TLS IMAP using EXAMINE/BODY.PEEK, without changing flags or deleting messages. Only exact synthetic fixtures were removed. No existing account password was changed. This supersedes the earlier quota-blocked diagnosis as current state; see [email verification evidence](SPRINT_0_EMAIL_VALIDATION.md).

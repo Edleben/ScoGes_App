@@ -1,6 +1,6 @@
 # EDXSTORE School Management SaaS
 
-French-first Sprint 0 foundation for a secure multi-tenant school-management and school-fee collection SaaS. Authentication and administration have partial English coverage; remaining acceptance work is tracked explicitly.
+French-first Sprint 0 foundation for a secure multi-tenant school-management and school-fee collection SaaS. Foundation journeys support French and English, including onboarding, administration, navigation and safe errors; real hosted email journeys have now passed; Sprint 0 closure awaits final review.
 
 ## Local Setup
 

@@ -1,6 +1,5 @@
 "use client";
-import { useActionState, useSyncExternalStore } from "react";
-import Link from "next/link";
+import { useActionState, useState, useSyncExternalStore } from "react";
 import type { Route } from "next";
 import {
   signInAction,
@@ -44,6 +43,7 @@ export function AuthForm({
   next?: string;
 }) {
   const [state, action, pending] = useActionState(actions[mode], { ok: false });
+  const [email, setEmail] = useState("");
   const token = useSyncExternalStore<string | null>(
     subscribe,
     fragmentToken,
@@ -67,6 +67,8 @@ export function AuthForm({
           required
           autoComplete="email"
           maxLength={254}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       )}
       {["login", "signup", "reset"].includes(mode) && (
@@ -142,22 +144,22 @@ export function AuthLanguageLinks({
   );
   return (
     <>
-      <Link
+      <a
         href={
           `${path}?locale=fr&next=${encodeURIComponent(next)}${hash}` as Route
         }
         lang="fr"
       >
         Français
-      </Link>
-      <Link
+      </a>
+      <a
         href={
           `${path}?locale=en&next=${encodeURIComponent(next)}${hash}` as Route
         }
         lang="en"
       >
         English
-      </Link>
+      </a>
     </>
   );
 }

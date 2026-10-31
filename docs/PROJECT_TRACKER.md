@@ -1,6 +1,6 @@
 # Project tracker
 
-Verified checkpoint: **2026-10-30**. Active sprint: **Sprint 0**, in progress. Work branch: `edwakson/ScoGes_App`; main changes only through validated PRs.
+Verified checkpoint: **2026-10-31**. Active sprint: **Sprint 0**, in progress. Work branch: `edwakson/ScoGes_App`; main changes only through validated PRs.
 
 This Markdown tracker and the UI consume the same milestone definitions in `src/modules/project-tracker/tracker-data.ts`. A unit test compares every row below with that data to prevent drift. Edit the data and this table together; rerun verification before changing completion status.
 
@@ -8,7 +8,7 @@ This Markdown tracker and the UI consume the same milestone definitions in `src/
 
 | ID       | Status      | Progress | Scope                                       |
 | -------- | ----------- | -------- | ------------------------------------------- |
-| sprint-0 | in_progress | 67%      | Fondations plateforme                       |
+| sprint-0 | in_progress | 100%     | Fondations plateforme                       |
 | sprint-1 | planned     | 0%       | Academique, eleves, responsables et imports |
 | sprint-2 | planned     | 0%       | Frais, facturation et echeanciers           |
 | sprint-3 | planned     | 0%       | Paiements, rapprochement et recus           |
@@ -23,8 +23,8 @@ This Markdown tracker and the UI consume the same milestone definitions in `src/
 | tenant-rbac                | done    | 100%     | sprint-0 | Tenant, membership et RBAC                  |
 | onboarding-audit           | done    | 100%     | sprint-0 | Onboarding et audit                         |
 | foundation-ui              | done    | 100%     | sprint-0 | Shell UI administration                     |
-| bilingual-completion       | planned | 0%       | sprint-0 | Compléter la traduction de la fondation     |
-| email-lifecycle-validation | planned | 0%       | sprint-0 | Valider les parcours e-mail de bout en bout |
+| bilingual-completion       | done    | 100%     | sprint-0 | Compléter la traduction de la fondation     |
+| email-lifecycle-validation | done    | 100%     | sprint-0 | Valider les parcours e-mail de bout en bout |
 | academic-references        | planned | 0%       | sprint-1 | References academiques                      |
 | students-guardians         | planned | 0%       | sprint-1 | Eleves et responsables                      |
 | enrollments                | planned | 0%       | sprint-1 | Inscriptions                                |
@@ -46,12 +46,13 @@ This Markdown tracker and the UI consume the same milestone definitions in `src/
 - [Merged PR #1: CI](https://github.com/Edleben/ScoGes_App/pull/1), [PR #2: administration](https://github.com/Edleben/ScoGes_App/pull/2), and [PR #3: Sprint 0 validation](https://github.com/Edleben/ScoGes_App/pull/3). PR #3 merged as `92efae9`.
 - [Reviewed validation CI](https://github.com/Edleben/ScoGes_App/actions/runs/41133779878): 68 unit/component/contract tests, 4 CI safety tests, 15 browser tests; required gate passed. These counts describe that dated functional baseline; later documentation/invariant checks can increase the unit-test total.
 - Hosted development verification: all 15 browser tests, SQL/RLS/audit assertions, Auth/schema connectivity and SMTP authentication passed. Synthetic fixtures were cleaned up. SMTP verification does not prove inbox receipt.
-- Four foundation milestones are delivered; two acceptance milestones are planned. Sprint 0 progress is `round(400 / 6) = 67%`, an unweighted engineering checklist score. It is not SaaS-wide completion, code coverage, automatic CI telemetry, or production certification.
+- All six technical milestones are delivered. Sprint 0 progress is `round(600 / 6) = 100%`, an unweighted engineering checklist score. Its status remains `in_progress` pending final PR review/owner acceptance. It is not SaaS-wide completion, code coverage, automatic CI telemetry, or production certification.
 
 ## Remaining Sprint 0 work
 
-1. Complete French/English onboarding, shell, dashboard and global-error content, including locale-preserving navigation.
-2. Validate confirmation/recovery email links and invitation delivery/receipt using a controlled mailbox or explicitly approved recipients.
+Bilingual foundation coverage is complete, including authenticated FR/EN onboarding validation, localized navigation and document language. Global error safety/retry is component-tested in both languages; no hosted outage was induced.
+
+Real FR/EN confirmation, recovery, invitation delivery/acceptance and invitation replay rejection passed. See [email verification evidence](SPRINT_0_EMAIL_VALIDATION.md). Final closure review remains pending; Sprint 1 is not active.
 
 The onboarding form currently resets edited fields after validation failure; preserve/re-enter the complete form in tests and record any future UX change explicitly. Full formatting debt (29 files at the checkpoint), two moderate development dependency advisories, the existing timestamp-helper search-path warning, and pilot operational hardening remain documented separately.
 
@@ -59,4 +60,6 @@ See [validation evidence](SPRINT_0_VALIDATION.md), [agent handoff](AI_HANDOFF.md
 
 ## Sprint 1 planning
 
-A [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) is ready for review. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) remains open. Preparing this prompt does not change any milestone status, activate Sprint 1 or authorize its implementation.
+A [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) is ready for review. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence and awaits final review/owner acceptance. Preparing this prompt does not change any milestone status, activate Sprint 1 or authorize its implementation.
+
+Current review: [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) and its [required checks](https://github.com/Edleben/ScoGes_App/pull/6/checks). Historical PR #3 results above retain their original test counts.

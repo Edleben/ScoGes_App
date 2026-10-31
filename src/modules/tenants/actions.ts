@@ -1,4 +1,5 @@
 "use server";
+import { localizedPath } from "@/i18n/navigation";
 
 import { z } from "zod";
 import { getLocale, t } from "@/i18n/messages";
@@ -65,5 +66,5 @@ export async function createTenantAction(
   }
 
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect(localizedPath("/dashboard", locale));
 }

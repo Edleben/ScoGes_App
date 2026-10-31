@@ -45,3 +45,7 @@ run outside database transactions; invitation issuance and acceptance use narrow
 Administrative writes resolve the active owned membership server-side, then call narrow RPCs that recheck database permissions and tenant ownership. Tenant locks serialize authorization changes and invitation acceptance; monotonic revisions reject stale writes and audit insertion is atomic with each mutation. See [Administration](ADMINISTRATION.md).
 
 The tracker is engineering status data, not tenant financial analytics or runtime observability. `tracker-data.ts` powers the UI; a unit invariant compares it with [PROJECT_TRACKER.md](PROJECT_TRACKER.md). The [shared handoff](AI_HANDOFF.md) maps modules and verification steps for all coding agents.
+
+## Foundation language handling
+
+The existing `?locale=fr|en` convention is shared across foundation pages. The proxy overwrites a presentation-only locale header; the root layout uses it for `<html lang>` and the client locale context used by safe errors. Invalid/missing locale defaults to French. Locale helpers preserve unrelated query values when composing internal links; language-switch controls intentionally reload the current pathname so cached layouts and document language agree. Login, onboarding, invitation acceptance and logout retain the selected language. This header never controls authentication or tenant authorization. Public/404 pages receive locale without introducing Auth refresh calls. Root layout now renders per request.

@@ -1,4 +1,5 @@
 "use server";
+import { localizedPath } from "@/i18n/navigation";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -111,5 +112,5 @@ export async function acceptInvitationAction(
     maxAge: 60 * 60 * 24 * 30,
   });
   revalidatePath("/dashboard", "layout");
-  redirect("/dashboard");
+  redirect(localizedPath("/dashboard", formLocale(form)));
 }

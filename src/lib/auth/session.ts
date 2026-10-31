@@ -1,3 +1,5 @@
+import { getRequestLocale } from "@/i18n/server";
+import { localizedPath } from "@/i18n/navigation";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { activeTenantCookie } from "@/modules/identity/auth-navigation";
@@ -38,7 +40,7 @@ export async function requireCurrentUser() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect(localizedPath("/login", await getRequestLocale()));
   }
 
   return user;

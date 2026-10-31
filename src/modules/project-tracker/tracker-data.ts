@@ -21,10 +21,9 @@ export type SprintTracker = {
 
 // A dated repository checkpoint; refresh only from reviewed, executed evidence.
 export const trackerCheckpoint = {
-  validatedOn: "2026-10-30",
-  validationPr: "https://github.com/Edleben/ScoGes_App/pull/3",
-  validationRun:
-    "https://github.com/Edleben/ScoGes_App/actions/runs/41133779878",
+  validatedOn: "2026-10-31",
+  validationPr: "https://github.com/Edleben/ScoGes_App/pull/6",
+  validationRun: "https://github.com/Edleben/ScoGes_App/pull/6/checks",
 } as const;
 
 export const sprintTrackers: SprintTracker[] = [
@@ -33,9 +32,9 @@ export const sprintTrackers: SprintTracker[] = [
     label: "Sprint 0",
     objective: "Fondations plateforme",
     status: "in_progress",
-    progress: 67,
+    progress: 100,
     summary:
-      "Fondations et administration validées. La traduction complète et les parcours e-mail restent à valider; Sprint 1 non démarré.",
+      "Les six jalons techniques, dont les parcours e-mail réels en français/anglais, sont vérifiés. Revue finale en attente ; Sprint 1 non démarré.",
     features: [
       {
         id: "workspace-quality",
@@ -68,7 +67,7 @@ export const sprintTrackers: SprintTracker[] = [
         id: "foundation-ui",
         title: "Shell UI administration",
         description:
-          "Shell français; authentification et administration vérifiées en français/anglais.",
+          "Shell, authentification et administration disponibles en français et en anglais.",
         status: "done",
         progress: 100,
         ownerArea: "Product UI",
@@ -77,18 +76,18 @@ export const sprintTrackers: SprintTracker[] = [
         id: "bilingual-completion",
         title: "Compléter la traduction de la fondation",
         description:
-          "Onboarding, shell, tableau de bord et erreurs globales restent français; les liens du shell ne préservent pas la langue.",
-        status: "planned",
-        progress: 0,
+          "Onboarding, shell, tableau de bord, tracker et erreurs traduits ; navigation et langue du document vérifiées en français et en anglais.",
+        status: "done",
+        progress: 100,
         ownerArea: "Product UI",
       },
       {
         id: "email-lifecycle-validation",
         title: "Valider les parcours e-mail de bout en bout",
         description:
-          "La connexion SMTP est vérifiée. Les liens de confirmation/récupération et la réception effective des invitations restent à valider.",
-        status: "planned",
-        progress: 0,
+          "Confirmation, récupération, réception et acceptation des invitations vérifiées en français/anglais ; rejeu refusé et comptes de test nettoyés.",
+        status: "done",
+        progress: 100,
         ownerArea: "Identity / UAT",
       },
     ],
@@ -315,7 +314,10 @@ export function getProjectTrackerSummary() {
   };
 }
 
-export function getStatusLabel(status: FeatureStatus) {
+export function getStatusLabel(
+  status: FeatureStatus,
+  locale: "fr" | "en" = "fr",
+) {
   const labels: Record<FeatureStatus, string> = {
     done: "Termine",
     in_progress: "En cours",
@@ -323,7 +325,14 @@ export function getStatusLabel(status: FeatureStatus) {
     blocked: "Bloque",
   };
 
-  return labels[status];
+  return locale === "en"
+    ? {
+        done: "Completed",
+        in_progress: "In progress",
+        planned: "Planned",
+        blocked: "Blocked",
+      }[status]
+    : labels[status];
 }
 
 export function getStatusClassName(status: FeatureStatus) {

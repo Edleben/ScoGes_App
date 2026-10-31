@@ -1,4 +1,5 @@
 "use server";
+import { localizedPath } from "@/i18n/navigation";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -16,7 +17,17 @@ import {
   invitationCookie,
 } from "./auth-navigation";
 import { authReply, formLocale, type AuthActionState } from "./auth-state";
+import type { AuthMessageKey } from "./auth-messages";
 export type { AuthActionState } from "./auth-state";
+
+const signupErrors = new Map<string, AuthMessageKey>([
+  ["over_email_send_rate_limit", "emailRateLimited"],
+  ["over_request_rate_limit", "rateLimited"],
+  ["email_address_not_authorized", "emailUnavailable"],
+  ["signup_disabled", "signupUnavailable"],
+  ["email_provider_disabled", "signupUnavailable"],
+  ["weak_password", "passwordRejected"],
+]);
 
 function callbackUrl(form: FormData, next: string) {
   const url = new URL("/auth/callback", getAppUrl());
@@ -37,9 +48,12 @@ export async function signInAction(
   if (error) return authReply(form, false, "credentials");
   const pendingInvitation = (await cookies()).has(invitationCookie);
   redirect(
-    pendingInvitation
-      ? "/invitations/accept"
-      : authDestination(form.get("next")),
+    localizedPath(
+      pendingInvitation
+        ? "/invitations/accept"
+        : authDestination(form.get("next")),
+      formLocale(form),
+    ),
   );
 }
 
@@ -65,9 +79,27 @@ export async function signUpAction(
   if (
     error &&
     !["user_already_exists", "email_exists"].includes(error.code ?? "")
-  )
-    return authReply(form, false, "unavailable");
-  if (data.session) redirect(destination);
+  ) {
+    const message =
+      signupErrors.get(error.code ?? "") ??
+      (error.status === 429 ? "rateLimited" : "unavailable");
+    // Never log provider messages, addresses, credentials, cookies or raw payloads.
+    console.warn(
+      JSON.stringify({
+        event: "auth.signup.failed",
+        category: message,
+        status:
+          typeof error.status === "number" &&
+          Number.isInteger(error.status) &&
+          error.status >= 400 &&
+          error.status <= 599
+            ? error.status
+            : null,
+      }),
+    );
+    return authReply(form, false, message);
+  }
+  if (data.session) redirect(localizedPath(destination, formLocale(form)));
   return authReply(form, true, "checkEmail");
 }
 
@@ -114,7 +146,7 @@ export async function updatePasswordAction(
   redirect(`/login?notice=passwordUpdated&locale=${formLocale(form)}`);
 }
 
-export async function signOutAction() {
+export async function signOutAction(form: FormData) {
   const supabase = await createSupabaseServerClient();
   if (supabase) {
     const { error } = await supabase.auth.signOut();
@@ -123,5 +155,5 @@ export async function signOutAction() {
   const store = await cookies();
   store.delete(invitationCookie);
   store.delete(activeTenantCookie);
-  redirect("/login");
+  redirect(localizedPath("/login", formLocale(form)));
 }

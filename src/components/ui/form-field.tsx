@@ -10,6 +10,8 @@ type FormFieldProps = {
   autoComplete?: string;
   minLength?: number;
   maxLength?: number;
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 export function FormField({
@@ -22,6 +24,8 @@ export function FormField({
   autoComplete,
   minLength,
   maxLength,
+  value,
+  onChange,
 }: FormFieldProps) {
   return (
     <label className="grid gap-2 text-sm font-medium text-slate-800">
@@ -39,6 +43,8 @@ export function FormField({
         autoComplete={autoComplete}
         minLength={minLength}
         maxLength={maxLength}
+        value={value}
+        onChange={onChange}
       />
     </label>
   );

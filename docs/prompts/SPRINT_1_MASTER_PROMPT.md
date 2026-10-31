@@ -1,6 +1,6 @@
 # Sprint 1 — Academic references, students, guardians, enrollments and imports
 
-Status: **Proposed; inactive; foundation completion gate not passed.** Prepared 2026-10-30. This document is an approval-ready scope, not evidence of owner approval or authorization to begin implementation. Sprint 0 remains active.
+Status: **Proposed; inactive; foundation closure review pending.** Prepared 2026-10-30. This document is an approval-ready scope, not evidence of owner approval or authorization to begin implementation. Sprint 0 remains active.
 
 ## Authority and activation
 

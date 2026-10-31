@@ -40,6 +40,27 @@ describe("authentication actions", () => {
     vi.clearAllMocks();
     cookieStore.has.mockReturnValue(false);
   });
+  it("preserves English after login and still rejects hostile return destinations", async () => {
+    auth.signInWithPassword.mockResolvedValue({ error: null });
+    await expect(
+      signInAction(
+        { ok: false },
+        form({
+          email: "a@example.com",
+          password: "password123",
+          locale: "en",
+          next: "https://evil.example",
+        }),
+      ),
+    ).rejects.toThrow("REDIRECT:/dashboard?locale=en");
+    cookieStore.has.mockReturnValue(true);
+    await expect(
+      signInAction(
+        { ok: false },
+        form({ email: "a@example.com", password: "password123", locale: "en" }),
+      ),
+    ).rejects.toThrow("REDIRECT:/invitations/accept?locale=en");
+  });
   it("validates recovery email before contacting the provider", async () => {
     expect(
       (await requestPasswordResetAction({ ok: false }, form({ email: "bad" })))
@@ -95,6 +116,68 @@ describe("authentication actions", () => {
       }),
     );
     expect(auth.signUp).not.toHaveBeenCalled();
+  });
+
+  for (const locale of ["fr", "en"] as const) {
+    for (const [code, status, key] of [
+      ["over_email_send_rate_limit", 429, "emailRateLimited"],
+      ["over_request_rate_limit", 429, "rateLimited"],
+      ["unknown_limit", 429, "rateLimited"],
+      ["email_address_not_authorized", 400, "emailUnavailable"],
+      ["signup_disabled", 403, "signupUnavailable"],
+      ["email_provider_disabled", 422, "signupUnavailable"],
+      ["weak_password", 422, "passwordRejected"],
+      ["unexpected_failure", 500, "unavailable"],
+    ] as const) {
+      it(`returns safe ${locale} signup feedback for ${code}`, async () => {
+        const log = vi.spyOn(console, "warn").mockImplementation(() => {});
+        try {
+          auth.signUp.mockResolvedValue({
+            data: { session: null, user: null },
+            error: {
+              code,
+              status,
+              message: "private provider details a@example.com secret-password",
+            },
+          });
+          const result = await signUpAction(
+            { ok: false },
+            form({
+              email: "a@example.com",
+              password: "password123",
+              confirmPassword: "password123",
+              locale,
+            }),
+          );
+          expect(result).toEqual({ ok: false, message: authText(locale, key) });
+          const output = JSON.stringify(log.mock.calls);
+          expect(output).toContain("auth.signup.failed");
+          expect(output).not.toMatch(
+            /a@example.com|secret-password|private provider/,
+          );
+        } finally {
+          log.mockRestore();
+        }
+      });
+    }
+  }
+  it("keeps existing-account signup responses indistinguishable", async () => {
+    for (const code of ["email_exists", "user_already_exists"]) {
+      auth.signUp.mockResolvedValue({
+        data: { session: null, user: null },
+        error: { code, status: 422 },
+      });
+      expect(
+        await signUpAction(
+          { ok: false },
+          form({
+            email: "a@example.com",
+            password: "password123",
+            confirmPassword: "password123",
+          }),
+        ),
+      ).toEqual({ ok: true, message: authText("fr", "checkEmail") });
+    }
   });
   it("requires email confirmation before a new account proceeds", async () => {
     auth.signUp.mockResolvedValue({ data: { session: null }, error: null });

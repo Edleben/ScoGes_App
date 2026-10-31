@@ -56,3 +56,7 @@ Use narrow authenticated RPCs for role/status/settings writes so mutation and au
 Keep one shared handoff for Claude, Codex and Antigravity, referenced by agent entry files and AGENTS.md. Governing product/sprint/STABLE documents retain their authority; dated operational status belongs in the tracker, validation report and implementation log.
 
 The typed tracker defines UI milestones; a unit test checks Markdown IDs/status/progress against it. UI evidence is a reviewed checkpoint, not an automated deployment/CI feed. Preserve historical verification, expose acceptance gaps and recheck actual state before resuming or changing completion claims.
+
+## ADR 0009 — Preserve foundation locale without changing route structure (2026-10-31)
+
+Retain the established `locale=fr|en` query convention. The proxy overwrites a validated presentation header used by the per-request root layout and error context. French remains the default; internal links/actions preserve English. Locale switches use full navigation because layouts are cached during client transitions. This avoids a route-prefix rewrite or a new i18n dependency. The header is never an authorization input; session refresh is still limited to the existing sensitive route families. Tradeoff: the root layout is dynamic, and switching language reloads the page and resets transient form/pagination state. Translation and tracker status are separate; email validation still blocks foundation completion.

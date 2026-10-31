@@ -1,5 +1,6 @@
 "use client";
 
+import { foundationText } from "@/i18n/foundation-messages";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form-field";
@@ -17,51 +18,59 @@ import {
 const initialState = { ok: false } satisfies ActionState;
 const authInitialState = { ok: false } satisfies AuthActionState;
 
-export function TenantOnboardingForm() {
+export function TenantOnboardingForm({ locale = "fr" }: { locale?: Locale }) {
+  const text = (key: Parameters<typeof foundationText>[1]) =>
+    foundationText(locale, key);
   const [state, formAction, pending] = useActionState(
     createTenantAction,
     initialState,
   );
 
   return (
-    <form action={formAction} className="grid gap-4">
+    <form action={formAction} className="grid gap-4" lang={locale}>
+      <input type="hidden" name="locale" value={locale} />
       <FormField
-        label="Nom de l'institution"
+        label={text("name")}
         name="name"
         required
-        placeholder="College Lumiere"
+        placeholder={text("nameExample")}
       />
       <FormField
-        label="Slug"
+        label={text("slug")}
         name="slug"
         required
         placeholder="college-lumiere"
       />
-      <FormField label="Pays ISO-2" name="country" required defaultValue="TG" />
       <FormField
-        label="Devise ISO-3"
+        label={text("country")}
+        name="country"
+        required
+        defaultValue="TG"
+      />
+      <FormField
+        label={text("currency")}
         name="baseCurrency"
         required
         defaultValue="XOF"
       />
       <FormField
-        label="Fuseau horaire"
+        label={text("timezone")}
         name="timezone"
         required
         defaultValue="Africa/Lome"
       />
       <SelectField
-        label="Langue par defaut"
+        label={text("defaultLocale")}
         name="defaultLocale"
         defaultValue="fr"
         options={[
-          { label: "Francais", value: "fr" },
-          { label: "English", value: "en" },
+          { label: text("french"), value: "fr" },
+          { label: text("english"), value: "en" },
         ]}
       />
       <ActionMessage ok={state.ok} message={state.message} />
       <Button disabled={pending} type="submit">
-        {pending ? "Creation..." : "Creer l'institution"}
+        {text(pending ? "creating" : "create")}
       </Button>
     </form>
   );

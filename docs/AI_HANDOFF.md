@@ -1,6 +1,6 @@
 # Shared handoff — Claude, Codex and Antigravity
 
-Checkpoint: **2026-10-30**, following merged PR #3. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
+Checkpoint: **2026-10-31**, hosted email verification and closure-review checkpoint after merged PR #5. Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
 
 ## Start here
 
@@ -14,12 +14,12 @@ Codex should enter through `AGENTS.md`; Claude can enter through root `CLAUDE.md
 
 ## Current state
 
-- Proprietary EDXSTORE LLC B2B2C school-management/fee-collection SaaS; modular Next.js/React/TypeScript monolith. French-first; English coverage is partial.
-- Sprint 0 is **in progress, 67% of six unweighted milestones**: four foundation milestones delivered, two acceptance milestones open. This is a manual checklist, not business analytics or a production-readiness score.
+- Proprietary EDXSTORE LLC B2B2C school-management/fee-collection SaaS; modular Next.js/React/TypeScript monolith. French-first; foundation journeys now support French and English.
+- Sprint 0 is **in progress, 100% of six unweighted technical milestones**: all six delivered; final PR review/owner acceptance remains pending. This is a manual checklist, not business analytics or a production-readiness score.
 - Sprint 1 through Sprint 5 remain planned at zero. Do not start student, billing/payment, collection, reporting-export or AI implementation without explicit instruction.
 - PR #1 introduced isolated CI; PR #2 completed administration; PR #3 expanded validation and safe onboarding errors. All three were verified merged. PR #3 merge commit: `92efae9454af9ece48836868c0e151c2e6db010b`.
-- Functional validation baseline from PR #3: **68** unit/component/contract tests, **4** CI safety tests and **15** Chromium tests, all passing; push/PR required gates passed. The handoff adds a tracker-drift invariant test, so expect the unit total to rise; verify rather than hardcoding a new pass claim.
-- Hosted development tests passed against the project configured in ignored `.env.local`; exact synthetic fixtures were cleaned up. No real email was sent by those validation runs.
+- Historical PR #3 baseline: 68 unit/component/contract, 4 CI safety and 15 Chromium tests. The tested application baseline `20cce27` passed 96 unit/component/contract, 4 safety and 20 isolated CI browser tests (18 hosted-backed browser cases). Refresh verification after changes; inspect the current PR checks instead of treating dated totals as live telemetry.
+- Hosted development verification uses the project configured in ignored `.env.local`. Real FR/EN email receipt and link completion now passed after owner SMTP setup; exact synthetic fixtures were cleaned up. Earlier PR #3 runs did not send real email; see the latest email checkpoint for current evidence.
 
 ## Implemented behavior and code map
 
@@ -102,8 +102,9 @@ The Windows managed pnpm launcher previously stalled during concurrent automatic
 
 ## Remaining acceptance work and debt
 
-1. Complete French/English onboarding, shell/dashboard/tracker/global-error content and locale-preserving navigation. Existing auth and administration regions are localized; the root document still declares French.
-2. Validate real confirmation/recovery email links and invitation delivery/recipient receipt end to end. SMTP authentication, issuance/acceptance RPC tests and mocked adapters do not prove receipt.
+Bilingual foundation coverage is now implemented and verified; the root document language follows the validated request locale. Global error safety/retry is component-tested in both languages.
+
+Real FR/EN confirmation/recovery links and invitation delivery/acceptance have now passed after owner SMTP setup; final closure review remains pending. See the latest email-validation checkpoint below.
 
 Other documented limits: onboarding clears edited fields on validation failure; full formatting has legacy debt (29 files at the baseline), two moderate Vitest mocker advisories remain, and `public.touch_updated_at` has a pre-existing mutable-search-path advisor warning. Recheck advisories before remediation; never suppress failures or rewrite canonical specifications just to turn a check green. Backup/restore drills, broader accessibility/mobile review, deployment hardening and pilot UAT are separate operational gates.
 
@@ -118,3 +119,23 @@ Handoff UI verification note: one local focused attempt timed out at the hosted 
 ## Sprint 1 proposal checkpoint — 2026-10-30
 
 PR #4 is merged as `2c751624dde35d38abf47aafaac7deed45c550c1`; its review CI passed 69 unit/component/contract, 4 CI safety and 15 Chromium tests. The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed, inactive and subject to the [foundation completion gate](SPRINT_0_COMPLETION_GATE.md). The gate remains open for bilingual foundation completion and real email lifecycle validation. No Sprint 1 code, migration or permission grant is authorized by this proposal. Sprint 0 remains active; tracker statuses and percentages remain unchanged. Resolve documented business decisions before their affected implementation slices.
+
+## Bilingual foundation update — 2026-10-31
+
+PR #5 is merged (`4d8527d8682de96b439903b7858724ebff21345b`). This follow-up completes foundation translations and localized navigation. The `locale` query selects presentation only; the proxy overwrites `x-edxstore-locale`, and root layout uses that validated value for HTML language and client error context. French remains the default. Language switches perform full navigation because Next.js caches layouts. Auth destinations remain allowlisted; tenant and permission checks are unchanged. Public pages receive locale context without adding Auth refresh dependencies. No schema/dependency changes or real email sends. Historical open-bilingual notes above are superseded by this dated checkpoint; the email gate and Sprint 1 activation restrictions remain.
+
+Bilingual follow-up verification: lint/typecheck/build/format checks passed, 77 unit/component/contract + 4 CI safety tests passed, and the complete production-mode Chromium suite passed 18/18 with no failures, skips or flaky results. Hosted SQL authorization/invitation/administration/audit assertions passed and rolled back their transaction. Authenticated test fixtures were cleaned up by the suite. The global error fallback is tested at component level; no hosted outage was induced. Refresh checks again after future email changes.
+
+## Signup failure investigation — 2026-10-31
+
+Configured hosted Auth returned 429 `over_email_send_rate_limit` to one isolated signup attempt; no account/session was created. Public settings confirm email signup enabled and confirmation required. Auth SMTP/quota settings require owner access and were not changed; app `.env.local` invitation SMTP does not configure hosted Auth mail. Keep the email gate open. Signup feedback is now safely classified in FR/EN, structured warnings exclude provider payloads/PII, and failed forms preserve email while clearing passwords.
+
+Clean development Chromium probes showed zero hydration warnings in FR/EN. The local development log identified Grammarly attributes `data-new-gr-c-s-check-loaded` and `data-gr-ext-installed` in the body hydration diff. Disable Grammarly for localhost and reload; do not suppress hydration warnings in app code. All browser tests now assert zero hydration warnings/uncaught exceptions; isolated CI adds real public-signup success cases. See [authentication troubleshooting](AUTHENTICATION.md#signup-troubleshooting--2026-10-31).
+
+Signup follow-up local verification: 96 unit/component/contract tests, 4 CI safety tests, full 18-case production Chromium suite (zero failures/skips/flaky results and zero hydration/runtime errors), lint/typecheck/build/format checks passed. Positive unconfirmed-account signup runs only in isolated CI. One later focused development rerun failed due to the existing server lock/connection resets; preserve the user-owned server and restart it separately when appropriate. The earlier clean FR/EN development probes and sanitized body-attribute diagnostics established the extension issue.
+
+## Hosted email verification — 2026-10-31
+
+After owner SMTP setup, real FR/EN confirmation, recovery, invitation delivery/acceptance and invitation replay rejection passed. Old passwords fail after recovery; authoritative cashier membership was checked. Exact synthetic accounts/tenants were cleaned up after each run. Mailbox access was read-only over verified TLS; no tokens/messages/credentials were committed, and no existing account credentials were modified. [Evidence](SPRINT_0_EMAIL_VALIDATION.md) supersedes earlier email-blocked notes.
+
+Both trackers now show 6/6 technical milestones (100%). Sprint 0 remains in progress pending final PR review/owner acceptance, and Sprint 1 remains planned at zero. The tracker exposes this review state explicitly instead of an empty next-action list. PR #6 and its checks are the review reference; do not start Sprint 1 without explicit owner activation.
