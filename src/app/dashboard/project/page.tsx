@@ -159,14 +159,18 @@ export default async function ProjectTrackerPage() {
           {sprint0.progress}% : {text("weighted")}
         </p>
         <h3 className="mt-4 font-semibold">{text("next")}</h3>
-        <ul className="mt-2 list-disc space-y-2 pl-5">
-          {remaining.map((feature) => (
-            <li key={feature.id}>
-              <span className="font-medium">{feature.title}</span> —{" "}
-              {feature.description}
-            </li>
-          ))}
-        </ul>
+        {remaining.length === 0 ? (
+          <p className="mt-2 text-sm">{text("reviewPending")}</p>
+        ) : (
+          <ul className="mt-2 list-disc space-y-2 pl-5">
+            {remaining.map((feature) => (
+              <li key={feature.id}>
+                <span className="font-medium">{feature.title}</span> —{" "}
+                {feature.description}
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-4 flex flex-wrap gap-4 text-sm underline">
           <a href={trackerCheckpoint.validationPr}>{text("validationPr")}</a>
           <a href={trackerCheckpoint.validationRun}>{text("validationRun")}</a>

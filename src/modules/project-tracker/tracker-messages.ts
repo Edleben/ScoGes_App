@@ -3,7 +3,7 @@ import { sprintTrackers, type SprintTracker } from "./tracker-data";
 const english = [
   [
     "Platform foundations",
-    "Foundations, administration and French/English coverage verified. Email journeys remain unverified; Sprint 1 has not started.",
+    "All six technical milestones, including real French/English email journeys, are verified. Final review is pending; Sprint 1 has not started.",
     [
       [
         "Workspace and quality",
@@ -27,7 +27,7 @@ const english = [
       ],
       [
         "Validate end-to-end email journeys",
-        "SMTP connectivity verified. Confirmation/recovery links and actual invitation receipt remain unverified.",
+        "Confirmation, recovery, invitation receipt and acceptance verified in French/English; replay rejected and test accounts cleaned up.",
       ],
     ],
   ],

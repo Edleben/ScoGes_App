@@ -642,13 +642,14 @@ test.describe("live authentication lifecycle", () => {
       name: "État de validation — Sprint 0",
     });
     await expect(
-      checkpoint.getByText("5 jalons livrés sur 6", { exact: true }),
+      checkpoint.getByText("6 jalons livrés sur 6", { exact: true }),
     ).toBeVisible();
-    await expect(checkpoint.getByRole("listitem")).toHaveCount(1);
+    await expect(checkpoint.getByRole("listitem")).toHaveCount(0);
     await expect(
-      checkpoint.getByRole("link", { name: "Validation des parcours (PR #3)" }),
-    ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/3");
+      checkpoint.getByRole("link", { name: "Validation des parcours (PR #6)" }),
+    ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/6");
     await expect(checkpoint).toContainText("Checklist manuelle");
+    await expect(checkpoint).toContainText("revue finale de la PR");
     await page.goto("/dashboard/users?page=9999");
     await expect(
       page.getByRole("cell", { name: "Aucun membre à afficher.", exact: true }),

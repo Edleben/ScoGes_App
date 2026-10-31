@@ -65,8 +65,10 @@ const fr = {
   weighted:
     "moyenne non pondérée des jalons. Les tests réussis ne valident pas les parcours encore ouverts.",
   next: "Prochaines actions de Sprint 0",
-  validationPr: "Validation des parcours (PR #3)",
-  validationRun: "Résultats CI du point de validation",
+  reviewPending:
+    "Les six jalons techniques sont vérifiés. La revue finale de la PR reste en attente ; Sprint 1 n’est pas activé.",
+  validationPr: "Validation des parcours (PR #6)",
+  validationRun: "Contrôles CI de la PR",
   globalProgress: "Progression globale",
   sprints: "Sprints suivis",
   doneFeatures: "Fonctionnalités terminées",
@@ -139,8 +141,10 @@ const en = {
   weighted:
     "unweighted milestone average. Passing tests do not validate journeys that remain open.",
   next: "Next Sprint 0 actions",
-  validationPr: "Journey validation (PR #3)",
-  validationRun: "Checkpoint CI results",
+  reviewPending:
+    "All six technical milestones are verified. Final PR review is pending; Sprint 1 is not active.",
+  validationPr: "Journey validation (PR #6)",
+  validationRun: "Pull request CI checks",
   globalProgress: "Overall progress",
   sprints: "Tracked sprints",
   doneFeatures: "Completed features",
