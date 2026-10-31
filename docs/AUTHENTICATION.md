@@ -150,3 +150,9 @@ The reported root/body hydration warning was not reproduced in clean Chromium on
 ## Hosted email verification after owner SMTP setup — 2026-10-31
 
 The owner subsequently configured Supabase Auth SMTP. Real confirmation, recovery and application invitation receipt/link completion passed using unique tagged addresses in the authorized test mailbox, in French and English. Old passwords were rejected after recovery; invitation membership/role and replay rejection were verified. Mail was read through verified-TLS IMAP using EXAMINE/BODY.PEEK, without changing flags or deleting messages. Only exact synthetic fixtures were removed. No existing account password was changed. This supersedes the earlier quota-blocked diagnosis as current state; see [email verification evidence](SPRINT_0_EMAIL_VALIDATION.md).
+
+## Repeatable email failure coverage
+
+`tests/e2e/email-lifecycle.spec.ts` exercises real local Auth/application mail receipt, confirmation/recovery completion and reuse, forced expiry on disposable identities, expired invitation denial and SMTP recipient rejection in FR/EN. The SMTP error must produce failure feedback and a delivery-failed audit, without a captured message. Unknown signup/recovery provider errors remain safe and cannot produce success states.
+
+`scripts/ci/email-fixtures.mjs` is a test CLI, not an application endpoint. It refuses hosted services and only ages/cleans named synthetic records in the disposable CI stack; it does not change global token lifetimes. Hosted negative verification used separately controlled exact fixtures and a task-owned refusal process. See [the evidence matrix](SPRINT_0_EMAIL_VALIDATION.md#supplemental-expiredreused-link-and-delivery-failure-validation--2026-10-31).

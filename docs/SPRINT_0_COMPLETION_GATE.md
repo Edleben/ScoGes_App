@@ -28,3 +28,7 @@ Legacy formatting debt, moderate development dependency advisories, the existing
 2. Only then mark Sprint 0 formally done in the sprint-status record, retaining this technical verification history.
 3. Obtain separate explicit owner activation of the [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md), resolving its business decisions before their affected slices.
 4. Keep later sprint features planned until implemented and verified; do not continue automatically.
+
+## Supplemental negative-case follow-up
+
+PR #6 is now merged as `4fc102a`. The current request adds explicit expired/reused confirmation/recovery/invitation and delivery-failure coverage; [the email matrix](SPRINT_0_EMAIL_VALIDATION.md) distinguishes hosted checks from isolated CI. This follow-up requires its own validated PR review. The technical milestone score remains 100%; no Sprint 1 activation is implied.

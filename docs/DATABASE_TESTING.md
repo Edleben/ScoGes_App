@@ -76,3 +76,9 @@ migrations, so tests cannot conceal a broken migration sequence. See [CI](CI.md)
 After the transactional suite, explicit isolated CI runs `scripts/tests/administration-concurrency.mjs` with separate connections. It commits synthetic race fixtures only on an opted-in loopback database, verifies that concurrent demotion/deactivation retains an active administrator, checks audit counts, and cleans up by exact IDs. Never enable this mode against a hosted database.
 
 The dated baseline is [SPRINT_0_VALIDATION.md](SPRINT_0_VALIDATION.md); the migration chain is in [DATA_MODEL.md](DATA_MODEL.md). Recheck environment identity privately as described in [AI_HANDOFF.md](AI_HANDOFF.md).
+
+## Isolated email expiry fixtures
+
+The email browser suite invokes `scripts/ci/email-fixtures.mjs` over stdin with non-secret fixture IDs/addresses. The CLI requires CI/local opt-in and loopback database, Auth, application, mailbox and SMTP endpoints. It verifies exact synthetic identity ownership before changing issuance timestamps or invitation expiry; optional one-time-token expiry columns are detected from the installed Auth schema. No DDL, global lifetime or clock changes occur. Tenant cleanup additionally checks synthetic creator identity and the unique `e2e-mail-` slug prefix. Auth accounts are discovered by exact generated address and deleted by exact verified ID.
+
+Guard tests in `tests/ci/email-fixtures.test.mjs` reject hosted/deceptive endpoints and partial opt-in. These mutation helpers must never be adapted to reset or age real account records. Hosted negative verification used separate explicitly owned synthetic records; see [email evidence](SPRINT_0_EMAIL_VALIDATION.md).
