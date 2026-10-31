@@ -1,4 +1,8 @@
-# Sprint 0 validation — 2026-10-30
+# Sprint 0 validation
+
+Latest follow-up: **2026-10-31**. Bilingual foundation coverage is delivered; Sprint 0 remains open for real email lifecycle validation. The 2026-10-30 baseline below is historical and is superseded for language coverage and tracker status by the dated follow-up at the end.
+
+## Historical baseline — 2026-10-30
 
 Sprint 0 is operational at the foundation level, with remaining acceptance work. The tracker is a manually maintained engineering checklist, not live CI telemetry or a production-readiness certificate. No Sprint 1 work was started.
 
@@ -77,3 +81,13 @@ The first onboarding browser assertion assumed retained form values; the correct
 This functional validation shipped in [merged PR #3](https://github.com/Edleben/ScoGes_App/pull/3), merge commit `92efae9454af9ece48836868c0e151c2e6db010b`. [PR CI](https://github.com/Edleben/ScoGes_App/actions/runs/41133779878) and [push CI](https://github.com/Edleben/ScoGes_App/actions/runs/41133709974) passed all required jobs, including security advisors and administrator-removal races. The 68-test unit count belongs to that baseline; subsequent handoff consistency checks increase the current total.
 
 Use [PROJECT_TRACKER.md](PROJECT_TRACKER.md) for milestone rows and [AI_HANDOFF.md](AI_HANDOFF.md) to restart safely. Preserve this dated evidence rather than replacing it with assumptions from another agent conversation.
+
+## Bilingual foundation follow-up — 2026-10-31
+
+- French/English onboarding now includes labels, submitting states, safe validation and duplicate-slug errors. UI language is independent of the institution’s saved default language. Both authenticated creation journeys verify persisted settings, administrator permissions and creation audit.
+- Shell, dashboard and all displayed tracker content/statuses/progress labels are localized. Internal navigation and authentication/onboarding/invitation/logout redirects retain English; French remains the default. Language switches reload the current pathname to refresh cached layouts and HTML language together.
+- The proxy overwrites the locale header from validated query input. Root HTML language and client error context agree. Public landing/404 screens are translated without adding Auth refresh dependencies.
+- Global error output and retry are component-tested in both languages, without exposing exception details. Database dependency/permission page states retain existing FR/EN component coverage. No hosted outage or root-layout crash was induced; these failure checks are not claimed as a live outage drill.
+- All 77 unit/component/contract tests and 4 CI safety tests passed. Final lint, route type generation, typecheck, changed-file formatting and production build passed. SQL invitation lifecycle, administration/transactional audit and authorization assertions passed against the configured hosted project and rolled back their test transaction.
+- A focused three-case browser run passed language switching/navigation and both public landing languages. The first full run caught an obsolete landing-text assertion and a navigation synchronization issue in the new test; the corrected focused rerun passed. The final complete production-mode Chromium run passed **18/18**, with **0 failures, 0 flaky tests and 0 skips**, after tracker reconciliation. Both public landing/404 languages and authenticated navigation/onboarding journeys passed.
+- The bilingual milestone is delivered; Sprint 0 is 83% (five of six unweighted milestones), not closed. Email confirmation/recovery and invitation receipt remain unverified. No real email was sent. Sprint 1 remains planned at zero.

@@ -1,4 +1,5 @@
 "use server";
+import { localizedPath } from "@/i18n/navigation";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -37,9 +38,12 @@ export async function signInAction(
   if (error) return authReply(form, false, "credentials");
   const pendingInvitation = (await cookies()).has(invitationCookie);
   redirect(
-    pendingInvitation
-      ? "/invitations/accept"
-      : authDestination(form.get("next")),
+    localizedPath(
+      pendingInvitation
+        ? "/invitations/accept"
+        : authDestination(form.get("next")),
+      formLocale(form),
+    ),
   );
 }
 
@@ -67,7 +71,7 @@ export async function signUpAction(
     !["user_already_exists", "email_exists"].includes(error.code ?? "")
   )
     return authReply(form, false, "unavailable");
-  if (data.session) redirect(destination);
+  if (data.session) redirect(localizedPath(destination, formLocale(form)));
   return authReply(form, true, "checkEmail");
 }
 
@@ -114,7 +118,7 @@ export async function updatePasswordAction(
   redirect(`/login?notice=passwordUpdated&locale=${formLocale(form)}`);
 }
 
-export async function signOutAction() {
+export async function signOutAction(form: FormData) {
   const supabase = await createSupabaseServerClient();
   if (supabase) {
     const { error } = await supabase.auth.signOut();
@@ -123,5 +127,5 @@ export async function signOutAction() {
   const store = await cookies();
   store.delete(invitationCookie);
   store.delete(activeTenantCookie);
-  redirect("/login");
+  redirect(localizedPath("/login", formLocale(form)));
 }

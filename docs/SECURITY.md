@@ -72,3 +72,5 @@ Onboarding no longer returns raw database/transport errors. Duplicate slugs rece
 ## Evidence and handoff limits
 
 The [validation report](SPRINT_0_VALIDATION.md) separates actual SQL/browser verification from mocked provider failures and unverified email receipt. The existing `public.touch_updated_at` search-path warning and two moderate development dependency advisories remain dated known debt; recheck before remediation. Preserve TLS, RLS, server permissions, audit rollback, last-admin protection and CI checks during any agent handoff. See [AI_HANDOFF.md](AI_HANDOFF.md).
+
+Locale is presentation-only. The proxy overwrites incoming locale headers, permits only French/English, and keeps session-cookie forwarding, no-store and no-referrer behavior on authentication-sensitive routes. Localized redirects continue to use the existing allowlist before adding locale; no arbitrary return URL is trusted. Global error output never renders raw exceptions.

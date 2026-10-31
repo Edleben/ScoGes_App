@@ -40,6 +40,27 @@ describe("authentication actions", () => {
     vi.clearAllMocks();
     cookieStore.has.mockReturnValue(false);
   });
+  it("preserves English after login and still rejects hostile return destinations", async () => {
+    auth.signInWithPassword.mockResolvedValue({ error: null });
+    await expect(
+      signInAction(
+        { ok: false },
+        form({
+          email: "a@example.com",
+          password: "password123",
+          locale: "en",
+          next: "https://evil.example",
+        }),
+      ),
+    ).rejects.toThrow("REDIRECT:/dashboard?locale=en");
+    cookieStore.has.mockReturnValue(true);
+    await expect(
+      signInAction(
+        { ok: false },
+        form({ email: "a@example.com", password: "password123", locale: "en" }),
+      ),
+    ).rejects.toThrow("REDIRECT:/invitations/accept?locale=en");
+  });
   it("validates recovery email before contacting the provider", async () => {
     expect(
       (await requestPasswordResetAction({ ok: false }, form({ email: "bad" })))

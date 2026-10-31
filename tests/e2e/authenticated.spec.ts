@@ -116,7 +116,7 @@ test.describe("live authentication lifecycle", () => {
       page.getByText("E2E auth institution", { exact: true }),
     ).toBeVisible();
     await page
-      .getByRole("button", { name: "Deconnexion", exact: true })
+      .getByRole("button", { name: "Déconnexion", exact: true })
       .click();
     await expect(page).toHaveURL(/\/login$/);
     await page.goto("/dashboard");
@@ -380,96 +380,132 @@ test.describe("live authentication lifecycle", () => {
     ).toBeChecked();
   });
 
-  test("authenticated browser onboarding rejects invalid/duplicate data and creates an audited administrator", async ({
-    page,
-  }) => {
-    test.setTimeout(60_000);
-    const owner = await account(),
-      reservedOwner = await account();
-    const existing = await tenant(reservedOwner, "E2E reserved institution");
-    const reserved = await admin()
-      .from("tenants")
-      .select("slug")
-      .eq("id", existing)
-      .single();
-    if (reserved.error) throw new Error("Reserved slug setup failed.");
-    await page.goto("/login");
-    await page.getByLabel("Adresse e-mail").fill(owner.email);
-    await page.getByLabel("Mot de passe", { exact: true }).fill(owner.password);
-    await page
-      .getByRole("button", { name: "Se connecter", exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/onboarding$/);
-    await page.getByLabel("Nom de l'institution").fill("X");
-    await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
-    await page
-      .getByRole("button", { name: "Creer l'institution", exact: true })
-      .click();
-    await expect(page.getByRole("status")).toContainText(
-      "Vérifiez les informations",
-    );
-    await page
-      .getByLabel("Nom de l'institution")
-      .fill("E2E browser institution");
-    await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
-    await page
-      .getByRole("button", { name: "Creer l'institution", exact: true })
-      .click();
-    await expect(page.getByRole("status")).toContainText(
-      "Ce slug est déjà utilisé",
-    );
-    const before = await owner.client
-      .from("memberships")
-      .select("id")
-      .eq("user_id", owner.id);
-    expect(before.error).toBeNull();
-    expect(before.data).toHaveLength(0);
-    const slug = `e2e-${randomUUID()}`;
-    await page
-      .getByLabel("Nom de l'institution")
-      .fill("E2E browser institution");
-    await page.getByLabel("Slug", { exact: true }).fill(slug);
-    await page
-      .getByRole("button", { name: "Creer l'institution", exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(
-      page.getByText("E2E browser institution", { exact: true }),
-    ).toBeVisible();
-    const created = await admin()
-      .from("tenants")
-      .select("id")
-      .eq("slug", slug)
-      .eq("created_by", owner.id)
-      .single();
-    if (created.error) throw new Error("Browser-created tenant missing.");
-    tenants.push(created.data.id);
-    const permission = await owner.client.rpc("current_user_has_permission", {
-      target_tenant_id: created.data.id,
-      permission_key: "users.manage_roles",
+  for (const locale of ["fr", "en"] as const) {
+    test(`authenticated ${locale} onboarding rejects invalid/duplicate data and creates an audited administrator`, async ({
+      page,
+    }) => {
+      test.setTimeout(60_000);
+      const owner = await account(),
+        reservedOwner = await account();
+      const existing = await tenant(reservedOwner, "E2E reserved institution");
+      const reserved = await admin()
+        .from("tenants")
+        .select("slug")
+        .eq("id", existing)
+        .single();
+      if (reserved.error) throw new Error("Reserved slug setup failed.");
+      await page.goto(`/login?locale=${locale}`);
+      await page
+        .getByLabel(locale === "fr" ? "Adresse e-mail" : "Email address")
+        .fill(owner.email);
+      await page
+        .getByLabel(locale === "fr" ? "Mot de passe" : "Password", {
+          exact: true,
+        })
+        .fill(owner.password);
+      await page
+        .getByRole("button", {
+          name: locale === "fr" ? "Se connecter" : "Sign in",
+          exact: true,
+        })
+        .click();
+      await expect(page).toHaveURL(
+        new RegExp(`/onboarding${locale === "en" ? "\\?locale=en" : ""}$`),
+      );
+      await page
+        .getByLabel(
+          locale === "fr" ? "Nom de l'institution" : "Institution name",
+        )
+        .fill("X");
+      await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
+      await page
+        .getByRole("button", {
+          name: locale === "fr" ? "Créer l'institution" : "Create institution",
+          exact: true,
+        })
+        .click();
+      await expect(page.getByRole("status")).toContainText(
+        locale === "fr"
+          ? "Vérifiez les informations"
+          : "Check the institution details",
+      );
+      await page
+        .getByLabel(
+          locale === "fr" ? "Nom de l'institution" : "Institution name",
+        )
+        .fill("E2E browser institution");
+      await page.getByLabel("Slug", { exact: true }).fill(reserved.data.slug);
+      await page
+        .getByRole("button", {
+          name: locale === "fr" ? "Créer l'institution" : "Create institution",
+          exact: true,
+        })
+        .click();
+      await expect(page.getByRole("status")).toContainText(
+        locale === "fr"
+          ? "Ce slug est déjà utilisé"
+          : "This slug is already used",
+      );
+      const before = await owner.client
+        .from("memberships")
+        .select("id")
+        .eq("user_id", owner.id);
+      expect(before.error).toBeNull();
+      expect(before.data).toHaveLength(0);
+      const slug = `e2e-${randomUUID()}`;
+      await page
+        .getByLabel(
+          locale === "fr" ? "Nom de l'institution" : "Institution name",
+        )
+        .fill("E2E browser institution");
+      await page.getByLabel("Slug", { exact: true }).fill(slug);
+      await page
+        .getByRole("button", {
+          name: locale === "fr" ? "Créer l'institution" : "Create institution",
+          exact: true,
+        })
+        .click();
+      await expect(page).toHaveURL(
+        new RegExp(`/dashboard${locale === "en" ? "\\?locale=en" : ""}$`),
+      );
+      await expect(
+        page.getByText("E2E browser institution", { exact: true }),
+      ).toBeVisible();
+      const created = await admin()
+        .from("tenants")
+        .select("id")
+        .eq("slug", slug)
+        .eq("created_by", owner.id)
+        .single();
+      if (created.error) throw new Error("Browser-created tenant missing.");
+      tenants.push(created.data.id);
+      const permission = await owner.client.rpc("current_user_has_permission", {
+        target_tenant_id: created.data.id,
+        permission_key: "users.manage_roles",
+      });
+      expect(permission.error).toBeNull();
+      expect(permission.data).toBe(true);
+      const settings = await owner.client
+        .from("tenant_settings")
+        .select("country,base_currency,timezone,default_locale")
+        .eq("tenant_id", created.data.id)
+        .single();
+      expect(settings.error).toBeNull();
+      expect(settings.data).toMatchObject({
+        country: "TG",
+        base_currency: "XOF",
+        timezone: "Africa/Lome",
+        default_locale: "fr",
+      });
+      const audit = await owner.client
+        .from("audit_events")
+        .select("actor_user_id")
+        .eq("tenant_id", created.data.id)
+        .eq("action", "tenant.created");
+      expect(audit.error).toBeNull();
+      expect(audit.data).toEqual([{ actor_user_id: owner.id }]);
     });
-    expect(permission.error).toBeNull();
-    expect(permission.data).toBe(true);
-    const settings = await owner.client
-      .from("tenant_settings")
-      .select("country,base_currency,timezone,default_locale")
-      .eq("tenant_id", created.data.id)
-      .single();
-    expect(settings.error).toBeNull();
-    expect(settings.data).toMatchObject({
-      country: "TG",
-      base_currency: "XOF",
-      timezone: "Africa/Lome",
-      default_locale: "fr",
-    });
-    const audit = await owner.client
-      .from("audit_events")
-      .select("actor_user_id")
-      .eq("tenant_id", created.data.id)
-      .eq("action", "tenant.created");
-    expect(audit.error).toBeNull();
-    expect(audit.data).toEqual([{ actor_user_id: owner.id }]);
-  });
+  }
   test("French and English administration pages render real data and localized validation", async ({
     page,
   }) => {
@@ -533,9 +569,9 @@ test.describe("live authentication lifecycle", () => {
       name: "État de validation — Sprint 0",
     });
     await expect(
-      checkpoint.getByText("4 jalons livrés sur 6", { exact: true }),
+      checkpoint.getByText("5 jalons livrés sur 6", { exact: true }),
     ).toBeVisible();
-    await expect(checkpoint.getByRole("listitem")).toHaveCount(2);
+    await expect(checkpoint.getByRole("listitem")).toHaveCount(1);
     await expect(
       checkpoint.getByRole("link", { name: "Validation des parcours (PR #3)" }),
     ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/3");
@@ -544,6 +580,118 @@ test.describe("live authentication lifecycle", () => {
     await expect(
       page.getByRole("cell", { name: "Aucun membre à afficher.", exact: true }),
     ).toBeVisible();
+  });
+  test("foundation language switches and navigation preserve the document and access boundaries", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    const owner = await account();
+    const target = await tenant(owner, "E2E locale institution");
+    await page.goto("/dashboard?locale=en");
+    await expect(page).toHaveURL(/\/login\?locale=en$/);
+    await page.getByLabel("Email address").fill(owner.email);
+    await page.getByLabel("Password", { exact: true }).fill(owner.password);
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page).toHaveURL(/\/dashboard\?locale=en$/);
+    for (const locale of ["fr", "en"] as const) {
+      await page
+        .getByRole("link", {
+          name: locale === "fr" ? "Français" : "English",
+          exact: true,
+        })
+        .click();
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(
+        page.getByRole("heading", {
+          name:
+            locale === "fr" ? "Tableau de bord Sprint 0" : "Sprint 0 dashboard",
+          exact: true,
+        }),
+      ).toBeVisible();
+      const nav = page.getByRole("navigation", {
+        name: locale === "fr" ? "Navigation principale" : "Main navigation",
+      });
+      await nav
+        .getByRole("link", {
+          name: locale === "fr" ? "Tracker projet" : "Project tracker",
+        })
+        .click();
+      await expect(page.locator("html")).toHaveAttribute("lang", locale);
+      await expect(
+        page.getByRole("heading", {
+          name:
+            locale === "fr"
+              ? "Tracker des sprints et fonctionnalités"
+              : "Sprint and feature tracker",
+        }),
+      ).toBeVisible();
+      await expect(page.getByRole("progressbar").first()).toHaveAttribute(
+        "aria-label",
+        new RegExp(locale === "fr" ? "Progression" : "Progress"),
+      );
+      await expect(
+        page.getByRole("region", {
+          name:
+            locale === "fr"
+              ? "État de validation — Sprint 0"
+              : "Validation status — Sprint 0",
+        }),
+      ).toContainText(locale === "fr" ? "reste ouverte" : "remains open");
+      for (const [fr, en, title] of [
+        [
+          "Paramètres",
+          "Settings",
+          locale === "fr"
+            ? "Paramètres de l’institution"
+            : "Institution settings",
+        ],
+        [
+          "Utilisateurs",
+          "Users",
+          locale === "fr"
+            ? "Administration des membres"
+            : "Member administration",
+        ],
+      ] as const) {
+        await nav
+          .getByRole("link", { name: locale === "fr" ? fr : en, exact: true })
+          .click();
+        await expect(
+          page.getByRole("heading", { name: title, exact: true }),
+        ).toBeVisible();
+        if (locale === "en") await expect(page).toHaveURL(/locale=en/);
+      }
+      await nav
+        .getByRole("link", {
+          name: locale === "fr" ? "Tableau de bord" : "Dashboard",
+          exact: true,
+        })
+        .click();
+      await expect(
+        page.getByRole("heading", {
+          name:
+            locale === "fr" ? "Tableau de bord Sprint 0" : "Sprint 0 dashboard",
+          exact: true,
+        }),
+      ).toBeVisible();
+    }
+    // The live membership remains authoritative after locale navigation.
+    const member = await owner.client
+      .from("memberships")
+      .select("id,updated_at")
+      .eq("tenant_id", target)
+      .single();
+    expect(member.error).toBeNull();
+    await page.getByRole("button", { name: "Sign out", exact: true }).click();
+    await expect(page).toHaveURL(/\/login\?locale=en$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await page.goto("/dashboard/settings?locale=en");
+    await expect(page).toHaveURL(/\/login\?locale=en$/);
+    await page.goto("/missing-foundation-page?locale=en");
+    await expect(
+      page.getByRole("heading", { name: "Page not found" }),
+    ).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
   test("stale settings forms cannot overwrite a more recent committed change", async ({
     page,

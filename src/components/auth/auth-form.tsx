@@ -1,6 +1,5 @@
 "use client";
 import { useActionState, useSyncExternalStore } from "react";
-import Link from "next/link";
 import type { Route } from "next";
 import {
   signInAction,
@@ -142,22 +141,22 @@ export function AuthLanguageLinks({
   );
   return (
     <>
-      <Link
+      <a
         href={
           `${path}?locale=fr&next=${encodeURIComponent(next)}${hash}` as Route
         }
         lang="fr"
       >
         Français
-      </Link>
-      <Link
+      </a>
+      <a
         href={
           `${path}?locale=en&next=${encodeURIComponent(next)}${hash}` as Route
         }
         lang="en"
       >
         English
-      </Link>
+      </a>
     </>
   );
 }

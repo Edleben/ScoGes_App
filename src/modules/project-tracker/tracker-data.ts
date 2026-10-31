@@ -21,7 +21,7 @@ export type SprintTracker = {
 
 // A dated repository checkpoint; refresh only from reviewed, executed evidence.
 export const trackerCheckpoint = {
-  validatedOn: "2026-10-30",
+  validatedOn: "2026-10-31",
   validationPr: "https://github.com/Edleben/ScoGes_App/pull/3",
   validationRun:
     "https://github.com/Edleben/ScoGes_App/actions/runs/41133779878",
@@ -33,9 +33,9 @@ export const sprintTrackers: SprintTracker[] = [
     label: "Sprint 0",
     objective: "Fondations plateforme",
     status: "in_progress",
-    progress: 67,
+    progress: 83,
     summary:
-      "Fondations et administration validées. La traduction complète et les parcours e-mail restent à valider; Sprint 1 non démarré.",
+      "Fondations, administration et couverture français/anglais vérifiées. Les parcours e-mail restent à valider ; Sprint 1 non démarré.",
     features: [
       {
         id: "workspace-quality",
@@ -68,7 +68,7 @@ export const sprintTrackers: SprintTracker[] = [
         id: "foundation-ui",
         title: "Shell UI administration",
         description:
-          "Shell français; authentification et administration vérifiées en français/anglais.",
+          "Shell, authentification et administration disponibles en français et en anglais.",
         status: "done",
         progress: 100,
         ownerArea: "Product UI",
@@ -77,9 +77,9 @@ export const sprintTrackers: SprintTracker[] = [
         id: "bilingual-completion",
         title: "Compléter la traduction de la fondation",
         description:
-          "Onboarding, shell, tableau de bord et erreurs globales restent français; les liens du shell ne préservent pas la langue.",
-        status: "planned",
-        progress: 0,
+          "Onboarding, shell, tableau de bord, tracker et erreurs traduits ; navigation et langue du document vérifiées en français et en anglais.",
+        status: "done",
+        progress: 100,
         ownerArea: "Product UI",
       },
       {
@@ -315,7 +315,10 @@ export function getProjectTrackerSummary() {
   };
 }
 
-export function getStatusLabel(status: FeatureStatus) {
+export function getStatusLabel(
+  status: FeatureStatus,
+  locale: "fr" | "en" = "fr",
+) {
   const labels: Record<FeatureStatus, string> = {
     done: "Termine",
     in_progress: "En cours",
@@ -323,7 +326,14 @@ export function getStatusLabel(status: FeatureStatus) {
     blocked: "Bloque",
   };
 
-  return labels[status];
+  return locale === "en"
+    ? {
+        done: "Completed",
+        in_progress: "In progress",
+        planned: "Planned",
+        blocked: "Blocked",
+      }[status]
+    : labels[status];
 }
 
 export function getStatusClassName(status: FeatureStatus) {

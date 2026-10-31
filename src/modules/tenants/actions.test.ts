@@ -36,6 +36,18 @@ describe("tenant onboarding failure safety", () => {
       error: null,
     });
   });
+  it("preserves the UI language independently of the institution default", async () => {
+    await expect(
+      createTenantAction(
+        { ok: false },
+        form({ locale: "en", defaultLocale: "fr" }),
+      ),
+    ).rejects.toThrow("REDIRECT:/dashboard?locale=en");
+    expect(rpc).toHaveBeenCalledWith(
+      "create_tenant_with_admin",
+      expect.objectContaining({ tenant_default_locale: "fr" }),
+    );
+  });
   it("validates form input before contacting the database", async () => {
     expect(
       (await createTenantAction({ ok: false }, form({ name: "X" }))).ok,

@@ -62,7 +62,7 @@ describe("project tracker data", () => {
       sprint.features
         .filter((feature) => feature.status !== "done")
         .map((feature) => feature.id),
-    ).toEqual(["bilingual-completion", "email-lifecycle-validation"]);
+    ).toEqual(["email-lifecycle-validation"]);
     expect(
       sprintTrackers
         .slice(1)

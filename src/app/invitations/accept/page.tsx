@@ -32,6 +32,7 @@ export default async function AcceptInvitationPage({
             <p className="mb-4">{user.email}</p>
             <AuthForm mode="accept" locale={locale} />
             <form action={signOutAction} className="mt-4">
+              <input type="hidden" name="locale" value={locale} />
               <Button type="submit" variant="secondary">
                 {authText(locale, "signout")}
               </Button>
