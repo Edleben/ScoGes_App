@@ -62,6 +62,6 @@ See [validation evidence](SPRINT_0_VALIDATION.md), [agent handoff](AI_HANDOFF.md
 
 A [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) is ready for review. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence and awaits final review/owner acceptance. Preparing this prompt does not change any milestone status, activate Sprint 1 or authorize its implementation.
 
-Current review: [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) and its [required checks](https://github.com/Edleben/ScoGes_App/pull/6/checks). Historical PR #3 results above retain their original test counts.
+The earlier foundation review [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) is merged. Current supplemental review: [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) and its [required checks](https://github.com/Edleben/ScoGes_App/pull/7/checks). Historical PR #3 results above retain their original test counts.
 
 Supplemental email coverage now includes hosted controlled expired/reused links and an audited transport failure. Repeatable isolated FR/EN cases validate actual captured messages and state transitions; see [the negative-case matrix](SPRINT_0_EMAIL_VALIDATION.md). Milestone percentages and sprint activation are unchanged.

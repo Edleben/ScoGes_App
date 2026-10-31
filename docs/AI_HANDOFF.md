@@ -1,6 +1,6 @@
 # Shared handoff — Claude, Codex and Antigravity
 
-Checkpoint: **2026-10-31**, hosted email verification and closure-review checkpoint after merged PR #5. Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
+Checkpoint: **2026-10-31**, supplemental email negative-case verification after merged PR #6. Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
 
 ## Start here
 
@@ -144,4 +144,4 @@ Both trackers now show 6/6 technical milestones (100%). Sprint 0 remains in prog
 
 PR #6 is merged as `4fc102a51ebcecf700f588642ee59da1d60195bf`; the feature branch was fast-forwarded before this follow-up. Hosted controlled checks now reject reused confirmation/recovery links, expired received confirmation/recovery/invitation links, and a loopback SMTP transport failure with failed delivery status/audit. Four exact synthetic accounts and one tenant were cleaned up. No hosted SMTP/global TTL/clock/schema change occurred.
 
-New isolated FR/EN browser coverage reads real mail catchers and completes or rejects received links; immediate SMTP recipient rejection must not claim delivery. The suite registers 32 cases, replacing two shallow signup-only cases with 14 lifecycle cases. Expiry/cleanup helpers reject hosted/deceptive endpoints. Local verification passed 98 unit/component, 6 safety and 18 hosted-backed browser tests plus lint/typecheck/build/format; isolated CI is pending. See [email evidence](SPRINT_0_EMAIL_VALIDATION.md). Sprint 1 remains inactive; final closure review remains separate.
+New isolated FR/EN browser coverage reads real mail catchers and completes or rejects received links; immediate SMTP recipient rejection must not claim delivery. The suite registers 32 cases, replacing two shallow signup-only cases with 14 lifecycle cases. Expiry/cleanup helpers reject hosted/deceptive endpoints. Local verification passed 98 unit/component, 6 safety and 18 hosted-backed browser tests plus lint/typecheck/build/format; isolated CI passed all 32 cases with no failures, skips or flaky results. Review [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) and its current checks. See [email evidence](SPRINT_0_EMAIL_VALIDATION.md). Sprint 1 remains inactive; final closure review remains separate.

@@ -6,7 +6,7 @@ Assessment: **2026-10-31 — technical milestones complete; final review/owner a
 
 All six tracker milestones are verified. The owner configured hosted Auth SMTP, after which real French/English confirmation, recovery, invitation delivery/acceptance and invitation replay rejection passed. See [hosted email evidence](SPRINT_0_EMAIL_VALIDATION.md), [validation history](SPRINT_0_VALIDATION.md) and the [tracker](PROJECT_TRACKER.md).
 
-The reviewed application baseline is commit `20cce2793cf298d5e7384f541097340db73d34af`: 96 unit/component/contract tests, 4 CI safety tests, 18 hosted-backed production Chromium tests, and 20 isolated CI browser tests passed. The [baseline PR CI](https://github.com/Edleben/ScoGes_App/actions/runs/41234158801) and push required gates passed. Local reconciliation checks passed (96 unit/component/contract tests, 4 CI safety tests, SQL assertions, 18 browser cases, lint/typecheck/build/format); the [current PR checks](https://github.com/Edleben/ScoGes_App/pull/6/checks) track the review head.
+The earlier reviewed application baseline is commit `20cce2793cf298d5e7384f541097340db73d34af`: 96 unit/component/contract tests, 4 CI safety tests, 18 hosted-backed production Chromium tests, and 20 isolated CI browser tests passed. The [baseline PR CI](https://github.com/Edleben/ScoGes_App/actions/runs/41234158801) and push required gates passed. Local reconciliation checks passed (96 unit/component/contract tests, 4 CI safety tests, SQL assertions, 18 browser cases, lint/typecheck/build/format); the [current PR checks](https://github.com/Edleben/ScoGes_App/pull/7/checks) track the review head.
 
 ## Closure checklist
 
@@ -16,7 +16,7 @@ The reviewed application baseline is commit `20cce2793cf298d5e7384f541097340db73
 | Hosted email lifecycle       | Verified                                    | Real FR/EN confirmation and recovery links completed; invitations submitted through the app, received and accepted; replay denied; exact fixtures cleaned up                                        |
 | Foundation regression        | Local refresh passed; see current PR checks | Lint, route type generation, typecheck, unit/contract and CI safety tests, formatting, production build, SQL/RLS/audit checks and full Chromium suite; no skipped/flaky results counted as passes   |
 | Migration/security integrity | Baseline verified; safeguards unchanged     | Existing append-only migration chain and tenant/permission/audit controls preserved; isolated CI covers fresh migrations and concurrency. No hosted settings or schema changes by this verification |
-| Documentation and acceptance | Final PR review/owner acceptance pending    | Both trackers and handoff agree; review [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) with passing required checks and explicitly accept closure                                            |
+| Documentation and acceptance | Final PR review/owner acceptance pending    | Both trackers and handoff agree; PR #6 is merged; review supplemental [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) with passing required checks and explicitly accept closure              |
 
 Evaluate the full [Sprint 0 Definition of Done](prompts/SPRINT_0_MASTER_PROMPT.md). Completion of the technical checklist does not imply an approved merge, deployment, or Sprint 1 activation. Do not infer final owner acceptance from the earlier readiness reply, which authorized verification after SMTP setup.
 
@@ -32,3 +32,5 @@ Legacy formatting debt, moderate development dependency advisories, the existing
 ## Supplemental negative-case follow-up
 
 PR #6 is now merged as `4fc102a`. The current request adds explicit expired/reused confirmation/recovery/invitation and delivery-failure coverage; [the email matrix](SPRINT_0_EMAIL_VALIDATION.md) distinguishes hosted checks from isolated CI. This follow-up requires its own validated PR review. The technical milestone score remains 100%; no Sprint 1 activation is implied.
+
+Supplemental test commit `73b6a11` passed 98 unit/component tests, 6 safety tests and 32 isolated browser cases, with no skipped/flaky results; both required gates passed. Hosted received-link expiry/reuse and the controlled transport-failure checks passed separately. The documentation-only evidence reconciliation is covered by the current PR checks.
