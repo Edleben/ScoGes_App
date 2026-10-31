@@ -179,6 +179,23 @@ describe("authentication actions", () => {
       ).toEqual({ ok: true, message: authText("fr", "checkEmail") });
     }
   });
+  for (const locale of ["fr", "en"] as const) {
+    it(`reports ${locale} recovery delivery failure without provider details or false success`, async () => {
+      auth.resetPasswordForEmail.mockResolvedValue({
+        error: {
+          status: 500,
+          code: "unexpected_failure",
+          message: "SMTP private-password a@example.com",
+        },
+      });
+      expect(
+        await requestPasswordResetAction(
+          { ok: false },
+          form({ email: "a@example.com", locale }),
+        ),
+      ).toEqual({ ok: false, message: authText(locale, "unavailable") });
+    });
+  }
   it("requires email confirmation before a new account proceeds", async () => {
     auth.signUp.mockResolvedValue({ data: { session: null }, error: null });
     const result = await signUpAction(
