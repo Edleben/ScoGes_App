@@ -41,3 +41,7 @@ Local lint/types/test/build checks and full isolated CI must validate this patch
 ## Bounded migration investigation — 2026-11-01
 
 [The completed investigation](R1_MINIMATCH_MIGRATION.md) identifies seven direct consumers and experimentally rejects a blanket v11 override and a callable-only adapter. Both passed default lint over the same 102 files/86 TSX rules, but focused React/import witnesses exposed crashes; v11 also removes `makeRe()`. A consumer-aware prototype is the conditional recommendation, with explicit maintenance and cross-platform/module-format criteria. No project dependency, lint configuration or application change was made by this spike. R1 remains partial and the remaining finding is not waived.
+
+## Real consumer-patch prototype — 2026-11-01
+
+[The actual installed prototype](R1_CONSUMER_PROTOTYPE.md) resolved only minimatch 11.0.1 and passed a frozen install with zero audit findings, using five version-pinned consumer patches. Ordinary lint/file/rule coverage and module/project-service checks agreed, but 2 of 15 optional rule-pattern cases differed on Windows. Promotion stopped under the agreed criteria. The main graph remains unchanged with one moderate finding; R1 is still partial. Linux/Node 22 and full candidate rollout checks were not run after that rejection. Further work requires supported upstream releases or an explicitly reviewed matching-contract modernization and patch maintenance scope.

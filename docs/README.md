@@ -32,6 +32,8 @@ Root product/framework/prompt/skill copies remain available as distribution refe
 | [CI](CI.md)                                   | Event coverage, required gate, artifacts, isolation and main protection            |
 | [Implementation log](IMPLEMENTATION_LOG.md)   | Append-only dated delivery/deployment/verification history                         |
 
+Prototype outcome: [actual consumer-patch candidate and no-go decision](R1_CONSUMER_PROTOTYPE.md), with [passive patch/result bundle](investigations/R1_CONSUMER_PROTOTYPE_RESULTS.json). The application graph is unchanged; R1 is not closed.
+
 Targeted dependency follow-up: [R1 partial remediation and minimatch compatibility blocker](R1_DEPENDENCY_REMEDIATION.md), [bounded migration investigation](R1_MINIMATCH_MIGRATION.md) and [sanitized spike results](investigations/R1_MINIMATCH_RESULTS.json). This does not close R1 or accept residual risk.
 
 Remediation planning: [R1–R7 actionable backlog](SPRINT_0_REMEDIATION.md) records the owner’s decision to keep the gate open, responsible functions, priorities and verification criteria. It authorizes documentation/planning only.

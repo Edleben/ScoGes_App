@@ -2,6 +2,8 @@
 
 Decision: **no-go for a blanket override or a callable-only shim; conditional next step is a consumer-aware development-tool prototype**. No production migration is implemented or approved by this investigation. R1 remains partially remediated; the Sprint 0 gate remains open.
 
+Follow-up: [the real consumer-patch prototype](R1_CONSUMER_PROTOTYPE.md) was executed and rejected for strict-parity promotion. It clears the isolated audit but changes two optional rule-pattern outcomes. That outcome supersedes the proposed next-step status below; no application migration was promoted.
+
 Baseline: `cd87cb310e6ee098229da30af4c83cd1732e6916`, policy branch `edwakson/ScoGes_App`, [PR #9](https://github.com/Edleben/ScoGes_App/pull/9) open at inspection. Vitest/mocker 5.0.3 remains the applied patch. Project package/lock/workspace/lint configuration and application files were not changed during the spike. Three pinned comparison packages were installed with scripts disabled in a newly created temporary directory outside the repository.
 
 ## Verified dependency scope
