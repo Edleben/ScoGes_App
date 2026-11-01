@@ -56,7 +56,7 @@ Sprint 0 membership/settings controls and the reviewed migration deployment step
 
 ## Sprint 0 validation status
 
-Foundation and administration checks are recorded in [Sprint 0 validation](docs/SPRINT_0_VALIDATION.md). Sprint 0 remains in progress: full UI translation and end-to-end email-link/receipt verification are still pending. The tracker reflects these acceptance gaps; Sprint 1 is not started.
+French/English foundation coverage and real confirmation/recovery/invitation receipt and link completion are verified, including expired/reused links and delivery failures. See [validation history](docs/SPRINT_0_VALIDATION.md), [email evidence](docs/SPRINT_0_EMAIL_VALIDATION.md), and [closure review/risk dispositions](docs/SPRINT_0_CLOSURE.md). Sprint 0 is technically 100% and remains in progress until explicit owner acceptance through [PR #8](https://github.com/Edleben/ScoGes_App/pull/8) with successful checks on its final head. Sprint 1 remains inactive; closure does not authorize deployment.
 
 ## Project records and agent handoff
 

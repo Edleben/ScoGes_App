@@ -21,9 +21,9 @@ export type SprintTracker = {
 
 // A dated repository checkpoint; refresh only from reviewed, executed evidence.
 export const trackerCheckpoint = {
-  validatedOn: "2026-10-31",
-  validationPr: "https://github.com/Edleben/ScoGes_App/pull/6",
-  validationRun: "https://github.com/Edleben/ScoGes_App/pull/6/checks",
+  validatedOn: "2026-11-01",
+  validationPr: "https://github.com/Edleben/ScoGes_App/pull/8",
+  validationRun: "https://github.com/Edleben/ScoGes_App/pull/8/checks",
 } as const;
 
 export const sprintTrackers: SprintTracker[] = [
@@ -34,7 +34,7 @@ export const sprintTrackers: SprintTracker[] = [
     status: "in_progress",
     progress: 100,
     summary:
-      "Les six jalons techniques, dont les parcours e-mail réels en français/anglais, sont vérifiés. Revue finale en attente ; Sprint 1 non démarré.",
+      "Les six jalons techniques sont livrés. La PR de clôture réunit les contrôles et les risques résiduels ; acceptation du propriétaire en attente. Sprint 1 non activé.",
     features: [
       {
         id: "workspace-quality",

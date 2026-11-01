@@ -36,6 +36,7 @@ describe("project tracker data", () => {
     expect(rows).toEqual(expected);
     expect(markdown).toContain(trackerCheckpoint.validatedOn);
     expect(markdown).toContain(trackerCheckpoint.validationPr);
+    expect(markdown).toContain(trackerCheckpoint.validationRun);
   });
 
   it("tracks all roadmap sprints without starting Sprint 1 work", () => {

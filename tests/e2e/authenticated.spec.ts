@@ -574,10 +574,10 @@ test.describe("live authentication lifecycle", () => {
     ).toBeVisible();
     await expect(checkpoint.getByRole("listitem")).toHaveCount(0);
     await expect(
-      checkpoint.getByRole("link", { name: "Validation des parcours (PR #6)" }),
-    ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/6");
+      checkpoint.getByRole("link", { name: "Clôture de Sprint 0 (PR #8)" }),
+    ).toHaveAttribute("href", "https://github.com/Edleben/ScoGes_App/pull/8");
     await expect(checkpoint).toContainText("Checklist manuelle");
-    await expect(checkpoint).toContainText("revue finale de la PR");
+    await expect(checkpoint).toContainText("acceptation du propriétaire");
     await page.goto("/dashboard/users?page=9999");
     await expect(
       page.getByRole("cell", { name: "Aucun membre à afficher.", exact: true }),
@@ -639,6 +639,16 @@ test.describe("live authentication lifecycle", () => {
               : "Validation status — Sprint 0",
         }),
       ).toContainText(locale === "fr" ? "reste ouverte" : "remains open");
+      const closure = page.getByRole("link", {
+        name:
+          locale === "fr"
+            ? "Clôture de Sprint 0 (PR #8)"
+            : "Sprint 0 closure (PR #8)",
+      });
+      await expect(closure).toHaveAttribute(
+        "href",
+        "https://github.com/Edleben/ScoGes_App/pull/8",
+      );
       for (const [fr, en, title] of [
         [
           "Paramètres",

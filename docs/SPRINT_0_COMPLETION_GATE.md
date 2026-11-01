@@ -1,36 +1,29 @@
 # Foundation completion gate
 
-Assessment: **2026-10-31 — technical milestones complete; final review/owner acceptance pending.** Sprint 0 remains active at 100% of six unweighted technical milestones. Sprint 1 remains planned at 0%. This is not a production-readiness certificate or activation of the next sprint.
+Assessment: **2026-11-01 — closure candidate; owner acceptance pending**. Six technical milestones are delivered at 100%; Sprint 0 stays `in_progress` until explicit acceptance is recorded. Sprint 1 remains planned at 0%. This is a development-foundation gate, not production certification or authorization to activate a later sprint.
 
-## Current evidence
+## Current review and evidence
 
-All six tracker milestones are verified. The owner configured hosted Auth SMTP, after which real French/English confirmation, recovery, invitation delivery/acceptance and invitation replay rejection passed. See [hosted email evidence](SPRINT_0_EMAIL_VALIDATION.md), [validation history](SPRINT_0_VALIDATION.md) and the [tracker](PROJECT_TRACKER.md).
+[PR #7](https://github.com/Edleben/ScoGes_App/pull/7) is merged as `6a76c436b5d7d2eb4efe50ea3895142412731540`. Its final-head CI passed 98 unit/component tests, 6 safety tests and 32 isolated Chromium cases, with no skipped/flaky results. Real hosted FR/EN confirmation/recovery/invitation receipt and completion, controlled negative-link checks and audited SMTP failure are documented in [email evidence](SPRINT_0_EMAIL_VALIDATION.md).
 
-The earlier reviewed application baseline is commit `20cce2793cf298d5e7384f541097340db73d34af`: 96 unit/component/contract tests, 4 CI safety tests, 18 hosted-backed production Chromium tests, and 20 isolated CI browser tests passed. The [baseline PR CI](https://github.com/Edleben/ScoGes_App/actions/runs/41234158801) and push required gates passed. Local reconciliation checks passed (96 unit/component/contract tests, 4 CI safety tests, SQL assertions, 18 browser cases, lint/typecheck/build/format); the [current PR checks](https://github.com/Edleben/ScoGes_App/pull/7/checks) track the review head.
+The closure candidate is [PR #8](https://github.com/Edleben/ScoGes_App/pull/8), with [current required checks](https://github.com/Edleben/ScoGes_App/pull/8/checks). All required checks must execute on its final head; prior green runs do not certify a later commit. Actual SHA/run links/totals are recorded in that PR after execution. See [validation history](SPRINT_0_VALIDATION.md), [both tracker records](PROJECT_TRACKER.md) and the [closure risk/acceptance register](SPRINT_0_CLOSURE.md).
 
 ## Closure checklist
 
-| Gate                         | Current assessment                          | Evidence / next step                                                                                                                                                                                |
-| ---------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Bilingual foundation         | Verified                                    | FR/EN onboarding, shell, dashboard/tracker, safe errors, locale navigation and document language; authenticated browser and component checks                                                        |
-| Hosted email lifecycle       | Verified                                    | Real FR/EN confirmation and recovery links completed; invitations submitted through the app, received and accepted; replay denied; exact fixtures cleaned up                                        |
-| Foundation regression        | Local refresh passed; see current PR checks | Lint, route type generation, typecheck, unit/contract and CI safety tests, formatting, production build, SQL/RLS/audit checks and full Chromium suite; no skipped/flaky results counted as passes   |
-| Migration/security integrity | Baseline verified; safeguards unchanged     | Existing append-only migration chain and tenant/permission/audit controls preserved; isolated CI covers fresh migrations and concurrency. No hosted settings or schema changes by this verification |
-| Documentation and acceptance | Final PR review/owner acceptance pending    | Both trackers and handoff agree; PR #6 is merged; review supplemental [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) with passing required checks and explicitly accept closure              |
+| Gate                          | Assessment / evidence required                                                                                                                                                                           |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bilingual foundation          | Delivered: authenticated FR/EN onboarding, shell/dashboard/tracker, safe errors, locale navigation and document language; refresh full Chromium on closure head                                          |
+| Real email lifecycle          | Delivered: actual receipt/link completion, expired/reused-link rejection, password/membership state and failed-delivery audit; retain the hosted-versus-isolated limits in the email matrix              |
+| Quality/build/security        | Final-head lint, generated route types, typecheck, unit/contract and CI safety tests, changed-file formatting, production build, dependency audit and secret scan must pass                              |
+| Migration/RLS/audit           | Final-head CI applies every migration fresh; tests real database roles, tenant isolation, permission denial, stale writes and atomic audit rollback; hosted refresh must leave no schema/fixture changes |
+| Concurrency/Chromium          | Disposable CI verifies independent-connection last-administrator races/audit counts and the complete browser suite; zero failures, skips and flaky results                                               |
+| Documentation/risk acceptance | UI and Markdown tracker/checkpoint agree; shared handoff is current; owner explicitly accepts technical closure and R1–R7 dispositions in PR #8                                                          |
 
-Evaluate the full [Sprint 0 Definition of Done](prompts/SPRINT_0_MASTER_PROMPT.md). Completion of the technical checklist does not imply an approved merge, deployment, or Sprint 1 activation. Do not infer final owner acceptance from the earlier readiness reply, which authorized verification after SMTP setup.
-
-Legacy formatting debt, moderate development dependency advisories, the existing timestamp-helper search-path warning, onboarding field-reset UX, broader accessibility and pilot backup/restore/deployment checks retain their documented disposition. Recheck new findings; never weaken safeguards or erase known limits to close the gate.
+Evaluate the full [Sprint 0 Definition of Done](prompts/SPRINT_0_MASTER_PROMPT.md). The [risk register](SPRINT_0_CLOSURE.md) identifies the shared rate-limit abstraction/header-policy deviation rather than quietly claiming complete production security. Existing hosted Auth limits and SQL invitation throttles remain in force. New security/data-integrity failures always block closure; documented debt does not authorize weakening safeguards.
 
 ## Transition procedure
 
-1. Complete the reconciliation checks and validated PR review; record owner acceptance of Sprint 0 closure.
-2. Only then mark Sprint 0 formally done in the sprint-status record, retaining this technical verification history.
-3. Obtain separate explicit owner activation of the [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md), resolving its business decisions before their affected slices.
-4. Keep later sprint features planned until implemented and verified; do not continue automatically.
-
-## Supplemental negative-case follow-up
-
-PR #6 is now merged as `4fc102a`. The current request adds explicit expired/reused confirmation/recovery/invitation and delivery-failure coverage; [the email matrix](SPRINT_0_EMAIL_VALIDATION.md) distinguishes hosted checks from isolated CI. This follow-up requires its own validated PR review. The technical milestone score remains 100%; no Sprint 1 activation is implied.
-
-Supplemental test commit `73b6a11` passed 98 unit/component tests, 6 safety tests and 32 isolated browser cases, with no skipped/flaky results; both required gates passed. Hosted received-link expiry/reuse and the controlled transport-failure checks passed separately. The documentation-only evidence reconciliation is covered by the current PR checks.
+1. Complete final-head checks and review PR #8. Record explicit owner acceptance of Sprint 0 and residual-risk dispositions; a request to verify, SMTP readiness, merged email PR or green badge alone is not acceptance.
+2. After acceptance, record review/merge evidence and set Sprint 0 to `done` in both trackers through a protected, freshly validated PR. Keep the six milestones at 100%, preserving dated evidence. Until that decision, both trackers intentionally remain `in_progress` at 100%.
+3. Stop at Sprint 0. Obtain separate explicit activation of the [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) and resolve its business decisions before affected slices.
+4. Production deployment, hosted migration changes and pilot readiness require their own authorization and evidence. Do not infer them from closure.

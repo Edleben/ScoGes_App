@@ -60,14 +60,14 @@ const fr = {
   checkpoint: "État de validation — Sprint 0",
   dated: "Point daté du",
   manual:
-    "Checklist manuelle de livraison ; la validation finale du sprint reste ouverte.",
+    "Checklist manuelle de livraison ; l’acceptation de la clôture reste ouverte.",
   delivered: "jalons livrés sur",
   weighted:
     "moyenne non pondérée des jalons. Les tests réussis ne valident pas les parcours encore ouverts.",
   next: "Prochaines actions de Sprint 0",
   reviewPending:
-    "Les six jalons techniques sont vérifiés. La revue finale de la PR reste en attente ; Sprint 1 n’est pas activé.",
-  validationPr: "Validation des parcours (PR #6)",
+    "Examiner les contrôles CI et les risques résiduels de la PR de clôture, puis accepter explicitement Sprint 0. L’acceptation du propriétaire reste en attente ; Sprint 1 n’est pas activé.",
+  validationPr: "Clôture de Sprint 0 (PR #8)",
   validationRun: "Contrôles CI de la PR",
   globalProgress: "Progression globale",
   sprints: "Sprints suivis",
@@ -136,14 +136,14 @@ const en = {
     "Track deliveries, remaining work and milestones for each sprint without starting later sprints.",
   checkpoint: "Validation status — Sprint 0",
   dated: "Checkpoint dated",
-  manual: "Manual delivery checklist; final sprint validation remains open.",
+  manual: "Manual delivery checklist; closure acceptance remains open.",
   delivered: "milestones delivered out of",
   weighted:
     "unweighted milestone average. Passing tests do not validate journeys that remain open.",
   next: "Next Sprint 0 actions",
   reviewPending:
-    "All six technical milestones are verified. Final PR review is pending; Sprint 1 is not active.",
-  validationPr: "Journey validation (PR #6)",
+    "Review the closure PR’s CI checks and residual risks, then explicitly accept Sprint 0. Owner acceptance is pending; Sprint 1 is not active.",
+  validationPr: "Sprint 0 closure (PR #8)",
   validationRun: "Pull request CI checks",
   globalProgress: "Overall progress",
   sprints: "Tracked sprints",
