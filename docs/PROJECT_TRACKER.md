@@ -69,3 +69,11 @@ Supplemental email coverage now includes hosted controlled expired/reused links 
 ## Closure acceptance checkpoint — 2026-11-01
 
 The UI checkpoint and this tracker point to PR #8. All six technical milestones remain delivered, with Sprint 0 `in_progress` at 100% pending owner acceptance of the exact validated closure head and [residual risks R1–R7](SPRINT_0_CLOSURE.md). Quality/build/security, migration/RLS/audit, concurrent administrator protection and all Chromium cases must pass on that head. Prior PR #7 totals (98 unit/component, 6 safety and 32 isolated browser tests) are historical evidence until refreshed by the closure checks. Record run links/results in PR #8; do not claim acceptance or change either sprint status prematurely. Sprint 1 stays planned at zero.
+
+## Owner decision — gate open for remediation (2026-11-01)
+
+The owner declined the R1–R7 deferral proposal. [The remediation backlog](SPRINT_0_REMEDIATION.md) now records all seven open items, priorities, responsible functions, acceptance criteria and release gates. Both sprint-status records remain `in_progress` at 100% of the original six delivered milestones; this historical score excludes remediation and does not imply accepted closure. No UI/application code changes are part of documenting this decision. Sprint 1 remains planned at zero.
+
+## R1 partial remediation — 2026-11-01
+
+The targeted Vitest/mocker 5.0.3 patch removes two moderate findings; one minimatch finding remains across legacy lint dependency paths. [R1 evidence](R1_DEPENDENCY_REMEDIATION.md) explains the compatibility blocker and remaining acceptance work. R1 remains open/partial; R2–R7 remain open. Original milestone percentages and UI checkpoint are unchanged historical delivery data, not remediation completion. Sprint 0 stays `in_progress`; no closure or Sprint 1 activation is inferred from merged PR #8.

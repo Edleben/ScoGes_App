@@ -1,6 +1,8 @@
 # Foundation completion gate
 
-Assessment: **2026-11-01 — closure candidate; owner acceptance pending**. Six technical milestones are delivered at 100%; Sprint 0 stays `in_progress` until explicit acceptance is recorded. Sprint 1 remains planned at 0%. This is a development-foundation gate, not production certification or authorization to activate a later sprint.
+Assessment: **2026-11-01 — owner kept the gate open for remediation**. Six technical milestones are delivered at 100%; Sprint 0 stays `in_progress` until explicit acceptance is recorded. Sprint 1 remains planned at 0%. This is a development-foundation gate, not production certification or authorization to activate a later sprint.
+
+The owner declined the proposed R1–R7 deferrals. Use [the remediation backlog](SPRINT_0_REMEDIATION.md) before requesting renewed closure acceptance. All items remain open; no risk waiver, merge, deployment or Sprint 1 activation is implied.
 
 ## Current review and evidence
 

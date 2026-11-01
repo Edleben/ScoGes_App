@@ -1,0 +1,659 @@
+{
+  "checkpoint": "2026-11-01",
+  "baselineCommit": "e17b0f315092997b6d309c832ba347520e707b77",
+  "decision": "NO_GO_FOR_PROMOTION",
+  "decisionReason": "Strict lint-option parity failed on Windows; no approval to change these semantics",
+  "isolation": {
+    "trackedCloneOnly": true,
+    "envLocalAbsent": true,
+    "pushDisabled": true,
+    "ignoreLifecycleScripts": true,
+    "mainConfigurationChanged": false
+  },
+  "candidate": {
+    "minimatch": "11.0.1",
+    "consumerOverrides": 7,
+    "patchPackages": 5,
+    "patchFiles": 16,
+    "workspace": "packages:\n  - .\n\nallowBuilds:\n  unrs-resolver: true\n\nconfirmModulesPurge: false\n\n# Minimum security patches; remove each override when parent ranges resolve safely.\noverrides:\n  \"vite@>=8.3.0 <8.3.3\": 8.3.3\n  \"undici@>=8.0.0 <8.12.2\": 8.12.2\n  \"source-map-js@>=1.0.0 <1.2.2\": 1.2.2\n\n  \"eslint@9.39.1>minimatch\": 11.0.1\n  \"@eslint/config-array@0.21.2>minimatch\": 11.0.1\n  \"@eslint/eslintrc@3.3.7>minimatch\": 11.0.1\n  \"eslint-plugin-jsx-a11y@6.10.2>minimatch\": 11.0.1\n  \"eslint-plugin-react@7.37.5>minimatch\": 11.0.1\n  \"eslint-plugin-import@2.32.0>minimatch\": 11.0.1\n  \"@typescript-eslint/typescript-estree@8.70.0>minimatch\": 11.0.1\n\npatchedDependencies:\n  '@eslint/config-array@0.21.2': patches/@eslint__config-array@0.21.2.patch\n  '@eslint/eslintrc@3.3.7': patches/@eslint__eslintrc@3.3.7.patch\n  eslint-plugin-import@2.32.0: patches/eslint-plugin-import@2.32.0.patch\n  eslint-plugin-jsx-a11y@6.10.2: patches/eslint-plugin-jsx-a11y@6.10.2.patch\n  eslint-plugin-react@7.37.5: patches/eslint-plugin-react@7.37.5.patch\n",
+    "lockfileSha256": "2d6b5e67ad7ede7b92ee1c9b49ee72fc39c61f068b72746ef0617ce274a76a05",
+    "frozenInstall": "passed",
+    "audit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    }
+  },
+  "baseline": {
+    "platform": "win32",
+    "node": "v24.22.0",
+    "fixtures": [
+      {
+        "name": "react invalid name",
+        "errors": 1,
+        "rules": ["react/jsx-pascal-case"]
+      },
+      {
+        "name": "react matching exception",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "react POSIX exception parity",
+        "errors": 1,
+        "rules": ["react/jsx-pascal-case"]
+      },
+      {
+        "name": "import denied allowlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import accepted allowlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import rejected forbidlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import accepted forbidlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import negated allowlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import negated forbidlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import unresolved path",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import Windows pattern",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "a11y custom control missing label",
+        "errors": 1,
+        "rules": ["jsx-a11y/control-has-associated-label"]
+      },
+      {
+        "name": "a11y custom control labelled",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "a11y nested custom child glob",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "a11y missing nested control",
+        "errors": 1,
+        "rules": ["jsx-a11y/label-has-associated-control"]
+      }
+    ],
+    "moduleChecks": [
+      {
+        "name": "config-array cjs",
+        "app": true,
+        "test": false,
+        "generated": false
+      },
+      {
+        "name": "eslintrc cjs",
+        "app": ["error"],
+        "test": null
+      },
+      {
+        "name": "config-array esm",
+        "app": true,
+        "test": false,
+        "generated": false
+      },
+      {
+        "name": "eslintrc esm",
+        "exception": "TypeError",
+        "message": "Cannot read properties of undefined (reading 'create')"
+      }
+    ],
+    "projectService": [
+      {
+        "allowed": true,
+        "program": true
+      },
+      {
+        "allowed": false,
+        "exception": "Error",
+        "message": "<repo>\\prototype-outside-project.js was not found by the project service. Consider either including it in the tsconfig.json or including it in allowDefaultProject."
+      }
+    ],
+    "fullLint": {
+      "files": 102,
+      "fileHash": "8f7b61149853223878ebb4317243d4ef9cddf52e748b376ca4bd6da4a9f68e63",
+      "diagnosticHash": "a60bf8784331a0233c042771ef51d939366589b87f21a9706282561f020e0830",
+      "rules": 86,
+      "rulesHash": "4489631ccffc144c43861189e3962c4aaa54abec9428f791b0bf8569d87e2432",
+      "errors": 0,
+      "warnings": 0
+    },
+    "ignores": {
+      ".next/probe.js": true,
+      "node_modules/probe.js": true,
+      "coverage/probe.js": true,
+      "playwright-report/probe.js": true,
+      "src/app/page.tsx": false
+    },
+    "globResults": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "prototype": {
+    "platform": "win32",
+    "node": "v24.22.0",
+    "fixtures": [
+      {
+        "name": "react invalid name",
+        "errors": 1,
+        "rules": ["react/jsx-pascal-case"]
+      },
+      {
+        "name": "react matching exception",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "react POSIX exception parity",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import denied allowlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import accepted allowlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import rejected forbidlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import accepted forbidlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import negated allowlist",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import negated forbidlist",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "import unresolved path",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "import Windows pattern",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      },
+      {
+        "name": "a11y custom control missing label",
+        "errors": 1,
+        "rules": ["jsx-a11y/control-has-associated-label"]
+      },
+      {
+        "name": "a11y custom control labelled",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "a11y nested custom child glob",
+        "errors": 0,
+        "rules": []
+      },
+      {
+        "name": "a11y missing nested control",
+        "errors": 1,
+        "rules": ["jsx-a11y/label-has-associated-control"]
+      }
+    ],
+    "moduleChecks": [
+      {
+        "name": "config-array cjs",
+        "app": true,
+        "test": false,
+        "generated": false
+      },
+      {
+        "name": "eslintrc cjs",
+        "app": ["error"],
+        "test": null
+      },
+      {
+        "name": "config-array esm",
+        "app": true,
+        "test": false,
+        "generated": false
+      },
+      {
+        "name": "eslintrc esm",
+        "exception": "TypeError",
+        "message": "Cannot read properties of undefined (reading 'create')"
+      }
+    ],
+    "projectService": [
+      {
+        "allowed": true,
+        "program": true
+      },
+      {
+        "allowed": false,
+        "exception": "Error",
+        "message": "<repo>\\prototype-outside-project.js was not found by the project service. Consider either including it in the tsconfig.json or including it in allowDefaultProject."
+      }
+    ],
+    "fullLint": {
+      "files": 102,
+      "fileHash": "8f7b61149853223878ebb4317243d4ef9cddf52e748b376ca4bd6da4a9f68e63",
+      "diagnosticHash": "a60bf8784331a0233c042771ef51d939366589b87f21a9706282561f020e0830",
+      "rules": 86,
+      "rulesHash": "4489631ccffc144c43861189e3962c4aaa54abec9428f791b0bf8569d87e2432",
+      "errors": 0,
+      "warnings": 0
+    },
+    "ignores": {
+      ".next/probe.js": true,
+      "node_modules/probe.js": true,
+      "coverage/probe.js": true,
+      "playwright-report/probe.js": true,
+      "src/app/page.tsx": false
+    },
+    "globResults": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  "fixtureInputs": [
+    {
+      "name": "react invalid name",
+      "plugin": "react",
+      "module": "eslint-plugin-react",
+      "rule": "react/jsx-pascal-case",
+      "options": {
+        "ignore": ["Allowed*"]
+      },
+      "code": "const x = <Bad_name />;"
+    },
+    {
+      "name": "react matching exception",
+      "plugin": "react",
+      "module": "eslint-plugin-react",
+      "rule": "react/jsx-pascal-case",
+      "options": {
+        "ignore": ["Bad*"]
+      },
+      "code": "const x = <Bad_name />;"
+    },
+    {
+      "name": "react POSIX exception parity",
+      "plugin": "react",
+      "module": "eslint-plugin-react",
+      "rule": "react/jsx-pascal-case",
+      "options": {
+        "ignore": ["[[:alpha:]]*"]
+      },
+      "code": "const x = <Bad_name />;"
+    },
+    {
+      "name": "import denied allowlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "allow": ["**/public/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import accepted allowlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "allow": ["**/lib/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import rejected forbidlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "forbid": ["**/lib/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import accepted forbidlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "forbid": ["**/public/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import negated allowlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "allow": ["!**/public/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import negated forbidlist",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "forbid": ["!**/public/**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "import unresolved path",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "allow": ["**/public/**"]
+      },
+      "code": "import tool from \"./nonexistent/private/tool.js\";"
+    },
+    {
+      "name": "import Windows pattern",
+      "plugin": "import",
+      "module": "eslint-plugin-import",
+      "rule": "import/no-internal-modules",
+      "options": {
+        "allow": ["**\\lib\\**"]
+      },
+      "code": "import tool from \"./src/lib/utils.ts\";"
+    },
+    {
+      "name": "a11y custom control missing label",
+      "plugin": "jsx-a11y",
+      "module": "eslint-plugin-jsx-a11y",
+      "rule": "jsx-a11y/control-has-associated-label",
+      "options": {
+        "controlComponents": ["ActionControl"]
+      },
+      "code": "const x=<ActionControl />;"
+    },
+    {
+      "name": "a11y custom control labelled",
+      "plugin": "jsx-a11y",
+      "module": "eslint-plugin-jsx-a11y",
+      "rule": "jsx-a11y/control-has-associated-label",
+      "options": {
+        "controlComponents": ["ActionControl"]
+      },
+      "code": "const x=<ActionControl aria-label=\"Submit\" />;"
+    },
+    {
+      "name": "a11y nested custom child glob",
+      "plugin": "jsx-a11y",
+      "module": "eslint-plugin-jsx-a11y",
+      "rule": "jsx-a11y/label-has-associated-control",
+      "options": {
+        "controlComponents": ["Custom*"],
+        "assert": "nesting"
+      },
+      "code": "const x=<label>Name<CustomInput /></label>;"
+    },
+    {
+      "name": "a11y missing nested control",
+      "plugin": "jsx-a11y",
+      "module": "eslint-plugin-jsx-a11y",
+      "rule": "jsx-a11y/label-has-associated-control",
+      "options": {
+        "controlComponents": ["Custom*"],
+        "assert": "nesting"
+      },
+      "code": "const x=<label>Name<div /></label>;"
+    }
+  ],
+  "fixtureDifferences": [
+    {
+      "name": "react POSIX exception parity",
+      "baseline": {
+        "name": "react POSIX exception parity",
+        "errors": 1,
+        "rules": ["react/jsx-pascal-case"]
+      },
+      "candidate": {
+        "name": "react POSIX exception parity",
+        "errors": 0,
+        "rules": []
+      }
+    },
+    {
+      "name": "import Windows pattern",
+      "baseline": {
+        "name": "import Windows pattern",
+        "errors": 0,
+        "rules": []
+      },
+      "candidate": {
+        "name": "import Windows pattern",
+        "errors": 1,
+        "rules": ["import/no-internal-modules"]
+      }
+    }
+  ],
+  "globDifferences": [
+    {
+      "input": ["src/[id]/page.tsx", "src/\\[id\\]/page.tsx"],
+      "baseline": false,
+      "candidate": true
+    },
+    {
+      "input": ["hello", "[[:alpha:]]*"],
+      "baseline": false,
+      "candidate": true
+    }
+  ],
+  "esmCorrection": {
+    "harnessCorrection": "Use named OverrideTester export, not default export",
+    "results": [
+      {
+        "name": "baseline",
+        "format": "esm",
+        "app": true,
+        "test": false
+      },
+      {
+        "name": "candidate",
+        "format": "esm",
+        "app": true,
+        "test": false
+      }
+    ]
+  },
+  "patches": [
+    {
+      "name": "@eslint__config-array@0.21.2.patch",
+      "sha256": "6ace6439117a46d1402e8d2928472693987bfec6782ec483ae257dcf10c7b06d",
+      "files": ["dist/esm/index.js"],
+      "additions": 1,
+      "deletions": 1,
+      "diff": "diff --git a/dist/esm/index.js b/dist/esm/index.js\nindex 52db07de381a181a069ba39b648d3a0158ef4bc6..5c3758b7fa83baf568aeb6299ed882e194b002f0 100644\n--- a/dist/esm/index.js\n+++ b/dist/esm/index.js\n@@ -1,7 +1,7 @@\n // @ts-self-types=\"./index.d.ts\"\n import * as posixPath from './std__path/posix.js';\n import * as windowsPath from './std__path/windows.js';\n-import minimatch from 'minimatch';\n+import * as minimatch from 'minimatch';\n import createDebug from 'debug';\n import { ObjectSchema } from '@eslint/object-schema';\n export { ObjectSchema } from '@eslint/object-schema';\n"
+    },
+    {
+      "name": "@eslint__eslintrc@3.3.7.patch",
+      "sha256": "e0571b68b406dec39a8de54f6e5281ae2d14a8a2d621930bffd73a444008ce2f",
+      "files": ["lib/config-array/override-tester.js"],
+      "additions": 1,
+      "deletions": 1,
+      "diff": "diff --git a/lib/config-array/override-tester.js b/lib/config-array/override-tester.js\nindex 3a445b1a2bbfd384d6ea85883bded5b5f4a12813..ba210d685920af8f974e3cef9e3e313b40b1a79f 100644\n--- a/lib/config-array/override-tester.js\n+++ b/lib/config-array/override-tester.js\n@@ -20,7 +20,7 @@\n import assert from \"node:assert\";\n import path from \"node:path\";\n import util from \"node:util\";\n-import minimatch from \"minimatch\";\n+import * as minimatch from \"minimatch\";\n \n const { Minimatch } = minimatch;\n \n"
+    },
+    {
+      "name": "eslint-plugin-import@2.32.0.patch",
+      "sha256": "d0c631c528887c4c4ad2b48ebcacfc17fce0f5be848ea73cc13198ac8f2bd645",
+      "files": [
+        "lib/rules/extensions.js",
+        "lib/rules/no-extraneous-dependencies.js",
+        "lib/rules/no-import-module-exports.js",
+        "lib/rules/no-internal-modules.js",
+        "lib/rules/no-namespace.js",
+        "lib/rules/no-unassigned-import.js",
+        "lib/rules/order.js"
+      ],
+      "additions": 11,
+      "deletions": 11,
+      "diff": "diff --git a/lib/rules/extensions.js b/lib/rules/extensions.js\nindex 54e60e1094fd3e6dcae5d789f502984b76248e79..02d95c300636e0e7133e2f83e51586d7503e2dfe 100644\n--- a/lib/rules/extensions.js\n+++ b/lib/rules/extensions.js\n@@ -1,6 +1,6 @@\n 'use strict';var _path = require('path');var _path2 = _interopRequireDefault(_path);\n \n-var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _resolve = require('eslint-module-utils/resolve');var _resolve2 = _interopRequireDefault(_resolve);\n var _importType = require('../core/importType');\n var _moduleVisitor = require('eslint-module-utils/moduleVisitor');var _moduleVisitor2 = _interopRequireDefault(_moduleVisitor);\ndiff --git a/lib/rules/no-extraneous-dependencies.js b/lib/rules/no-extraneous-dependencies.js\nindex 0dcf9d0544610dcdfa04409d438e2f82b3b4b718..8dd4acaf8e6d23e5f126075ec43baa403c79ac08 100644\n--- a/lib/rules/no-extraneous-dependencies.js\n+++ b/lib/rules/no-extraneous-dependencies.js\n@@ -1,6 +1,6 @@\n 'use strict';var _slicedToArray = function () {function sliceIterator(arr, i) {var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i[\"return\"]) _i[\"return\"]();} finally {if (_d) throw _e;}}return _arr;}return function (arr, i) {if (Array.isArray(arr)) {return arr;} else if (Symbol.iterator in Object(arr)) {return sliceIterator(arr, i);} else {throw new TypeError(\"Invalid attempt to destructure non-iterable instance\");}};}();var _path = require('path');var _path2 = _interopRequireDefault(_path);\n var _fs = require('fs');var _fs2 = _interopRequireDefault(_fs);\n-var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _contextCompat = require('eslint-module-utils/contextCompat');\n var _pkgUp = require('eslint-module-utils/pkgUp');var _pkgUp2 = _interopRequireDefault(_pkgUp);\n var _resolve = require('eslint-module-utils/resolve');var _resolve2 = _interopRequireDefault(_resolve);\ndiff --git a/lib/rules/no-import-module-exports.js b/lib/rules/no-import-module-exports.js\nindex c54dddeb5421c164b480883f3227760c4a33291d..6675ec3878136e8156118499f0af8e750d611738 100644\n--- a/lib/rules/no-import-module-exports.js\n+++ b/lib/rules/no-import-module-exports.js\n@@ -1,4 +1,4 @@\n-'use strict';var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+'use strict';var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _path = require('path');var _path2 = _interopRequireDefault(_path);\n var _contextCompat = require('eslint-module-utils/contextCompat');\n var _pkgUp = require('eslint-module-utils/pkgUp');var _pkgUp2 = _interopRequireDefault(_pkgUp);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { 'default': obj };}\ndiff --git a/lib/rules/no-internal-modules.js b/lib/rules/no-internal-modules.js\nindex 3b20616a24314b815c11561faeaa6a32ea629e4e..49b9708b257495869f4d49b1e3f41dcc2a124857 100644\n--- a/lib/rules/no-internal-modules.js\n+++ b/lib/rules/no-internal-modules.js\n@@ -1,4 +1,4 @@\n-'use strict';var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+'use strict';var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n \n var _resolve = require('eslint-module-utils/resolve');var _resolve2 = _interopRequireDefault(_resolve);\n var _importType = require('../core/importType');var _importType2 = _interopRequireDefault(_importType);\n@@ -48,8 +48,8 @@ module.exports = {\n \n   create: function () {function noReachingInside(context) {\n       var options = context.options[0] || {};\n-      var allowRegexps = (options.allow || []).map(function (p) {return _minimatch2['default'].makeRe(p);});\n-      var forbidRegexps = (options.forbid || []).map(function (p) {return _minimatch2['default'].makeRe(p);});\n+      var allowMatchers = (options.allow || []).map(function (p) {return new _minimatch.Minimatch(p);});\n+      var forbidMatchers = (options.forbid || []).map(function (p) {return new _minimatch.Minimatch(p);});\n \n       // minimatch patterns are expected to use / path separators, like import\n       // statements, so normalize paths to use the same\n@@ -71,12 +71,12 @@ module.exports = {\n \n       // test if reaching to this destination is allowed\n       function reachingAllowed(importPath) {\n-        return allowRegexps.some(function (re) {return re.test(importPath);});\n+        return allowMatchers.some(function (re) {return re.match(importPath);});\n       }\n \n       // test if reaching to this destination is forbidden\n       function reachingForbidden(importPath) {\n-        return forbidRegexps.some(function (re) {return re.test(importPath);});\n+        return forbidMatchers.some(function (re) {return re.match(importPath);});\n       }\n \n       function isAllowViolation(importPath) {\ndiff --git a/lib/rules/no-namespace.js b/lib/rules/no-namespace.js\nindex c858db0c0c3a84d1712b8f61cc69998e4c6275c2..8cb28736fb217ca538e5f4c08d77012ccbf32003 100644\n--- a/lib/rules/no-namespace.js\n+++ b/lib/rules/no-namespace.js\n@@ -3,7 +3,7 @@\n \n \n \n-var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _contextCompat = require('eslint-module-utils/contextCompat');\n \n var _docsUrl = require('../docsUrl');var _docsUrl2 = _interopRequireDefault(_docsUrl);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { 'default': obj };}\ndiff --git a/lib/rules/no-unassigned-import.js b/lib/rules/no-unassigned-import.js\nindex 121d5110923ca474a7eed915051146ff92f8879b..b4aec90c8ae78b0f0ca9fc9ed394ec730e62e7e6 100644\n--- a/lib/rules/no-unassigned-import.js\n+++ b/lib/rules/no-unassigned-import.js\n@@ -1,5 +1,5 @@\n 'use strict';var _path = require('path');var _path2 = _interopRequireDefault(_path);\n-var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _contextCompat = require('eslint-module-utils/contextCompat');\n \n var _staticRequire = require('../core/staticRequire');var _staticRequire2 = _interopRequireDefault(_staticRequire);\ndiff --git a/lib/rules/order.js b/lib/rules/order.js\nindex 578709bf0b90c1c794ed7f8c046d9b3edaf0ff0a..12180bcdd9089b17c3438190eacaf2f7d3658670 100644\n--- a/lib/rules/order.js\n+++ b/lib/rules/order.js\n@@ -1,6 +1,6 @@\n 'use strict';var _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) {return typeof obj;} : function (obj) {return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj;};var _slicedToArray = function () {function sliceIterator(arr, i) {var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i[\"return\"]) _i[\"return\"]();} finally {if (_d) throw _e;}}return _arr;}return function (arr, i) {if (Array.isArray(arr)) {return arr;} else if (Symbol.iterator in Object(arr)) {return sliceIterator(arr, i);} else {throw new TypeError(\"Invalid attempt to destructure non-iterable instance\");}};}();\n \n-var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch);\n+var _minimatch = require('minimatch');var _minimatch2 = _interopRequireDefault(_minimatch.minimatch);\n var _arrayIncludes = require('array-includes');var _arrayIncludes2 = _interopRequireDefault(_arrayIncludes);\n var _object = require('object.groupby');var _object2 = _interopRequireDefault(_object);\n var _contextCompat = require('eslint-module-utils/contextCompat');\n"
+    },
+    {
+      "name": "eslint-plugin-jsx-a11y@6.10.2.patch",
+      "sha256": "2ae63a888ba893d320935c94105b7588b1fa77730ad05f3fed0ec19b1f1f11f7",
+      "files": [
+        "lib/util/mayContainChildComponent.js",
+        "lib/util/mayHaveAccessibleLabel.js"
+      ],
+      "additions": 2,
+      "deletions": 2,
+      "diff": "diff --git a/lib/util/mayContainChildComponent.js b/lib/util/mayContainChildComponent.js\nindex 9c12846d93a699b3870fcc682b70318d549a9b11..20fc6c3a448824c09637011d50d215acf04f087e 100644\n--- a/lib/util/mayContainChildComponent.js\n+++ b/lib/util/mayContainChildComponent.js\n@@ -5,7 +5,7 @@ Object.defineProperty(exports, \"__esModule\", {\n });\n exports[\"default\"] = mayContainChildComponent;\n var _jsxAstUtils = require(\"jsx-ast-utils\");\n-var _minimatch = _interopRequireDefault(require(\"minimatch\"));\n+var _minimatch = _interopRequireDefault(require(\"minimatch\").minimatch);\n function _interopRequireDefault(e) { return e && e.__esModule ? e : { \"default\": e }; }\n /**\n  * Returns true if it can positively determine that the element lacks an\ndiff --git a/lib/util/mayHaveAccessibleLabel.js b/lib/util/mayHaveAccessibleLabel.js\nindex 07eb76610957454796da190d118f1b1061bbad20..2dcf2327a6cb4f2fa313c660f9c73f066d9ff153 100644\n--- a/lib/util/mayHaveAccessibleLabel.js\n+++ b/lib/util/mayHaveAccessibleLabel.js\n@@ -6,7 +6,7 @@ Object.defineProperty(exports, \"__esModule\", {\n exports[\"default\"] = mayHaveAccessibleLabel;\n var _arrayIncludes = _interopRequireDefault(require(\"array-includes\"));\n var _jsxAstUtils = require(\"jsx-ast-utils\");\n-var _minimatch = _interopRequireDefault(require(\"minimatch\"));\n+var _minimatch = _interopRequireDefault(require(\"minimatch\").minimatch);\n function _interopRequireDefault(e) { return e && e.__esModule ? e : { \"default\": e }; }\n /**\n  * Returns true if a labelling element is found or if it cannot determine if\n"
+    },
+    {
+      "name": "eslint-plugin-react@7.37.5.patch",
+      "sha256": "639b2ea575a6d6ebda2ac8a81dfb42833dc83da284514722990c8016139f412c",
+      "files": [
+        "lib/rules/forbid-component-props.js",
+        "lib/rules/jsx-handler-names.js",
+        "lib/rules/jsx-pascal-case.js",
+        "lib/rules/no-danger.js",
+        "lib/rules/no-unstable-nested-components.js"
+      ],
+      "additions": 5,
+      "deletions": 5,
+      "diff": "diff --git a/lib/rules/forbid-component-props.js b/lib/rules/forbid-component-props.js\nindex 2dd4412b87e7d57d0d46415cd2816e73f6b34e7e..4f520a2e6e732182c7788367a9947bb275d73ff2 100644\n--- a/lib/rules/forbid-component-props.js\n+++ b/lib/rules/forbid-component-props.js\n@@ -5,7 +5,7 @@\n \n 'use strict';\n \n-const minimatch = require('minimatch');\n+const { minimatch } = require('minimatch');\n const docsUrl = require('../util/docsUrl');\n const report = require('../util/report');\n \ndiff --git a/lib/rules/jsx-handler-names.js b/lib/rules/jsx-handler-names.js\nindex f89f24413e8bd0ae35167c52381b907ef687a2bc..8a73dfaa5d3016112ed89a7474df2e39ec42a468 100644\n--- a/lib/rules/jsx-handler-names.js\n+++ b/lib/rules/jsx-handler-names.js\n@@ -5,7 +5,7 @@\n \n 'use strict';\n \n-const minimatch = require('minimatch');\n+const { minimatch } = require('minimatch');\n const docsUrl = require('../util/docsUrl');\n const getText = require('../util/eslint').getText;\n const report = require('../util/report');\ndiff --git a/lib/rules/jsx-pascal-case.js b/lib/rules/jsx-pascal-case.js\nindex efeef4032a97a6918e275d68600d644a242c2b83..dfcbdf5f0124e9de78c1b2eff497fc06062a612e 100644\n--- a/lib/rules/jsx-pascal-case.js\n+++ b/lib/rules/jsx-pascal-case.js\n@@ -6,7 +6,7 @@\n 'use strict';\n \n const elementType = require('jsx-ast-utils/elementType');\n-const minimatch = require('minimatch');\n+const { minimatch } = require('minimatch');\n const docsUrl = require('../util/docsUrl');\n const jsxUtil = require('../util/jsx');\n const report = require('../util/report');\ndiff --git a/lib/rules/no-danger.js b/lib/rules/no-danger.js\nindex 54dbed49cffd1912e2f99a141ff37515b8f1f7c2..8d1fdcc2a487f5f1907d776c66ec5a6042a86dc5 100644\n--- a/lib/rules/no-danger.js\n+++ b/lib/rules/no-danger.js\n@@ -7,7 +7,7 @@\n \n const has = require('hasown');\n const fromEntries = require('object.fromentries/polyfill')();\n-const minimatch = require('minimatch');\n+const { minimatch } = require('minimatch');\n \n const docsUrl = require('../util/docsUrl');\n const jsxUtil = require('../util/jsx');\ndiff --git a/lib/rules/no-unstable-nested-components.js b/lib/rules/no-unstable-nested-components.js\nindex c330795ff0f75802ad2360b9f729d7db21459630..f3880c2e82aa649c063f6a2a1895381b514d99cf 100644\n--- a/lib/rules/no-unstable-nested-components.js\n+++ b/lib/rules/no-unstable-nested-components.js\n@@ -5,7 +5,7 @@\n \n 'use strict';\n \n-const minimatch = require('minimatch');\n+const { minimatch } = require('minimatch');\n const Components = require('../util/Components');\n const docsUrl = require('../util/docsUrl');\n const astUtil = require('../util/ast');\n"
+    }
+  ],
+  "notExecuted": [
+    "Linux and Node 22 parity (stopped at Windows parity gate)",
+    "Candidate full application/build/database/browser gates (not promoted)",
+    "Denial-of-service exploit/regression workload (not needed to reject compatibility)"
+  ],
+  "limitations": [
+    "Local Windows/Node 24/pnpm 11.25 evidence only",
+    "Initial eslintrc ESM harness used the wrong default export; corrected named-export follow-up passed for both graphs",
+    "Patch bundle is passive research data, not registered by the application",
+    "Candidate lock is retained in the disposable local clone; this bundle records its digest, not a portable lock snapshot",
+    "No security waiver or R1 closure"
+  ]
+}
