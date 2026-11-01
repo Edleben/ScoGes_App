@@ -32,6 +32,8 @@ Root product/framework/prompt/skill copies remain available as distribution refe
 | [CI](CI.md)                                   | Event coverage, required gate, artifacts, isolation and main protection            |
 | [Implementation log](IMPLEMENTATION_LOG.md)   | Append-only dated delivery/deployment/verification history                         |
 
+Targeted dependency follow-up: [R1 partial remediation and minimatch compatibility blocker](R1_DEPENDENCY_REMEDIATION.md). This does not close R1 or accept residual risk.
+
 Remediation planning: [R1–R7 actionable backlog](SPRINT_0_REMEDIATION.md) records the owner’s decision to keep the gate open, responsible functions, priorities and verification criteria. It authorizes documentation/planning only.
 
 Closure-specific records: [completion gate](SPRINT_0_COMPLETION_GATE.md), [closure acceptance and risk register](SPRINT_0_CLOSURE.md), and [real email evidence](SPRINT_0_EMAIL_VALIDATION.md). Current review is [PR #8](https://github.com/Edleben/ScoGes_App/pull/8); verify its exact-head CI and human acceptance separately.

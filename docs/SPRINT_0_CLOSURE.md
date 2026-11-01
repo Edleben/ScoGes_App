@@ -36,3 +36,7 @@ No safeguard is waived by this register. A newly failing required check, isolati
 3. Record actual SHA, test totals, run links, failures/retries and limits in the closure PR. CI results attached to that immutable SHA are the final validation evidence; do not create a documentation-only untested successor just to copy a green badge.
 4. The owner explicitly accepts Sprint 0 technical closure and R1–R7 dispositions in the validated PR. Do not auto-merge or claim acceptance before that decision. Record the approval/merge evidence and then update both trackers to `done` through the same protected PR process, with fresh validation for any changed head.
 5. Stop. Sprint 1 requires separate explicit owner activation of its [bounded prompt](prompts/SPRINT_1_MASTER_PROMPT.md); neither closure nor PR merge activates it.
+
+## R1 partial remediation checkpoint — 2026-11-01
+
+[The targeted Vitest patch](R1_DEPENDENCY_REMEDIATION.md) removes both mocker advisories; the refreshed audit reports one moderate minimatch finding, zero high/critical. R1 remains partial pending a compatible resolution of legacy lint consumers. The historical three-finding row above is superseded for audit totals, not for owner acceptance. R2–R7 and the completion gate remain open; no previously declined deferral is accepted.

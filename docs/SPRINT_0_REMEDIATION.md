@@ -2,7 +2,7 @@
 
 Checkpoint: **2026-11-01**. Owner decision: **“Keep the gate open for remediation.”** The previously proposed deferrals are **not accepted**. Sprint 0 remains `in_progress`; Sprint 1, deployment and hosted changes are not authorized by this record. The six delivered tracker milestones retain their historical 100% score; that score does not include completion of this remediation backlog.
 
-This is the actionable follow-up to the [closure risk register](SPRINT_0_CLOSURE.md) and [completion gate](SPRINT_0_COMPLETION_GATE.md). All R1–R7 items are **open**, with no assigned individual or promised date. Owners below are responsible functions pending assignment. Severity is an engineering assessment except R1's reported audit rating; priority describes work order, not a claim of active exploitation. Evidence is dated and must be refreshed before implementation.
+This is the actionable follow-up to the [closure risk register](SPRINT_0_CLOSURE.md) and [completion gate](SPRINT_0_COMPLETION_GATE.md). R1 is **partially remediated** with minimatch still open; R2–R7 remain **open**, with no assigned individual or promised date. Owners below are responsible functions pending assignment. Severity is an engineering assessment except R1's reported audit rating; priority describes work order, not a claim of active exploitation. Evidence is dated and must be refreshed before implementation.
 
 ## Priority and release gates
 
@@ -20,12 +20,12 @@ P1 means the next security/remediation work, not an emergency declaration. There
 
 ## R1 — Development-tool dependency advisories
 
-- **Status / evidence:** Open. The 2026-11-01 audit reported zero high/critical and three moderate development-only advisories: two `@vitest/mocker`, one `minimatch`. This is a dated result, not a live audit.
+- **Status / evidence:** Partially remediated. Vitest/mocker now resolve to 5.0.3; refreshed audit reports one moderate minimatch advisory and zero high/critical. The two mocker findings are gone. [R1 evidence and compatibility blocker](R1_DEPENDENCY_REMEDIATION.md) records the targeted change and remaining major-3/10 minimatch paths. Validation/review must pass; R1 is not closed.
 - **Impact:** Test/development tooling may permit code injection, path traversal or resource exhaustion under advisory-specific conditions. Development-only does not mean harmless, especially for CI that processes untrusted contributions.
 - **Existing mitigation:** No reported runtime dependency findings at that checkpoint; read-only CI permissions, isolated services and the existing high/critical audit gate. These do not eliminate the moderate findings.
 - **Remediation:** Refresh advisories and resolved dependency paths. Apply the smallest compatible Vitest/mocker patch (documented fixed line >=5.0.3). Check upstream fixes for minimatch (documented >=11.0.1); do not force a breaking major across consumers. Document a real compatibility blocker if a safe resolution is unavailable.
 - **Acceptance / verification:** No affected vulnerable resolutions remain, or an individually documented owner-approved exception exists. Frozen install, full unit/contract/CI-safety tests, lint/types/build, dependency audit and Chromium regression pass on the resulting PR head. Keep lockfile changes reviewable; do not weaken the audit threshold.
-- **Deferral:** Previously proposed for controlled development only; **not accepted**. A moderate rating does not require halting all local development, but this is a small, high-value candidate to fix now.
+- **Deferral:** Previously proposed for controlled development only; **not accepted**. The compatible Vitest patch is applied; minimatch still needs supported consumer upgrades or a reviewed backport/migration. No blanket breaking-major override or waiver is accepted.
 
 ## R2 — Timestamp trigger helper search path
 
