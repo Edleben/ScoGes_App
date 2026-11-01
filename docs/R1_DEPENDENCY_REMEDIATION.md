@@ -37,3 +37,7 @@ The refreshed ESLint latest-version metadata still declared a major-10 minimatch
 ## Verification and review
 
 Local lint/types/test/build checks and full isolated CI must validate this patch before review acceptance. Actual results, commit SHA and run links are recorded in the implementation log and remediation PR after execution; this document does not predeclare pending checks successful. The [remediation backlog](SPRINT_0_REMEDIATION.md) and [completion gate](SPRINT_0_COMPLETION_GATE.md) remain authoritative for the open status.
+
+## Bounded migration investigation — 2026-11-01
+
+[The completed investigation](R1_MINIMATCH_MIGRATION.md) identifies seven direct consumers and experimentally rejects a blanket v11 override and a callable-only adapter. Both passed default lint over the same 102 files/86 TSX rules, but focused React/import witnesses exposed crashes; v11 also removes `makeRe()`. A consumer-aware prototype is the conditional recommendation, with explicit maintenance and cross-platform/module-format criteria. No project dependency, lint configuration or application change was made by this spike. R1 remains partial and the remaining finding is not waived.

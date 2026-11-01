@@ -1,0 +1,318 @@
+{
+  "checkpoint": "2026-11-01",
+  "baselineCommit": "cd87cb310e6ee098229da30af4c83cd1732e6916",
+  "platform": "Windows",
+  "node": "v24.22.0",
+  "method": "Temporary pinned packages; CommonJS module-load substitution in child processes only; no repository dependency/config changes",
+  "globProbe": {
+    "cases": [
+      ["src/app/page.tsx", "**/*.{ts,tsx}"],
+      ["src/.hidden.ts", "**/*.ts"],
+      [
+        "src/.hidden.ts",
+        "**/*.ts",
+        {
+          "dot": true
+        }
+      ],
+      [".config/file.js", "**/*.js"],
+      [
+        ".config/file.js",
+        "**/*.js",
+        {
+          "dot": true
+        }
+      ],
+      ["file.ts", "!**/*.test.ts"],
+      ["file.test.ts", "!**/*.test.ts"],
+      ["src/a.test.ts", "**/!(*.test).ts"],
+      ["src/a.ts", "**/!(*.test).ts"],
+      ["a/b/c.ts", "**/*.ts"],
+      [
+        "a/.b/c.ts",
+        "**/*.ts",
+        {
+          "dot": true
+        }
+      ],
+      [
+        "a/b/c.ts",
+        "*.ts",
+        {
+          "matchBase": true
+        }
+      ],
+      ["page.tsx", "*.{ts,tsx}"],
+      ["page.jsx", "*.{ts,tsx}"],
+      ["x.js", "*.@(js|ts)"],
+      ["x.ts", "*.?(t)s"],
+      [
+        "Foo",
+        "foo",
+        {
+          "nocase": true
+        }
+      ],
+      ["Foo", "foo"],
+      ["foo/bar/", "foo/**"],
+      ["foo//bar", "foo/bar"],
+      ["src/[id]/page.tsx", "src/\\[id\\]/page.tsx"],
+      ["src/[id]/page.tsx", "src/**/page.tsx"],
+      ["C:/repo/src/page.ts", "C:/**/page.ts"],
+      [
+        "C:\\repo\\src\\page.ts",
+        "C:/**/page.ts",
+        {
+          "windowsPathsNoEscape": true
+        }
+      ],
+      ["//server/share/src/a.ts", "//server/share/**/*.ts"],
+      [
+        "a/b",
+        "**/../b",
+        {
+          "optimizationLevel": 2
+        }
+      ],
+      [
+        "a/b",
+        "a/**/../b",
+        {
+          "optimizationLevel": 2
+        }
+      ],
+      ["hello", "[[:alpha:]]*"],
+      ["file10.ts", "file{1..12}.ts"],
+      ["a.js", "#comment"],
+      [
+        "#comment",
+        "#comment",
+        {
+          "nocomment": true
+        }
+      ],
+      ["a/b/c", "a/*/c"],
+      ["a/b/c", "a/**"],
+      [
+        "a/b/c",
+        "a/b",
+        {
+          "partial": true
+        }
+      ],
+      [
+        "a.js",
+        "!*.ts",
+        {
+          "nonegate": true
+        }
+      ],
+      [
+        "a/b",
+        "a\\b",
+        {
+          "windowsPathsNoEscape": true
+        }
+      ],
+      [
+        "a/b",
+        "a/**/b",
+        {
+          "noglobstar": true
+        }
+      ],
+      ["a/b", "a/**/b"],
+      [
+        ".next/cache/a.js",
+        "**/.next/**",
+        {
+          "dot": true
+        }
+      ],
+      ["node_modules/a/x.js", "**/node_modules/**"]
+    ],
+    "apis": {
+      "legacy": {
+        "version": "3.1.5",
+        "moduleType": "function",
+        "exports": [
+          "GLOBSTAR",
+          "Minimatch",
+          "braceExpand",
+          "defaults",
+          "filter",
+          "makeRe",
+          "match",
+          "sep"
+        ],
+        "instanceMakeRe": "function",
+        "setValueTypes": [["Object", "RegExp"]],
+        "defaultsType": "function"
+      },
+      "modern": {
+        "version": "10.2.6",
+        "moduleType": "object",
+        "exports": [
+          "AST",
+          "GLOBSTAR",
+          "Minimatch",
+          "braceExpand",
+          "defaults",
+          "escape",
+          "filter",
+          "makeRe",
+          "match",
+          "minimatch",
+          "sep",
+          "unescape"
+        ],
+        "instanceMakeRe": "function",
+        "setValueTypes": [["Symbol", "RegExp"]],
+        "defaultsType": "function"
+      },
+      "patched": {
+        "version": "11.0.1",
+        "moduleType": "object",
+        "exports": [
+          "GLOBSTAR",
+          "Minimatch",
+          "braceExpand",
+          "defaults",
+          "escape",
+          "filter",
+          "match",
+          "minimatch",
+          "sep",
+          "unescape"
+        ],
+        "instanceMakeRe": "undefined",
+        "setValueTypes": [["Symbol", "Matcher"]],
+        "defaultsType": "function"
+      }
+    },
+    "differences": [
+      {
+        "case": 20,
+        "input": ["src/[id]/page.tsx", "src/\\[id\\]/page.tsx"],
+        "results": {
+          "legacy": false,
+          "modern": true,
+          "patched": true
+        }
+      },
+      {
+        "case": 27,
+        "input": ["hello", "[[:alpha:]]*"],
+        "results": {
+          "legacy": false,
+          "modern": true,
+          "patched": true
+        }
+      }
+    ]
+  },
+  "lintProbes": [
+    {
+      "mode": "baseline",
+      "fullLint": {
+        "files": 102,
+        "fileHash": "8f7b61149853223878ebb4317243d4ef9cddf52e748b376ca4bd6da4a9f68e63",
+        "diagnosticHash": "a60bf8784331a0233c042771ef51d939366589b87f21a9706282561f020e0830",
+        "errors": 0,
+        "warnings": 0,
+        "enabledTsxRules": 86,
+        "rulesHash": "4489631ccffc144c43861189e3962c4aaa54abec9428f791b0bf8569d87e2432"
+      },
+      "ignored": {
+        ".next/probe.js": true,
+        "node_modules/probe.js": true,
+        "coverage/probe.js": true,
+        "playwright-report/probe.js": true,
+        "src/app/page.tsx": false
+      },
+      "fixtures": [
+        {
+          "name": "react callable export",
+          "rules": ["react/jsx-pascal-case"],
+          "errors": 1
+        },
+        {
+          "name": "import makeRe API",
+          "rules": ["import/no-internal-modules"],
+          "errors": 1
+        }
+      ],
+      "interceptedCallSites": 0
+    },
+    {
+      "mode": "raw",
+      "fullLint": {
+        "files": 102,
+        "fileHash": "8f7b61149853223878ebb4317243d4ef9cddf52e748b376ca4bd6da4a9f68e63",
+        "diagnosticHash": "a60bf8784331a0233c042771ef51d939366589b87f21a9706282561f020e0830",
+        "errors": 0,
+        "warnings": 0,
+        "enabledTsxRules": 86,
+        "rulesHash": "4489631ccffc144c43861189e3962c4aaa54abec9428f791b0bf8569d87e2432"
+      },
+      "ignored": {
+        ".next/probe.js": true,
+        "node_modules/probe.js": true,
+        "coverage/probe.js": true,
+        "playwright-report/probe.js": true,
+        "src/app/page.tsx": false
+      },
+      "fixtures": [
+        {
+          "name": "react callable export",
+          "exception": "TypeError",
+          "message": "minimatch is not a function"
+        },
+        {
+          "name": "import makeRe API",
+          "exception": "TypeError",
+          "message": "Error while loading rule 'import/no-internal-modules': Cannot read properties of undefined (reading 'makeRe')"
+        }
+      ],
+      "interceptedCallSites": 20
+    },
+    {
+      "mode": "callable",
+      "fullLint": {
+        "files": 102,
+        "fileHash": "8f7b61149853223878ebb4317243d4ef9cddf52e748b376ca4bd6da4a9f68e63",
+        "diagnosticHash": "a60bf8784331a0233c042771ef51d939366589b87f21a9706282561f020e0830",
+        "errors": 0,
+        "warnings": 0,
+        "enabledTsxRules": 86,
+        "rulesHash": "4489631ccffc144c43861189e3962c4aaa54abec9428f791b0bf8569d87e2432"
+      },
+      "ignored": {
+        ".next/probe.js": true,
+        "node_modules/probe.js": true,
+        "coverage/probe.js": true,
+        "playwright-report/probe.js": true,
+        "src/app/page.tsx": false
+      },
+      "fixtures": [
+        {
+          "name": "react callable export",
+          "rules": ["react/jsx-pascal-case"],
+          "errors": 1
+        },
+        {
+          "name": "import makeRe API",
+          "exception": "TypeError",
+          "message": "Error while loading rule 'import/no-internal-modules': _minimatch2.default.makeRe is not a function"
+        }
+      ],
+      "interceptedCallSites": 20
+    }
+  ],
+  "limits": [
+    "40 synthetic glob cases are not exhaustive",
+    "CommonJS interception is not a real pnpm override and does not validate ESM loading",
+    "No candidate frozen install, audit-zero claim, security exploit test, Linux run or complete migration regression is established",
+    "TypeScript project-service and legacy eslintrc paths need separate coverage"
+  ]
+}
