@@ -32,6 +32,8 @@ Root product/framework/prompt/skill copies remain available as distribution refe
 | [CI](CI.md)                                   | Event coverage, required gate, artifacts, isolation and main protection            |
 | [Implementation log](IMPLEMENTATION_LOG.md)   | Append-only dated delivery/deployment/verification history                         |
 
+Remediation planning: [R1–R7 actionable backlog](SPRINT_0_REMEDIATION.md) records the owner’s decision to keep the gate open, responsible functions, priorities and verification criteria. It authorizes documentation/planning only.
+
 Closure-specific records: [completion gate](SPRINT_0_COMPLETION_GATE.md), [closure acceptance and risk register](SPRINT_0_CLOSURE.md), and [real email evidence](SPRINT_0_EMAIL_VALIDATION.md). Current review is [PR #8](https://github.com/Edleben/ScoGes_App/pull/8); verify its exact-head CI and human acceptance separately.
 
 ## Agent entry points
@@ -46,4 +48,4 @@ Update `src/modules/project-tracker/tracker-data.ts` and `PROJECT_TRACKER.md` to
 
 ## Next sprint proposal
 
-The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and inactive. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence, including [hosted email verification](SPRINT_0_EMAIL_VALIDATION.md), and awaits final review/owner acceptance; Sprint 0 remains active. Approval and implementation follow the documented gate, rather than the presence of a prompt file.
+The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and inactive. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence, including [hosted email verification](SPRINT_0_EMAIL_VALIDATION.md), but the owner kept it open for R1–R7 remediation; Sprint 0 remains active. Approval and implementation follow the documented gate, rather than the presence of a prompt file.

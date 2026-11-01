@@ -1,8 +1,12 @@
 # Sprint 0 closure review — 2026-11-01
 
-Status: **closure candidate; owner acceptance pending**. This record proposes technical closure, not production readiness, deployment or Sprint 1 activation. Sprint 0 stays `in_progress` at 100% until explicit owner acceptance is recorded through the validated closure PR.
+Status: **gate open for remediation; proposed R1–R7 deferrals not accepted**. This record proposes technical closure, not production readiness, deployment or Sprint 1 activation. Sprint 0 stays `in_progress` at 100% until explicit owner acceptance is recorded through the validated closure PR.
 
 Review: [PR #8](https://github.com/Edleben/ScoGes_App/pull/8), [required checks](https://github.com/Edleben/ScoGes_App/pull/8/checks). Final-head run links and actual results belong in that PR; this document does not predeclare a pending check successful.
+
+## Owner decision and remediation follow-up
+
+On 2026-11-01 the owner explicitly chose **“Keep the gate open for remediation.”** The dispositions below are historical proposals, not accepted waivers. [The R1–R7 remediation backlog](SPRINT_0_REMEDIATION.md) is the current actionable record: severity/priority, impacts, existing mitigations, responsible functions, release gates, acceptance criteria and verification. All seven items remain open. Renewed acceptance requires completed remediation or specifically approved dispositions; a green CI gate does not override this decision.
 
 ## Reviewed baseline and scope
 
@@ -10,7 +14,7 @@ PR #7 is merged as `6a76c436b5d7d2eb4efe50ea3895142412731540`. The clean work br
 
 The closure commit must rerun the entire required pipeline: frozen install, formatting ratchet, lint, generated route types, typecheck, unit/contract and CI safety tests, build, dependency/security scans, fresh migration application, security advisors, database constraints/RLS, transactional audit rollback, concurrent administrator removal and production-mode Chromium. Missing, skipped or flaky tests cannot satisfy acceptance. CI must validate the final review head, not merely the already-merged email baseline.
 
-## Remaining risk dispositions proposed for owner acceptance
+## Historical risk dispositions — not accepted
 
 | ID  | Finding and current evidence                                                                                                                                                                                                                          | Disposition / owner / due gate                                                                                                                                                                                                                                                                               |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
