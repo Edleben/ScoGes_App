@@ -1,6 +1,6 @@
 # Shared handoff — Claude, Codex and Antigravity
 
-Checkpoint: **2026-10-31**, supplemental email negative-case verification after merged PR #6. Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
+Checkpoint: **2026-11-01**, Sprint 0 closure candidate after merged PR #7 (`6a76c43`). Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
 
 ## Start here
 
@@ -106,7 +106,7 @@ Bilingual foundation coverage is now implemented and verified; the root document
 
 Real FR/EN confirmation/recovery links and invitation delivery/acceptance have now passed after owner SMTP setup; final closure review remains pending. See the latest email-validation checkpoint below.
 
-Other documented limits: onboarding clears edited fields on validation failure; full formatting has legacy debt (29 files at the baseline), two moderate Vitest mocker advisories remain, and `public.touch_updated_at` has a pre-existing mutable-search-path advisor warning. Recheck advisories before remediation; never suppress failures or rewrite canonical specifications just to turn a check green. Backup/restore drills, broader accessibility/mobile review, deployment hardening and pilot UAT are separate operational gates.
+Current limits: onboarding clears edited fields on validation failure; full formatting reports 19 pre-existing failures, the refreshed audit reports three moderate development-tool advisories (two Vitest mocker, one minimatch), and `public.touch_updated_at` has a pre-existing mutable-search-path advisor warning. Shared ingress rate-limit abstraction and CSP/header deployment policy remain incomplete; SQL invitation rate/cooldown controls already exist. Recheck advisories before remediation; never suppress failures or rewrite canonical specifications just to turn a check green. Backup/restore drills, broader accessibility/mobile review, deployment hardening and pilot UAT are separate operational gates.
 
 ## Branch, review and stop rules
 
@@ -145,3 +145,11 @@ Both trackers now show 6/6 technical milestones (100%). Sprint 0 remains in prog
 PR #6 is merged as `4fc102a51ebcecf700f588642ee59da1d60195bf`; the feature branch was fast-forwarded before this follow-up. Hosted controlled checks now reject reused confirmation/recovery links, expired received confirmation/recovery/invitation links, and a loopback SMTP transport failure with failed delivery status/audit. Four exact synthetic accounts and one tenant were cleaned up. No hosted SMTP/global TTL/clock/schema change occurred.
 
 New isolated FR/EN browser coverage reads real mail catchers and completes or rejects received links; immediate SMTP recipient rejection must not claim delivery. The suite registers 32 cases, replacing two shallow signup-only cases with 14 lifecycle cases. Expiry/cleanup helpers reject hosted/deceptive endpoints. Local verification passed 98 unit/component, 6 safety and 18 hosted-backed browser tests plus lint/typecheck/build/format; isolated CI passed all 32 cases with no failures, skips or flaky results. Review [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) and its current checks. See [email evidence](SPRINT_0_EMAIL_VALIDATION.md). Sprint 1 remains inactive; final closure review remains separate.
+
+## Closure candidate — 2026-11-01 (current)
+
+PR #7 is merged as `6a76c436b5d7d2eb4efe50ea3895142412731540`; the clean feature branch was fast-forwarded before closure work. [PR #8](https://github.com/Edleben/ScoGes_App/pull/8) is the closure review, superseding earlier current-review references. Read [the gate](SPRINT_0_COMPLETION_GATE.md) and [risk/acceptance record](SPRINT_0_CLOSURE.md) first. Both trackers remain Sprint 0 `in_progress`, 100%; Sprint 1–5 remain `planned`, 0%. All six technical milestones are delivered; owner acceptance has not been inferred.
+
+Verify the final PR head through fresh quality/security, build, database/RLS/audit, isolated multi-connection races and full production Chromium checks. PR metadata records actual SHA, run links, totals and any reruns; older commits/runs do not certify the closure head. Docker is unavailable on this workstation, so committed concurrency fixtures must run in disposable GitHub CI, never on hosted Supabase. Hosted checks use only the ignored local configuration with verified TLS and rolled-back/owned fixtures. No new real mail is needed for this closure; preserve the already-executed email matrix.
+
+Main protection was re-read on 2026-11-01: up-to-date `Required validation` from Actions, PR-only updates including administrators, resolved conversations, no force pushes/deletion; zero additional reviewer approvals configured. This enforces checks, not owner acceptance of risk. Obtain that explicitly in PR #8. After acceptance, record its review/merge evidence and update both tracker statuses to `done` through a freshly validated protected PR. No automatic merge, deployment, migration application, dependency update or Sprint 1 activation is authorized.

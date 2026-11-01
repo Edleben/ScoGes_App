@@ -1,6 +1,6 @@
 # Project documentation map
 
-Checkpoint: 2026-10-30, after merged PR #3. Start with [AGENTS.md](../AGENTS.md) and [the shared handoff](AI_HANDOFF.md). Follow the repository's instruction precedence; this index does not replace the current human request or authorize implementation of a later sprint.
+Closure-review checkpoint: 2026-11-01, after merged PR #7. Start with [AGENTS.md](../AGENTS.md) and [the shared handoff](AI_HANDOFF.md). Follow the repository's instruction precedence; this index does not replace the current human request or authorize implementation of a later sprint.
 
 ## Requirements and engineering authority
 
@@ -31,6 +31,8 @@ Root product/framework/prompt/skill copies remain available as distribution refe
 | [Database testing](DATABASE_TESTING.md)       | Hosted transactional tests versus isolated committed race fixtures                 |
 | [CI](CI.md)                                   | Event coverage, required gate, artifacts, isolation and main protection            |
 | [Implementation log](IMPLEMENTATION_LOG.md)   | Append-only dated delivery/deployment/verification history                         |
+
+Closure-specific records: [completion gate](SPRINT_0_COMPLETION_GATE.md), [closure acceptance and risk register](SPRINT_0_CLOSURE.md), and [real email evidence](SPRINT_0_EMAIL_VALIDATION.md). Current review is [PR #8](https://github.com/Edleben/ScoGes_App/pull/8); verify its exact-head CI and human acceptance separately.
 
 ## Agent entry points
 

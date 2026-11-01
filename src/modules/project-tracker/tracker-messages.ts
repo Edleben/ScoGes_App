@@ -3,7 +3,7 @@ import { sprintTrackers, type SprintTracker } from "./tracker-data";
 const english = [
   [
     "Platform foundations",
-    "All six technical milestones, including real French/English email journeys, are verified. Final review is pending; Sprint 1 has not started.",
+    "All six technical milestones are delivered. The closure PR brings together validation and residual risks; owner acceptance is pending. Sprint 1 is not active.",
     [
       [
         "Workspace and quality",

@@ -28,8 +28,10 @@ Formatting is a ratchet over changed files (`pnpm format:changed`), excluding ge
 
 Local verification: `pnpm lint`, `pnpm exec next typegen`, `pnpm typecheck`, `pnpm test:ci-tools`, `pnpm test`, `pnpm build`, and `pnpm format:changed`. Full isolated integration requires Docker and is validated on GitHub's Linux runner. Dependency/service download outages fail visibly rather than silently skipping checks.
 
-At implementation, the audit has zero critical/high findings and two moderate `@vitest/mocker` advisories (patched in 5.0.3). The configured blocking threshold is high; moderate findings remain visible in the audit artifact and require follow-up.
+At the 2026-11-01 closure triage, the audit has zero critical/high findings and three moderate development-tool advisories: two `@vitest/mocker` (patched in 5.0.3) and one `minimatch` (patched in 11.0.1). The high blocking threshold is unchanged; moderate findings remain visible in the artifact and [closure risk register](SPRINT_0_CLOSURE.md). Upstream compatibility must be checked before a minimatch major override.
 
 ## Tracker/documentation maintenance
 
 The unit suite compares Markdown tracker rows with every UI sprint/milestone ID, status and progress value. This guards record consistency, not business-feature completion. New snapshot counts must come from an actual run; the reviewed PR #3 baseline remains 68 unit tests, 4 safety tests and 15 browser tests, while later consistency checks can increase totals. See [PROJECT_TRACKER.md](PROJECT_TRACKER.md), [validation evidence](SPRINT_0_VALIDATION.md) and [handoff](AI_HANDOFF.md).
+
+Closure review uses [PR #8](https://github.com/Edleben/ScoGes_App/pull/8/checks); push and PR required gates must pass on the final head. Branch protection was re-read on 2026-11-01 with the documented settings intact, including conversation resolution and zero mandatory additional approvals. Human acceptance of Sprint 0/risk dispositions is separate from CI and must not be inferred from those zero-approval settings.

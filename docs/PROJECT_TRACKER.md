@@ -1,6 +1,6 @@
 # Project tracker
 
-Verified checkpoint: **2026-10-31**. Active sprint: **Sprint 0**, in progress. Work branch: `edwakson/ScoGes_App`; main changes only through validated PRs.
+Closure-review checkpoint: **2026-11-01**. Active sprint: **Sprint 0**, in progress. Work branch: `edwakson/ScoGes_App`; main changes only through validated PRs.
 
 This Markdown tracker and the UI consume the same milestone definitions in `src/modules/project-tracker/tracker-data.ts`. A unit test compares every row below with that data to prevent drift. Edit the data and this table together; rerun verification before changing completion status.
 
@@ -54,7 +54,7 @@ Bilingual foundation coverage is complete, including authenticated FR/EN onboard
 
 Real FR/EN confirmation, recovery, invitation delivery/acceptance and invitation replay rejection passed. See [email verification evidence](SPRINT_0_EMAIL_VALIDATION.md). Final closure review remains pending; Sprint 1 is not active.
 
-The onboarding form currently resets edited fields after validation failure; preserve/re-enter the complete form in tests and record any future UX change explicitly. Full formatting debt (29 files at the checkpoint), two moderate development dependency advisories, the existing timestamp-helper search-path warning, and pilot operational hardening remain documented separately.
+The onboarding form currently resets edited fields after validation failure; preserve/re-enter the complete form in tests and record any future UX change explicitly. The refreshed risk register records 19 pre-existing formatting failures, three moderate development-tool advisories, the timestamp-helper search-path warning, shared ingress/header hardening and pilot operational gaps. These are proposed dispositions requiring explicit owner acceptance; see [closure review](SPRINT_0_CLOSURE.md).
 
 See [validation evidence](SPRINT_0_VALIDATION.md), [agent handoff](AI_HANDOFF.md), and [documentation map](README.md). Do not start Sprint 1 without the owner's explicit instruction.
 
@@ -62,6 +62,10 @@ See [validation evidence](SPRINT_0_VALIDATION.md), [agent handoff](AI_HANDOFF.md
 
 A [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) is ready for review. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence and awaits final review/owner acceptance. Preparing this prompt does not change any milestone status, activate Sprint 1 or authorize its implementation.
 
-The earlier foundation review [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) is merged. Current supplemental review: [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) and its [required checks](https://github.com/Edleben/ScoGes_App/pull/7/checks). Historical PR #3 results above retain their original test counts.
+Both [PR #6](https://github.com/Edleben/ScoGes_App/pull/6) and [PR #7](https://github.com/Edleben/ScoGes_App/pull/7) are merged; the latest baseline is `6a76c43`. Current closure review: [PR #8](https://github.com/Edleben/ScoGes_App/pull/8) and its [required checks](https://github.com/Edleben/ScoGes_App/pull/8/checks). Historical PR #3 results above retain their original test counts.
 
 Supplemental email coverage now includes hosted controlled expired/reused links and an audited transport failure. Repeatable isolated FR/EN cases validate actual captured messages and state transitions; see [the negative-case matrix](SPRINT_0_EMAIL_VALIDATION.md). Milestone percentages and sprint activation are unchanged.
+
+## Closure acceptance checkpoint — 2026-11-01
+
+The UI checkpoint and this tracker point to PR #8. All six technical milestones remain delivered, with Sprint 0 `in_progress` at 100% pending owner acceptance of the exact validated closure head and [residual risks R1–R7](SPRINT_0_CLOSURE.md). Quality/build/security, migration/RLS/audit, concurrent administrator protection and all Chromium cases must pass on that head. Prior PR #7 totals (98 unit/component, 6 safety and 32 isolated browser tests) are historical evidence until refreshed by the closure checks. Record run links/results in PR #8; do not claim acceptance or change either sprint status prematurely. Sprint 1 stays planned at zero.

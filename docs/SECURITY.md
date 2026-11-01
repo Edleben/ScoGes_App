@@ -71,6 +71,10 @@ Onboarding no longer returns raw database/transport errors. Duplicate slugs rece
 
 ## Evidence and handoff limits
 
-The [validation report](SPRINT_0_VALIDATION.md) separates actual SQL/browser verification from mocked provider failures and unverified email receipt. The existing `public.touch_updated_at` search-path warning and two moderate development dependency advisories remain dated known debt; recheck before remediation. Preserve TLS, RLS, server permissions, audit rollback, last-admin protection and CI checks during any agent handoff. See [AI_HANDOFF.md](AI_HANDOFF.md).
+The [validation report](SPRINT_0_VALIDATION.md) separates actual SQL/browser verification from mocked provider failures; real controlled mailbox receipt and link completion now have [separate evidence](SPRINT_0_EMAIL_VALIDATION.md). The existing `public.touch_updated_at` search-path warning and three moderate development-tool advisories remain known debt at the 2026-11-01 checkpoint; recheck before remediation. Preserve TLS, RLS, server permissions, audit rollback, last-admin protection and CI checks during any agent handoff. See [AI_HANDOFF.md](AI_HANDOFF.md).
 
 Locale is presentation-only. The proxy overwrites incoming locale headers, permits only French/English, and keeps session-cookie forwarding, no-store and no-referrer behavior on authentication-sensitive routes. Localized redirects continue to use the existing allowlist before adding locale; no arbitrary return URL is trusted. Global error output never renders raw exceptions.
+
+## Closure risk boundary — 2026-11-01
+
+[The closure register](SPRINT_0_CLOSURE.md) explicitly proposes the remaining risk dispositions for owner review. SQL invitation issuance already serializes actor/recipient requests and enforces 20 per actor/hour plus a one-minute pending-recipient cooldown. Hosted Auth also supplies its own throttling. A shared application rate-limit abstraction and CSP/security-header deployment policy are still absent; they require explicit development-baseline exception acceptance and remediation before public preview/pilot. This closure does not grant production readiness or silently waive security requirements. Pilot backup/restore, deployment monitoring and accessibility/UAT remain separate evidence gates.

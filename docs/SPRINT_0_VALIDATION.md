@@ -1,6 +1,6 @@
 # Sprint 0 validation
 
-Latest follow-up: **2026-10-31**. Bilingual foundation coverage is delivered; Sprint 0 remains open for real email lifecycle validation. The 2026-10-30 baseline below is historical and is superseded for language coverage and tracker status by the dated follow-up at the end.
+Latest checkpoint: **2026-11-01 — closure review**. Bilingual foundation and real email lifecycle verification are complete. [PR #8](https://github.com/Edleben/ScoGes_App/pull/8) refreshes exact-head checks and requests owner acceptance of [remaining risk dispositions](SPRINT_0_CLOSURE.md). The 2026-10-30 baseline below is historical; later checkpoints supersede its acceptance gaps and counts.
 
 ## Historical baseline — 2026-10-30
 
@@ -95,3 +95,9 @@ Use [PROJECT_TRACKER.md](PROJECT_TRACKER.md) for milestone rows and [AI_HANDOFF.
 ## Hosted email milestone closure — 2026-10-31
 
 After owner SMTP setup, real confirmation/recovery and application invitation delivery/acceptance passed in French and English. Old passwords failed after recovery; cashier membership and invitation replay rejection were verified. Exact synthetic fixtures were cleaned up, and mailbox reads did not change messages or flags. See [the detailed evidence and limits](SPRINT_0_EMAIL_VALIDATION.md). This supersedes earlier statements that hosted email receipt/link completion was unverified. All six technical milestones are now 100%; Sprint 0 remains in progress pending final PR review/owner acceptance, and Sprint 1 remains inactive.
+
+## Closure verification — 2026-11-01
+
+PR #7 is merged (`6a76c43`); its 98 unit/component, 6 CI safety and 32 isolated browser cases passed. This is the starting baseline, not a new pass on the closure commit. PR #8 reruns quality/security/build, fresh migration/RLS/audit, committed local concurrency and full Chromium checks against the final head; actual SHA/run links/totals are recorded in the PR after execution. Hosted development checks separately use the configured project with verified TLS, no permanent DDL and exact synthetic fixture cleanup. No real email resend, production deployment or global settings change is part of closure.
+
+Refreshed triage found zero high/critical and three moderate development-tool advisories, plus 19 existing full-format failures. [The closure register](SPRINT_0_CLOSURE.md) records these alongside the mutable search path, shared ingress/header hardening, UX and operational limits. Changed-file formatting and required security checks stay enabled. Owner acceptance and any baseline exception remain explicit; Sprint 1 is not activated.
