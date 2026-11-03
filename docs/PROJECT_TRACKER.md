@@ -77,3 +77,7 @@ The owner declined the R1–R7 deferral proposal. [The remediation backlog](SPRI
 ## R1 partial remediation — 2026-11-01
 
 The targeted Vitest/mocker 5.0.3 patch removes two moderate findings; one minimatch finding remains across legacy lint dependency paths. [R1 evidence](R1_DEPENDENCY_REMEDIATION.md) explains the compatibility blocker and remaining acceptance work. R1 remains open/partial; R2–R7 remain open. Original milestone percentages and UI checkpoint are unchanged historical delivery data, not remediation completion. Sprint 0 stays `in_progress`; no closure or Sprint 1 activation is inferred from merged PR #8.
+
+## R2 prepared hardening — 2026-11-03
+
+[R2](R2_TIMESTAMP_HARDENING.md) now has a minimal append-only helper configuration fix and guarded fresh/upgrade regression coverage prepared for review. Hosted deployment remains pending and requires authorization; read-only history still has four versions. No original milestone or sprint percentage changes: Sprint 0 remains `in_progress`, R1 partial and the completion gate open. Future sprint implementation is not activated.

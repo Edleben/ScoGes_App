@@ -43,3 +43,7 @@ The administration migration adds two narrow write RPCs and a monotonic revision
 | 20261030185852 | Transactional administration, monotonic revisions and shared invitation lock | Applied once after PR #2 |
 
 All four were verified in the configured hosted migration history on 2026-10-30. This dated record is not permission to assume another environment is migrated. Check actual history before deployment. Role sets remain normalized; inactive/revoked memberships are retained. Administrative audit metadata records curated before/after values, actor/target and request IDs without credentials. See [handoff](AI_HANDOFF.md) and [tracker](PROJECT_TRACKER.md).
+
+## R2 prepared migration — 2026-11-03
+
+`20261103155717_pin_timestamp_helper_search_path.sql` is the fifth, append-only migration: one `ALTER FUNCTION public.touch_updated_at() SET search_path = pg_catalog`. No tables, records, grants or bindings change. Tenants/profiles retain transaction timestamps; memberships/settings retain the separate monotonic revision helper. [R2 verification/deployment notes](R2_TIMESTAMP_HARDENING.md) distinguish fresh/transactional-upgrade CI from hosted deployment. Read-only hosted history on this date still contains only the four earlier versions; the fifth has not been deployed.

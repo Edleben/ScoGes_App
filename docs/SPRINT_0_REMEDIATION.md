@@ -30,7 +30,7 @@ P1 means the next security/remediation work, not an emergency declaration. There
 
 ## R2 — Timestamp trigger helper search path
 
-- **Status / evidence:** Open. `public.touch_updated_at()` has no pinned search path. Hosted readback on 2026-11-01 found `security_definer=false`; the body assigns `now()` to `new.updated_at`. Existing foundation migrations and security-advisor output identify the helper.
+- **Status / evidence:** Fix prepared; hosted deployment pending. [R2 migration and verification plan](R2_TIMESTAMP_HARDENING.md) pins the existing invoker helper to `pg_catalog` with one append-only configuration change. Read-only hosted checks on 2026-11-03 still show the original four versions and unset helper path. CI validates fresh/upgrade/shadowing/identity/data preservation before review; R2 is not claimed closed on hosted Supabase.
 - **Impact:** Mutable resolution context is avoidable database hardening debt; current evidence does not establish a privilege-escalation exploit.
 - **Existing mitigation:** Security-invoker trigger helper, small body, existing RLS/permission controls and CI security-advisor checks. No error-level advisor finding is permitted by CI.
 - **Remediation:** Add a minimal append-only migration pinning an appropriate search path and qualifying any needed references. Preserve trigger behavior, grants and migration history. Do not rewrite the original migration or change `SECURITY INVOKER` to definer.
