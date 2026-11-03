@@ -112,6 +112,9 @@ try {
 }
 
 if (!process.exitCode && env.CI_ENFORCE_INTEGRATION === "1") {
+  const { testTimestampHardening } =
+    await import("./tests/timestamp-hardening.mjs");
+  await testTimestampHardening(env);
   const { testAdministrationConcurrency } =
     await import("./tests/administration-concurrency.mjs");
   await testAdministrationConcurrency(env);

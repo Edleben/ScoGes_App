@@ -78,3 +78,7 @@ Locale is presentation-only. The proxy overwrites incoming locale headers, permi
 ## Closure risk boundary — 2026-11-01
 
 [The closure register](SPRINT_0_CLOSURE.md) explicitly proposes the remaining risk dispositions for owner review. SQL invitation issuance already serializes actor/recipient requests and enforces 20 per actor/hour plus a one-minute pending-recipient cooldown. Hosted Auth also supplies its own throttling. A shared application rate-limit abstraction and CSP/security-header deployment policy are still absent; they require explicit development-baseline exception acceptance and remediation before public preview/pilot. This closure does not grant production readiness or silently waive security requirements. Pilot backup/restore, deployment monitoring and accessibility/UAT remain separate evidence gates.
+
+## R2 timestamp helper — 2026-11-03
+
+The prepared append-only migration pins `public.touch_updated_at()` to trusted `pg_catalog` without replacing its body, altering ownership/grants, changing invoker security or rebinding triggers. Local-only tests check hostile search-path behavior plus fresh/upgrade invariants; [R2 evidence and deployment plan](R2_TIMESTAMP_HARDENING.md) records the limits. The configured hosted database was inspected read-only and still has the old setting/four-migration history. No hosted resolution or warning clearance is claimed before authorized deployment and post-checks. R1 remains partial and other risks remain open.

@@ -1,8 +1,12 @@
 # Sprint 0 closure review — 2026-11-01
 
-Status: **closure candidate; owner acceptance pending**. This record proposes technical closure, not production readiness, deployment or Sprint 1 activation. Sprint 0 stays `in_progress` at 100% until explicit owner acceptance is recorded through the validated closure PR.
+Status: **gate open for remediation; proposed R1–R7 deferrals not accepted**. This record proposes technical closure, not production readiness, deployment or Sprint 1 activation. Sprint 0 stays `in_progress` at 100% until explicit owner acceptance is recorded through the validated closure PR.
 
 Review: [PR #8](https://github.com/Edleben/ScoGes_App/pull/8), [required checks](https://github.com/Edleben/ScoGes_App/pull/8/checks). Final-head run links and actual results belong in that PR; this document does not predeclare a pending check successful.
+
+## Owner decision and remediation follow-up
+
+On 2026-11-01 the owner explicitly chose **“Keep the gate open for remediation.”** The dispositions below are historical proposals, not accepted waivers. [The R1–R7 remediation backlog](SPRINT_0_REMEDIATION.md) is the current actionable record: severity/priority, impacts, existing mitigations, responsible functions, release gates, acceptance criteria and verification. All seven items remain open. Renewed acceptance requires completed remediation or specifically approved dispositions; a green CI gate does not override this decision.
 
 ## Reviewed baseline and scope
 
@@ -10,7 +14,7 @@ PR #7 is merged as `6a76c436b5d7d2eb4efe50ea3895142412731540`. The clean work br
 
 The closure commit must rerun the entire required pipeline: frozen install, formatting ratchet, lint, generated route types, typecheck, unit/contract and CI safety tests, build, dependency/security scans, fresh migration application, security advisors, database constraints/RLS, transactional audit rollback, concurrent administrator removal and production-mode Chromium. Missing, skipped or flaky tests cannot satisfy acceptance. CI must validate the final review head, not merely the already-merged email baseline.
 
-## Remaining risk dispositions proposed for owner acceptance
+## Historical risk dispositions — not accepted
 
 | ID  | Finding and current evidence                                                                                                                                                                                                                          | Disposition / owner / due gate                                                                                                                                                                                                                                                                               |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -32,3 +36,7 @@ No safeguard is waived by this register. A newly failing required check, isolati
 3. Record actual SHA, test totals, run links, failures/retries and limits in the closure PR. CI results attached to that immutable SHA are the final validation evidence; do not create a documentation-only untested successor just to copy a green badge.
 4. The owner explicitly accepts Sprint 0 technical closure and R1–R7 dispositions in the validated PR. Do not auto-merge or claim acceptance before that decision. Record the approval/merge evidence and then update both trackers to `done` through the same protected PR process, with fresh validation for any changed head.
 5. Stop. Sprint 1 requires separate explicit owner activation of its [bounded prompt](prompts/SPRINT_1_MASTER_PROMPT.md); neither closure nor PR merge activates it.
+
+## R1 partial remediation checkpoint — 2026-11-01
+
+[The targeted Vitest patch](R1_DEPENDENCY_REMEDIATION.md) removes both mocker advisories; the refreshed audit reports one moderate minimatch finding, zero high/critical. R1 remains partial pending a compatible resolution of legacy lint consumers. The historical three-finding row above is superseded for audit totals, not for owner acceptance. R2–R7 and the completion gate remain open; no previously declined deferral is accepted.
