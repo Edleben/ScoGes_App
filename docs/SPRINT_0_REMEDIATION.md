@@ -89,3 +89,7 @@ P1 means the next security/remediation work, not an emergency declaration. There
 3. Keep each remediation reviewable on `edwakson/ScoGes_App`. Preserve RLS, permissions, audit atomicity, last-admin protection and append-only migrations.
 4. Update the item's status only with actual commit/PR/run evidence, responsible owner and verification limits. Never infer accepted risk from a green check or merge of unrelated work.
 5. Reconcile the closure register, tracker/handoff and completion gate. Rerun appropriate checks on the final remediation/closure head. Request renewed Sprint 0 acceptance after required remediation or individually approved dispositions; stop before Sprint 1.
+
+## R3 implementation update — 2026-11-10
+
+Shared managed Redis limits and nonce CSP/header policy are now implemented on the remediation branch; the earlier R3 absence statement describes the historical baseline. [R3](R3_ABUSE_AND_BROWSER_SECURITY.md) records endpoint coverage, explicit fail-closed availability trade-off, thresholds, privacy/ingress rules and executed validation. R3 remains open until final-head review and actual Vercel deployment/operational checks. No risk deferral or pilot acceptance has been inferred.

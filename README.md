@@ -61,3 +61,7 @@ French/English foundation coverage and real confirmation/recovery/invitation rec
 ## Project records and agent handoff
 
 Use the [documentation map](docs/README.md), [Markdown tracker](docs/PROJECT_TRACKER.md), and [shared handoff for Claude, Codex and Antigravity](docs/AI_HANDOFF.md). The UI tracker at `/dashboard/project` shows the same manually maintained milestones and a dated evidence checkpoint. Main is PR-only; ongoing work uses `edwakson/ScoGes_App`.
+
+## Distributed abuse protection
+
+Local authentication and sensitive writes now require the server-only Redis settings in `.env.example`. Missing configuration or a provider outage returns a safe temporary-unavailable response. See [R3 setup and failure policy](docs/R3_ABUSE_AND_BROWSER_SECURITY.md), including explicit hosted test opt-in and Vercel deployment requirements.

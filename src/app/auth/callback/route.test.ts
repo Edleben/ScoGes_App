@@ -1,3 +1,7 @@
+import { requestLimit } from "@/lib/security/request-limit";
+vi.mock("@/lib/security/request-limit", () => ({
+  requestLimit: vi.fn(async () => "allowed"),
+}));
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 const { exchange } = vi.hoisted(() => ({ exchange: vi.fn() }));
@@ -51,3 +55,20 @@ describe("PKCE callback", () => {
     );
   });
 });
+
+it.each(["limited", "unavailable"] as const)(
+  "does not exchange a callback code when limiter is %s",
+  async (decision) => {
+    vi.clearAllMocks();
+    vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+    const response = await GET(
+      new NextRequest(
+        "https://app.example/auth/callback?code=synthetic&locale=en",
+      ),
+    );
+    expect(exchange).not.toHaveBeenCalled();
+    expect(response.headers.get("location")).toBe(
+      "https://app.example/login?notice=unavailable&locale=en",
+    );
+  },
+);

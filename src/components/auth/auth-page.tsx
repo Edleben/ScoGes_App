@@ -67,7 +67,9 @@ export async function AuthPage({
           ? "/auth/reset-password"
           : "/auth/forgot-password";
   const notice =
-    query.notice === "invalidLink" || query.notice === "passwordUpdated"
+    query.notice === "invalidLink" ||
+    query.notice === "passwordUpdated" ||
+    query.notice === "unavailable"
       ? query.notice
       : null;
   return (

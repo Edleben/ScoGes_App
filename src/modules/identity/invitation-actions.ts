@@ -1,4 +1,5 @@
 "use server";
+import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -28,6 +29,13 @@ export async function inviteMemberAction(
     !canAssignRole(membership.roles, parsed.data.role)
   )
     return authReply(form, false, "denied");
+  const limit = await requestLimit("invitation", user.id);
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const emailProvider = createEmailProvider();
   if (!emailProvider) return authReply(form, false, "smtpMissing");
   const supabase = await createSupabaseServerClient();
@@ -75,6 +83,13 @@ export async function captureInvitationAction(
 ): Promise<AuthActionState> {
   const parsed = invitationTokenSchema.safeParse(form.get("token"));
   if (!parsed.success) return authReply(form, false, "invalidLink");
+  const limit = await requestLimit("capture");
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   (await cookies()).set(invitationCookie, parsed.data, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -89,7 +104,14 @@ export async function acceptInvitationAction(
   _: AuthActionState,
   form: FormData,
 ): Promise<AuthActionState> {
-  await requireCurrentUser();
+  const user = await requireCurrentUser();
+  const limit = await requestLimit("acceptance", user.id);
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const store = await cookies();
   const token = invitationTokenSchema.safeParse(
     store.get(invitationCookie)?.value,

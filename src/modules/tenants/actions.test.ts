@@ -1,3 +1,7 @@
+import { requestLimit } from "@/lib/security/request-limit";
+vi.mock("@/lib/security/request-limit", () => ({
+  requestLimit: vi.fn(async () => "allowed"),
+}));
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const { rpc, client } = vi.hoisted(() => ({ rpc: vi.fn(), client: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({
@@ -36,6 +40,15 @@ describe("tenant onboarding failure safety", () => {
       error: null,
     });
   });
+  it.each(["limited", "unavailable"] as const)(
+    "blocks protected side effects when limiter is %s",
+    async (decision) => {
+      vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+      expect((await createTenantAction({ ok: false }, form())).ok).toBe(false);
+      expect(requestLimit).toHaveBeenCalled();
+      expect(rpc).not.toHaveBeenCalled();
+    },
+  );
   it("preserves the UI language independently of the institution default", async () => {
     await expect(
       createTenantAction(

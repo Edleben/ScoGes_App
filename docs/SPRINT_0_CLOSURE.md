@@ -40,3 +40,7 @@ No safeguard is waived by this register. A newly failing required check, isolati
 ## R1 partial remediation checkpoint — 2026-11-01
 
 [The targeted Vitest patch](R1_DEPENDENCY_REMEDIATION.md) removes both mocker advisories; the refreshed audit reports one moderate minimatch finding, zero high/critical. R1 remains partial pending a compatible resolution of legacy lint consumers. The historical three-finding row above is superseded for audit totals, not for owner acceptance. R2–R7 and the completion gate remain open; no previously declined deferral is accepted.
+
+## R3 remediation update — 2026-11-10
+
+The historical R3 absence entry is superseded on the implementation branch by [distributed Redis controls and CSP/header hardening](R3_ABUSE_AND_BROWSER_SECURITY.md). Deployment configuration, trusted-ingress evidence, quota/monitoring and final review remain required. R3 is not accepted/closed merely because the implementation exists. Owner acceptance and the Sprint 0 completion gate remain open.

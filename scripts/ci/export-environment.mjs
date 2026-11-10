@@ -8,6 +8,8 @@ if (!process.env.GITHUB_ENV)
 const status = parseEnv(readFileSync(process.argv[2], "utf8"));
 const env = {
   ...localEnvironment(status),
+  UPSTASH_REDIS_REST_URL: "http://127.0.0.1:8079",
+  UPSTASH_REDIS_REST_TOKEN: randomBytes(24).toString("hex"),
   SMTP_PASSWORD: randomBytes(24).toString("hex"),
   CI_TEST_PASSWORD: randomBytes(24).toString("hex") + "Aa1!",
   CI_TEST_UPDATED_PASSWORD: randomBytes(24).toString("hex") + "Bb2!",
@@ -16,6 +18,7 @@ for (const value of [
   ...Object.entries(status)
     .filter(([key]) => /KEY|TOKEN|SECRET|DB_URL/.test(key))
     .map(([, value]) => value),
+  env.UPSTASH_REDIS_REST_TOKEN,
   env.SMTP_PASSWORD,
   env.CI_TEST_PASSWORD,
   env.CI_TEST_UPDATED_PASSWORD,

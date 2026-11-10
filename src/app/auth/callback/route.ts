@@ -1,3 +1,4 @@
+import { requestLimit } from "@/lib/security/request-limit";
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getAppUrl } from "@/lib/supabase/config";
@@ -11,6 +12,15 @@ export async function GET(request: NextRequest) {
   const supabase = await createSupabaseServerClient();
   let destination = `/login?notice=invalidLink&locale=${locale}`;
   if (code && code.length <= 2048 && supabase) {
+    const limit = await requestLimit("callback");
+    if (limit !== "allowed") {
+      const response = NextResponse.redirect(
+        new URL(`/login?notice=unavailable&locale=${locale}`, getAppUrl()),
+      );
+      response.headers.set("Cache-Control", "private, no-store");
+      response.headers.set("Referrer-Policy", "no-referrer");
+      return response;
+    }
     const flowId = request.nextUrl.searchParams.get("sb_flow_id");
     const { error } = await supabase.auth.exchangeCodeForSession(
       code,

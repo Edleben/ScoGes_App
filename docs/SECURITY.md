@@ -82,3 +82,7 @@ Locale is presentation-only. The proxy overwrites incoming locale headers, permi
 ## R2 timestamp helper — 2026-11-03
 
 The prepared append-only migration pins `public.touch_updated_at()` to trusted `pg_catalog` without replacing its body, altering ownership/grants, changing invoker security or rebinding triggers. Local-only tests check hostile search-path behavior plus fresh/upgrade invariants; [R2 evidence and deployment plan](R2_TIMESTAMP_HARDENING.md) records the limits. The configured hosted database was inspected read-only and still has the old setting/four-migration history. No hosted resolution or warning clearance is claimed before authorized deployment and post-checks. R1 remains partial and other risks remain open.
+
+## R3 remediation checkpoint — 2026-11-10
+
+The earlier statement that shared limits and CSP are absent is superseded for this implementation branch. Server-only managed Redis sliding windows, explicit fail-closed handling, verified-ingress selection, keyed identifiers, nonce CSP and response headers are implemented. Configuration/deployment checks and final PR validation remain distinct from code completion. See [the R3 policy and residual-risk record](R3_ABUSE_AND_BROWSER_SECURITY.md); do not infer pilot approval or Sprint 0 closure.

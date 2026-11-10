@@ -1,4 +1,5 @@
 "use server";
+import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 
 import { cookies } from "next/headers";
@@ -42,6 +43,13 @@ export async function signInAction(
 ): Promise<AuthActionState> {
   const parsed = signInSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return authReply(form, false, "invalid");
+  const limit = await requestLimit("login");
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const supabase = await createSupabaseServerClient();
   if (!supabase) return authReply(form, false, "unavailable");
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
@@ -63,6 +71,13 @@ export async function signUpAction(
 ): Promise<AuthActionState> {
   const parsed = signUpSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return authReply(form, false, "invalid");
+  const limit = await requestLimit("signup");
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const supabase = await createSupabaseServerClient();
   if (!supabase) return authReply(form, false, "unavailable");
   const destination = (await cookies()).has(invitationCookie)
@@ -109,6 +124,13 @@ export async function requestPasswordResetAction(
 ): Promise<AuthActionState> {
   const parsed = emailSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return authReply(form, false, "invalid");
+  const limit = await requestLimit("recovery");
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const supabase = await createSupabaseServerClient();
   if (!supabase) return authReply(form, false, "unavailable");
   const { error } = await supabase.auth.resetPasswordForEmail(
@@ -134,6 +156,13 @@ export async function updatePasswordAction(
   } = await supabase.auth.getUser();
   if (userError || !user?.email_confirmed_at)
     return authReply(form, false, "invalidLink");
+  const limit = await requestLimit("password", user.id);
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const { error } = await supabase.auth.updateUser({
     password: parsed.data.password,
   });

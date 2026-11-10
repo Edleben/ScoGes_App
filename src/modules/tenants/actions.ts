@@ -1,4 +1,5 @@
 "use server";
+import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 
 import { z } from "zod";
@@ -41,6 +42,16 @@ export async function createTenantAction(
       message: t(locale, "onboarding.invalid"),
     };
   }
+
+  const limit = await requestLimit("onboarding", user.id);
+  if (limit !== "allowed")
+    return {
+      ok: false,
+      message: authText(
+        locale,
+        limit === "limited" ? "rateLimited" : "unavailable",
+      ),
+    };
 
   try {
     const supabase = await createSupabaseServerClient();
