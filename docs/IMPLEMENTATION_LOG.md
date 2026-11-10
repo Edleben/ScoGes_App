@@ -175,3 +175,5 @@ Local evidence: lint/types/build passed; 126 full unit/contract tests plus 16 fo
 ### R3 CI evidence
 
 Implementation `cacd865` / [PR #10](https://github.com/Edleben/ScoGes_App/pull/10): [push CI](https://github.com/Edleben/ScoGes_App/actions/runs/42854854836) passed required validation, 127 unit/contract, 8 safety, 3 Redis and 34 Chromium cases, plus fresh/upgrade/RLS/audit/concurrency/build/security. No failures, skips or flaky browser cases. Final documentation-head CI remains required; R3 stays open for deployed/operational verification and owner acceptance.
+
+Final R3 boundary review used a read-only hosted grant query: authenticated clients retain execution rights on the public business RPCs. Recorded that application Redis checks can be bypassed through directly authorized Data API calls; no schema/grants were modified. R3 remains open for an independently reviewed direct-API abuse backstop and deployed/operational verification. This does not establish an authorization or tenant-isolation regression.

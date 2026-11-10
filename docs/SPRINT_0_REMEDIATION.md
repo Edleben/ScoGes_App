@@ -93,3 +93,5 @@ P1 means the next security/remediation work, not an emergency declaration. There
 ## R3 implementation update — 2026-11-10
 
 Shared managed Redis limits and nonce CSP/header policy are now implemented on the remediation branch; the earlier R3 absence statement describes the historical baseline. [R3](R3_ABUSE_AND_BROWSER_SECURITY.md) records endpoint coverage, explicit fail-closed availability trade-off, thresholds, privacy/ingress rules and executed validation. R3 remains open until final-head review and actual Vercel deployment/operational checks. No risk deferral or pilot acceptance has been inferred.
+
+R3 boundary verification (2026-11-10): authenticated EXECUTE grants on public onboarding/administration/invitation RPCs are present on hosted Supabase. Application Redis checks do not cover direct Data API RPC calls. Existing database authorization/audit and SQL invitation throttles remain intact. R3/public preview remains blocked pending a reviewed direct-API quota/perimeter backstop plus deployed/operational verification; see [R3 evidence](R3_ABUSE_AND_BROWSER_SECURITY.md).
