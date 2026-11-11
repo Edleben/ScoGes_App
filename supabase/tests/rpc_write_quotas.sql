@@ -16,8 +16,14 @@ select pg_temp.quota_reject('select app_private.enforce_rpc_write_quota()','4250
 select pg_temp.quota_reject('update app_private.rpc_write_windows set occurred_at=array[]::timestamptz[]','42501');
 select pg_temp.quota_reject(format('select public.create_tenant_with_admin(''Forged'',''forged'',''TG'',''XOF'',''UTC'',''fr'',%L)',current_setting('quota_test.recipient')),'P0001');
 
-do $$
-declare i integer; t uuid; country text;
+-- A role with no authenticated principal cannot exploit nullable legacy comparisons.
+select set_config('request.jwt.claim.sub','',true);
+select set_config('request.jwt.claims','{}',true);
+select pg_temp.quota_reject(format('select public.create_tenant_with_admin(''No principal'',''test-''||gen_random_uuid(),''TG'',''XOF'',''UTC'',''fr'',%L)',current_setting('quota_test.actor')),'42501');
+select pg_temp.quota_actor('actor');
+
+do $
+declare i integer; t uuid; requested_country text;
 begin
   for i in 1..5 loop
     perform public.create_tenant_with_admin('Quota tenant','test-'||gen_random_uuid(),'TG','XOF','UTC','fr',auth.uid());
@@ -25,8 +31,8 @@ begin
   perform pg_temp.quota_reject('select public.create_tenant_with_admin(''Blocked'',''test-''||gen_random_uuid(),''TG'',''XOF'',''UTC'',''fr'',auth.uid())','PT429');
   for i in 1..60 loop
     t:=current_setting('quota_test.tenant_'||case when i%2=1 then 1 else 2 end)::uuid;
-    country:=case when ((i-1)/2)%2=0 then 'US' else 'TG' end;
-    perform public.update_tenant_settings(t,updated_at,country,'XOF','UTC','fr') from public.tenant_settings where tenant_id=t;
+    requested_country:=case when ((i-1)/2)%2=0 then 'US' else 'TG' end;
+    perform public.update_tenant_settings(t,updated_at,requested_country,'XOF','UTC','fr') from public.tenant_settings where tenant_id=t;
   end loop;
   perform pg_temp.quota_reject(format('select public.administer_tenant_membership(%L,%L,updated_at,array[''auditor'']) from public.memberships where id=%L',current_setting('quota_test.tenant_1'),current_setting('quota_test.membership'),current_setting('quota_test.membership')),'PT429');
   perform pg_temp.quota_reject(format('select public.administer_tenant_membership(%L,id,updated_at,null,''inactive'') from public.memberships where id=%L',current_setting('quota_test.tenant_1'),current_setting('quota_test.membership')),'PT429');
@@ -85,6 +91,24 @@ begin
     or (select count(*) from public.audit_events where actor_user_id=current_setting('quota_test.actor')::uuid and action='tenant.settings.updated')<>61 then raise exception 'quota failure was not atomic'; end if;
 end;
 $$;
+-- A later audit failure rolls back an already-updated quota row as well.
+update app_private.rpc_write_windows set occurred_at=array_fill(clock_timestamp(),array[59]) where actor_id=current_setting('quota_test.actor')::uuid and scope='administration';
+create function pg_temp.quota_reject_audit() returns trigger language plpgsql as $
+begin raise exception 'quota_test_audit_failure'; end;
+$;
+create trigger z_reject_quota_audit before insert on public.audit_events for each row execute function pg_temp.quota_reject_audit();
+set local role authenticated;
+select pg_temp.quota_actor('actor');
+select pg_temp.quota_reject(format('select public.update_tenant_settings(tenant_id,updated_at,''GB'',''XOF'',''UTC'',''fr'') from public.tenant_settings where tenant_id=%L',current_setting('quota_test.tenant_2')),'P0001');
+reset role;
+drop trigger z_reject_quota_audit on public.audit_events;
+do $
+begin
+ if (select cardinality(occurred_at) from app_private.rpc_write_windows where actor_id=current_setting('quota_test.actor')::uuid and scope='administration')<>59
+   or (select country from public.tenant_settings where tenant_id=current_setting('quota_test.tenant_2')::uuid)<>'CA' then raise exception 'audit failure consumed quota or changed business state'; end if;
+end;
+$;
+
 -- Explicitly exhaust the database quota with no matching invitation audit rows:
 -- proves both current and legacy RPCs hit this backstop, not only the older SQL limit.
 insert into app_private.rpc_write_windows values(current_setting('quota_test.actor')::uuid,'invitation',array_fill(clock_timestamp(),array[20]));

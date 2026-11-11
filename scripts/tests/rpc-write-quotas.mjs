@@ -125,6 +125,9 @@ export async function testRpcWriteQuotas(env) {
         stage +
         " (" +
         (error.code ?? "assertion") +
+        ", " +
+        ((error.where ?? "").match(/line [0-9]+/g)?.join(" / ") ??
+          "no SQL line") +
         ").",
     );
   } finally {
