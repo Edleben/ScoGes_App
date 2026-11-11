@@ -31,11 +31,11 @@ begin
   perform set_config('request.jwt.claims',json_build_object('sub',current_setting('quota_test.'||label),'role','authenticated')::text,true);
 end;
 $$;
-create function pg_temp.quota_reject(statement text, expected_code text) returns void language plpgsql as $$
+create function pg_temp.quota_reject(statement text, expected_code text, expected_message text default null) returns void language plpgsql as $$
 begin
   begin execute statement;
   exception when others then
-    if sqlstate=expected_code and (expected_code<>'PT429' or sqlerrm='rpc_rate_limited') then return; end if;
+    if sqlstate=expected_code and (expected_message is null or sqlerrm=expected_message) and (expected_code<>'PT429' or sqlerrm='rpc_rate_limited') then return; end if;
     raise exception 'unexpected RPC quota rejection';
   end;
   raise exception 'RPC quota operation unexpectedly succeeded';

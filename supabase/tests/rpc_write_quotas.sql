@@ -14,7 +14,7 @@ select pg_temp.quota_actor('actor');
 select pg_temp.quota_reject('select * from app_private.rpc_write_windows','42501');
 select pg_temp.quota_reject('select app_private.enforce_rpc_write_quota()','42501');
 select pg_temp.quota_reject('update app_private.rpc_write_windows set occurred_at=array[]::timestamptz[]','42501');
-select pg_temp.quota_reject(format('select public.create_tenant_with_admin(''Forged'',''forged'',''TG'',''XOF'',''UTC'',''fr'',%L)',current_setting('quota_test.recipient')),'P0001');
+select pg_temp.quota_reject(format('select public.create_tenant_with_admin(''Forged'',''forged'',''TG'',''XOF'',''UTC'',''fr'',%L)',current_setting('quota_test.recipient')),'P0001','actor mismatch');
 
 -- A role with no authenticated principal cannot exploit nullable legacy comparisons.
 select set_config('request.jwt.claim.sub','',true);
@@ -22,7 +22,7 @@ select set_config('request.jwt.claims','{}',true);
 select pg_temp.quota_reject(format('select public.create_tenant_with_admin(''No principal'',''test-''||gen_random_uuid(),''TG'',''XOF'',''UTC'',''fr'',%L)',current_setting('quota_test.actor')),'42501');
 select pg_temp.quota_actor('actor');
 
-do $
+do $$
 declare i integer; t uuid; requested_country text;
 begin
   for i in 1..5 loop
@@ -63,7 +63,7 @@ set local role authenticated;
 select pg_temp.quota_actor('actor');
 select public.update_tenant_settings(tenant_id,updated_at,'CA','XOF','UTC','fr') from public.tenant_settings where tenant_id=current_setting('quota_test.tenant_2')::uuid;
 select pg_temp.quota_actor('recipient');
-select pg_temp.quota_reject(format('select public.update_tenant_settings(%L,null,''CA'',''XOF'',''UTC'',''fr'')',current_setting('quota_test.tenant_1')),'P0001');
+select pg_temp.quota_reject(format('select public.update_tenant_settings(%L,null,''CA'',''XOF'',''UTC'',''fr'')',current_setting('quota_test.tenant_1')),'P0001','administration_denied');
 reset role;
 do $$
 begin
@@ -93,21 +93,21 @@ end;
 $$;
 -- A later audit failure rolls back an already-updated quota row as well.
 update app_private.rpc_write_windows set occurred_at=array_fill(clock_timestamp(),array[59]) where actor_id=current_setting('quota_test.actor')::uuid and scope='administration';
-create function pg_temp.quota_reject_audit() returns trigger language plpgsql as $
+create function pg_temp.quota_reject_audit() returns trigger language plpgsql as $$
 begin raise exception 'quota_test_audit_failure'; end;
-$;
+$$;
 create trigger z_reject_quota_audit before insert on public.audit_events for each row execute function pg_temp.quota_reject_audit();
 set local role authenticated;
 select pg_temp.quota_actor('actor');
-select pg_temp.quota_reject(format('select public.update_tenant_settings(tenant_id,updated_at,''GB'',''XOF'',''UTC'',''fr'') from public.tenant_settings where tenant_id=%L',current_setting('quota_test.tenant_2')),'P0001');
+select pg_temp.quota_reject(format('select public.update_tenant_settings(tenant_id,updated_at,''GB'',''XOF'',''UTC'',''fr'') from public.tenant_settings where tenant_id=%L',current_setting('quota_test.tenant_2')),'P0001','quota_test_audit_failure');
 reset role;
 drop trigger z_reject_quota_audit on public.audit_events;
-do $
+do $$
 begin
  if (select cardinality(occurred_at) from app_private.rpc_write_windows where actor_id=current_setting('quota_test.actor')::uuid and scope='administration')<>59
    or (select country from public.tenant_settings where tenant_id=current_setting('quota_test.tenant_2')::uuid)<>'CA' then raise exception 'audit failure consumed quota or changed business state'; end if;
 end;
-$;
+$$;
 
 -- Explicitly exhaust the database quota with no matching invitation audit rows:
 -- proves both current and legacy RPCs hit this backstop, not only the older SQL limit.
@@ -153,7 +153,7 @@ $$;
 update app_private.rpc_write_windows set occurred_at=array_fill(clock_timestamp()-interval '11 minutes',array[20]) where actor_id=current_setting('quota_test.recipient')::uuid and scope='acceptance';
 set local role authenticated;
 select public.accept_tenant_invitation(current_setting('quota_test.token'));
-select pg_temp.quota_reject('select public.accept_tenant_invitation(current_setting(''quota_test.token''))','P0001');
+select pg_temp.quota_reject('select public.accept_tenant_invitation(current_setting(''quota_test.token''))','P0001','invalid invitation');
 reset role;
 do $$
 declare deleted_actor uuid:=gen_random_uuid();
