@@ -3,7 +3,7 @@ import { sprintTrackers, type SprintTracker } from "./tracker-data";
 const english = [
   [
     "Platform foundations",
-    "All six technical milestones are delivered. The closure gate remains open: R3 RPC quotas are under validation; migration, deployment and monitoring must be verified. Sprint 1 is not active.",
+    "All six technical milestones are delivered. The closure gate remains open: R3 RPC quotas passed CI; migration, deployment and monitoring must be verified. Sprint 1 is not active.",
     [
       [
         "Workspace and quality",

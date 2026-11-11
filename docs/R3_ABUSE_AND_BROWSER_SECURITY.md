@@ -78,3 +78,7 @@ R3 remains high priority and open for this direct-API backstop as well as Vercel
 ## Authorized direct-RPC backstop — 2026-11-11
 
 Owner authorized the next bounded slice. [The database backstop](R3_DIRECT_RPC_BACKSTOP.md) now adds private, actor-scoped rolling quotas at the atomic audit boundary without replacing RPCs or authorization. Its migration and isolated upgrade/concurrency/direct-HTTP tests are prepared; hosted deployment and final validation remain pending. The earlier direct-API gap describes the undeployed baseline. Successful audited writes are bounded after deployment; rejected-request/DDoS perimeter controls remain a separate operational concern. R3 is not closed.
+
+## Direct RPC backstop validated in CI — 2026-11-11
+
+[The backstop evidence](R3_DIRECT_RPC_BACKSTOP.md) now records both successful implementation CI runs, including direct HTTP429 and quota/audit rollback. Existing public RPC bodies/signatures/owners/grants remain unchanged. The earlier direct-write gap is addressed in implementation and still present on hosted Supabase until the reviewed migration is authorized/applied. Database quotas count successful audited writes; Redis continues to limit application attempts. Rejected-request/DDoS, Vercel, monitoring and deployment gates remain open.

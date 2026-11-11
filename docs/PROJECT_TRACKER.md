@@ -89,3 +89,7 @@ UI summary and this tracker now identify R3 Redis/CSP validation and pending dep
 ## R3 database backstop in validation — 2026-11-11
 
 [The direct RPC quota migration](R3_DIRECT_RPC_BACKSTOP.md) is prepared with isolated regression/upgrade/concurrency/HTTP tests. Both UI language summaries reflect the pending database rollout and deployment/monitoring gates. All original milestone percentages remain unchanged: Sprint 0 `in_progress` / 100% of six delivered milestones; later sprints planned/zero. No hosted deployment or closure is claimed.
+
+## R3 direct RPC validation checkpoint — 2026-11-11
+
+[Backstop implementation and evidence](R3_DIRECT_RPC_BACKSTOP.md) now pass isolated CI, including direct HTTP429 and concurrent cross-tenant quotas. Both UI language summaries distinguish CI validation from pending hosted migration/deployment/monitoring. Sprint 0 and R3 remain open; original milestones/progress and Sprint 1 inactivity are unchanged.
