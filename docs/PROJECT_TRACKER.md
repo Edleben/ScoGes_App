@@ -97,3 +97,7 @@ UI summary and this tracker now identify R3 Redis/CSP validation and pending dep
 ## Authorized hosted rollout — 2026-11-11
 
 [R2/R3 deployment and post-checks](DEPLOYMENT_2026-11-11.md) are now executed on the configured Supabase project: six recorded migration versions, pinned invoker helper, enabled private quota enforcement, hosted SQL/PT429/direct HTTP429 and 20 clean Chromium cases. Both language summaries now reflect applied database migrations and the remaining Vercel/monitoring work. Full hosted advisor refresh is pending due connector permissions. Sprint 0 remains `in_progress` / 100% of its six historical milestones; Sprint 1 stays planned/zero. No acceptance gate is closed.
+
+## R4 planning package — 2026-11-11
+
+[Recovery/deployment/monitoring planning](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) is prepared; owner decisions and operational drills are pending. UI French/English summaries now distinguish deployed R2/R3 database controls from unexecuted R4 recovery/monitoring work. Milestone rows/progress remain unchanged: Sprint 0 `in_progress` / historical 100%, later sprints planned/zero. PR #11's original Ubuntu-DNS browser-install failures remain disclosed; new review-head checks must pass before merge.

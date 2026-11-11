@@ -59,3 +59,7 @@ See [R3 configuration, policies and residual risks](R3_ABUSE_AND_BROWSER_SECURIT
 ## Direct RPC mutation backstop — 2026-11-11
 
 [The R3 backstop](R3_DIRECT_RPC_BACKSTOP.md) adds a private PostgreSQL rolling-write quota trigger at the existing transactional audit boundary. No public RPC body/signature/grant is replaced. PostgreSQL owns atomic business-write/audit/quota consistency; Redis remains the server-only application attempt limiter and never becomes a financial source of truth. Database counters hold only bounded security metadata, not financial balances or authorization state. Hosted rollout is pending.
+
+## R4 operational boundary — planning
+
+[The R4 plan](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) keeps backup/restore and privileged release operations outside ordinary app requests/PR CI. PostgreSQL plus Auth/audit/private security metadata need consistent recovery; environment settings/object binaries are separate manifest items. Redis remains a transient abuse-control dependency and never becomes a financial source of truth. Provider-aware recovery/release runbooks are proposed; no scheduler, telemetry SDK, storage service, queue or infrastructure component was added.

@@ -61,3 +61,5 @@ The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and
 Security follow-up: [R3 distributed Redis limits and browser policy](R3_ABUSE_AND_BROWSER_SECURITY.md) records the owner-approved provider, server-only configuration, failure policy, evidence and pending deployment gate.
 
 Direct API follow-up: [R3 database write-quota backstop](R3_DIRECT_RPC_BACKSTOP.md) describes the prepared append-only migration, security/retention/transaction boundaries and pending deployment gate.
+
+R4 planning package: [recovery/deployment/monitoring plan](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md), [isolated restore runbook/evidence template](runbooks/RESTORE_DRILL.md), and [release/rollback/incident runbook](runbooks/RELEASE_MONITORING_INCIDENTS.md). These are plans, not executed recovery or production readiness. Owner objectives, budget, targets and responders remain pending.

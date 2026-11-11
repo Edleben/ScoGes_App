@@ -92,3 +92,7 @@ The earlier statement that shared limits and CSP are absent is superseded for th
 ## Direct API backstop prepared — 2026-11-11
 
 [Private R3 write quotas](R3_DIRECT_RPC_BACKSTOP.md) now cover the audited onboarding, administration, invitation, delivery and acceptance mutation paths, including the legacy invitation wrapper. Fixed verified-user attribution, cross-tenant actor aggregation, private schema/RLS/revoked client privileges and atomic quota/audit rollback preserve authorization. The prepared append-only migration has not been applied to hosted Supabase. Only after deployment/verification may the direct-successful-write gap be considered mitigated there; request/DDoS, Vercel and quota/monitoring gates remain open.
+
+## R4 operational-security plan — 2026-11-11
+
+[R4 planning](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) requires encrypted restricted backup/key custody, explicit source/target isolation and outbound-effect containment before restore, supported Auth/private-schema recovery, and reconciliation of post-backup role revocations/consumed credentials before reopening access. Recovery timings, full advisor scan, collector scrubbing/retention and alert delivery/acknowledgement remain unverified. No real source backup/restore, security-setting change or production rollout was executed by the planning task.

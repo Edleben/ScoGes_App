@@ -103,3 +103,7 @@ The owner authorized and the branch now prepares [private database write quotas]
 ## Hosted R2/R3 deployment checkpoint — 2026-11-11
 
 Owner explicitly authorized both reviewed migrations. [Deployment evidence](DEPLOYMENT_2026-11-11.md) confirms their atomic application and history, preserved business/RPC/grant state, target helper/private-quota checks, actual direct HTTP429 and 20 post-deployment Chromium passes. Older missing-hosted-migration statements are superseded for this configured project. Full advisor refresh remains inaccessible through the connector and needs owner dashboard verification. R3's Vercel/monitoring/perimeter gates and R4 recovery/UAT remain open; no blanket risk acceptance or Sprint 0 closure is inferred.
+
+## R4 planning prepared — 2026-11-11
+
+[The bounded R4 package](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) now supplies a decision register, verified inventory/permission gaps, backup options, isolated restore and release/incident runbooks, monitoring thresholds (proposed), ownership and UAT/acceptance evidence. Owner recovery objectives/budget/responders/targets are pending. R4 remains open/unexecuted; R3 deployed-environment/monitoring and full-advisor checks also remain open. No backup/restore capability, configured alert or pilot readiness is claimed. This is not roadmap Sprint 4 or Sprint 1 implementation.
