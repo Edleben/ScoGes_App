@@ -1,5 +1,7 @@
 # R3 — Distributed limits and browser security
 
+Current hosted checkpoint — **2026-11-11**: PR #10 is merged; the R2 helper and R3 direct-RPC quota migrations are now applied to the configured project and post-deployment checks passed. [Deployment evidence](DEPLOYMENT_2026-11-11.md) supersedes older pending-deployment notes below. Full advisor refresh, Vercel/monitoring and Sprint 0 acceptance remain open; Sprint 1 is inactive.
+
 Status (2026-11-10): implementation prepared; final validation/review and deployment verification pending. No merge, deployment, paid plan upgrade, Sprint 0 acceptance or Sprint 1 activation is authorized. Owner approved managed Upstash Redis and Vercel ingress. The database was provisioned by the owner; credentials are local and server-only.
 
 ## Acceptance and architecture

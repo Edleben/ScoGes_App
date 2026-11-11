@@ -93,3 +93,7 @@ UI summary and this tracker now identify R3 Redis/CSP validation and pending dep
 ## R3 direct RPC validation checkpoint — 2026-11-11
 
 [Backstop implementation and evidence](R3_DIRECT_RPC_BACKSTOP.md) now pass isolated CI, including direct HTTP429 and concurrent cross-tenant quotas. Both UI language summaries distinguish CI validation from pending hosted migration/deployment/monitoring. Sprint 0 and R3 remain open; original milestones/progress and Sprint 1 inactivity are unchanged.
+
+## Authorized hosted rollout — 2026-11-11
+
+[R2/R3 deployment and post-checks](DEPLOYMENT_2026-11-11.md) are now executed on the configured Supabase project: six recorded migration versions, pinned invoker helper, enabled private quota enforcement, hosted SQL/PT429/direct HTTP429 and 20 clean Chromium cases. Both language summaries now reflect applied database migrations and the remaining Vercel/monitoring work. Full hosted advisor refresh is pending due connector permissions. Sprint 0 remains `in_progress` / 100% of its six historical milestones; Sprint 1 stays planned/zero. No acceptance gate is closed.

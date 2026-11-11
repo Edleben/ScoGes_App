@@ -99,3 +99,7 @@ R3 boundary verification (2026-11-10): authenticated EXECUTE grants on public on
 ## R3 direct API implementation follow-up — 2026-11-11
 
 The owner authorized and the branch now prepares [private database write quotas](R3_DIRECT_RPC_BACKSTOP.md), covering successful audited direct RPC mutations without changing RPC authorization. New migration/upgrade/concurrency/direct-HTTP checks must pass. Hosted deployment, Vercel verification and exercised monitoring remain release blockers; direct rejected-request flooding still needs perimeter/operational protection. R3 stays open.
+
+## Hosted R2/R3 deployment checkpoint — 2026-11-11
+
+Owner explicitly authorized both reviewed migrations. [Deployment evidence](DEPLOYMENT_2026-11-11.md) confirms their atomic application and history, preserved business/RPC/grant state, target helper/private-quota checks, actual direct HTTP429 and 20 post-deployment Chromium passes. Older missing-hosted-migration statements are superseded for this configured project. Full advisor refresh remains inaccessible through the connector and needs owner dashboard verification. R3's Vercel/monitoring/perimeter gates and R4 recovery/UAT remain open; no blanket risk acceptance or Sprint 0 closure is inferred.

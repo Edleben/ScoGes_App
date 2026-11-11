@@ -1,6 +1,6 @@
 # R3 — Direct RPC write backstop
 
-Checkpoint: 2026-11-11. Owner authorized this bounded follow-up. Implementation is prepared on `edwakson/ScoGes_App` for PR #10; implementation commit `8de04cc` passed both push and PR required CI. Review, final documentation-head checks and hosted rollout remain pending. Do not merge, deploy migrations, activate Sprint 1 or mark Sprint 0/R3 closed from this document.
+Current checkpoint — 2026-11-11: PR #10 is merged and the backstop is **deployed and verified on the configured hosted project** after separate explicit owner authorization. [Deployment evidence](DEPLOYMENT_2026-11-11.md) supersedes historical pending-rollout statements below. Implementation CI remains recorded separately. Vercel/monitoring, full advisor refresh and owner-controlled R3/Sprint 0 acceptance remain open; this record does not activate Sprint 1 or authorize another deployment.
 
 ## Goal and boundary
 
@@ -30,7 +30,7 @@ Clock time is taken after the row lock and never moves behind retained usage. Co
 
 Migration history is append-only. Trigger creation takes a SHARE ROW EXCLUSIVE audit-table lock, held to the end of the migration transaction; run the entire migration transactionally in a controlled deployment window. The trigger is installed before seeding, excluding concurrent audited writes from the history snapshot. Recent protected audit events seed only the newest quota-sized windows, so existing usage does not receive a reset on upgrade. Audit/business records and existing functions/grants are not rewritten. A one-time audit-history scan is required; assess volume and lock time before deployment. An unexpected existing `app_private` namespace causes a safe migration failure for investigation.
 
-Hosted Supabase has not received this migration. After PR review and explicit deployment authorization, inspect migration history and namespace conflicts, apply the reviewed chain (including independently pending R2 where appropriate), verify grants/RLS/trigger/HTTP429 behavior and run post-deployment regression. Older application code remains compatible with the unchanged RPC contracts. Prefer fix-forward for any defect; removing/disabling the security trigger or clearing counters is a security-reducing rollback requiring explicit review. The existing backup/restore gate remains separate.
+The configured hosted project received this migration together with R2 on 2026-11-11; see [executed deployment checks](DEPLOYMENT_2026-11-11.md). For any other environment, first obtain deployment authorization, inspect migration history and namespace conflicts, apply the reviewed chain, verify grants/RLS/trigger/HTTP429 behavior and run post-deployment regression. Older application code remains compatible with the unchanged RPC contracts. Prefer fix-forward for any defect; removing/disabling the security trigger or clearing counters is a security-reducing rollback requiring explicit review. The existing backup/restore gate remains separate.
 
 ## Verification plan and executed evidence
 
