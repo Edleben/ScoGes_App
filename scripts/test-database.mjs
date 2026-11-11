@@ -118,4 +118,6 @@ if (!process.exitCode && env.CI_ENFORCE_INTEGRATION === "1") {
   const { testAdministrationConcurrency } =
     await import("./tests/administration-concurrency.mjs");
   await testAdministrationConcurrency(env);
+  const { testRpcWriteQuotas } = await import("./tests/rpc-write-quotas.mjs");
+  await testRpcWriteQuotas(env);
 }

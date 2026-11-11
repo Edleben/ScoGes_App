@@ -81,3 +81,15 @@ The targeted Vitest/mocker 5.0.3 patch removes two moderate findings; one minima
 ## R2 prepared hardening — 2026-11-03
 
 [R2](R2_TIMESTAMP_HARDENING.md) now has a minimal append-only helper configuration fix and guarded fresh/upgrade regression coverage prepared for review. Hosted deployment remains pending and requires authorization; read-only history still has four versions. No original milestone or sprint percentage changes: Sprint 0 remains `in_progress`, R1 partial and the completion gate open. Future sprint implementation is not activated.
+
+## R3 remediation in validation — 2026-11-10
+
+UI summary and this tracker now identify R3 Redis/CSP validation and pending deployment verification. The owner approved Vercel ingress and provisioned managed Upstash Redis on the Free plan. [R3 evidence and operational residual risks](R3_ABUSE_AND_BROWSER_SECURITY.md) govern the current slice. Original six milestones remain delivered/100%; Sprint 0 remains `in_progress`, its acceptance gate open, and Sprint 1 planned/zero. No deployment or merge is authorized by this checkpoint.
+
+## R3 database backstop in validation — 2026-11-11
+
+[The direct RPC quota migration](R3_DIRECT_RPC_BACKSTOP.md) is prepared with isolated regression/upgrade/concurrency/HTTP tests. Both UI language summaries reflect the pending database rollout and deployment/monitoring gates. All original milestone percentages remain unchanged: Sprint 0 `in_progress` / 100% of six delivered milestones; later sprints planned/zero. No hosted deployment or closure is claimed.
+
+## R3 direct RPC validation checkpoint — 2026-11-11
+
+[Backstop implementation and evidence](R3_DIRECT_RPC_BACKSTOP.md) now pass isolated CI, including direct HTTP429 and concurrent cross-tenant quotas. Both UI language summaries distinguish CI validation from pending hosted migration/deployment/monitoring. Sprint 0 and R3 remain open; original milestones/progress and Sprint 1 inactivity are unchanged.

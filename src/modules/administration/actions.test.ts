@@ -1,3 +1,8 @@
+import { authText } from "@/modules/identity/auth-messages";
+import { requestLimit } from "@/lib/security/request-limit";
+vi.mock("@/lib/security/request-limit", () => ({
+  requestLimit: vi.fn(async () => "allowed"),
+}));
 import { describe, it, expect, beforeEach, vi } from "vitest";
 const { rpc, membership } = vi.hoisted(() => ({
   rpc: vi.fn(),
@@ -58,6 +63,48 @@ describe("tenant administration", () => {
     expect((await action({ ok: false }, form())).ok).toBe(false);
     expect(rpc).not.toHaveBeenCalled();
   });
+  it.each(["limited", "unavailable"] as const)(
+    "blocks protected side effects when limiter is %s",
+    async (decision) => {
+      vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+      expect(
+        (
+          await updateSettingsAction(
+            { ok: false },
+            form({
+              country: "TG",
+              baseCurrency: "XOF",
+              timezone: "Africa/Lome",
+              defaultLocale: "fr",
+            }),
+          )
+        ).ok,
+      ).toBe(false);
+      expect(requestLimit).toHaveBeenCalled();
+      expect(rpc).not.toHaveBeenCalled();
+    },
+  );
+  it.each(["fr", "en"] as const)(
+    "returns safe %s database-quota feedback",
+    async (locale) => {
+      rpc.mockResolvedValue({
+        data: null,
+        error: { code: "PT429", message: "rpc_rate_limited" },
+      });
+      expect(
+        await updateSettingsAction(
+          { ok: false },
+          form({
+            locale,
+            country: "TG",
+            baseCurrency: "XOF",
+            timezone: "UTC",
+            defaultLocale: "fr",
+          }),
+        ),
+      ).toEqual({ ok: false, message: authText(locale, "rateLimited") });
+    },
+  );
   it("rejects switched tenants, forged ownership and inactive context", async () => {
     for (const extra of [
       { tenantId: subject },

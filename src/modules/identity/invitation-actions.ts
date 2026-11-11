@@ -1,4 +1,6 @@
 "use server";
+import { isRpcRateLimit } from "@/lib/security/rpc-errors";
+import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -28,6 +30,13 @@ export async function inviteMemberAction(
     !canAssignRole(membership.roles, parsed.data.role)
   )
     return authReply(form, false, "denied");
+  const limit = await requestLimit("invitation", user.id);
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const emailProvider = createEmailProvider();
   if (!emailProvider) return authReply(form, false, "smtpMissing");
   const supabase = await createSupabaseServerClient();
@@ -40,6 +49,7 @@ export async function inviteMemberAction(
   const issued = z
     .object({ id: z.string().uuid(), token: invitationTokenSchema })
     .safeParse(data);
+  if (isRpcRateLimit(error)) return authReply(form, false, "rateLimited");
   if (error || !issued.success) return authReply(form, false, "inviteFailed");
   const url = new URL("/invitations/accept", getAppUrl());
   url.searchParams.set("locale", formLocale(form));
@@ -75,6 +85,13 @@ export async function captureInvitationAction(
 ): Promise<AuthActionState> {
   const parsed = invitationTokenSchema.safeParse(form.get("token"));
   if (!parsed.success) return authReply(form, false, "invalidLink");
+  const limit = await requestLimit("capture");
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   (await cookies()).set(invitationCookie, parsed.data, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -89,7 +106,14 @@ export async function acceptInvitationAction(
   _: AuthActionState,
   form: FormData,
 ): Promise<AuthActionState> {
-  await requireCurrentUser();
+  const user = await requireCurrentUser();
+  const limit = await requestLimit("acceptance", user.id);
+  if (limit !== "allowed")
+    return authReply(
+      form,
+      false,
+      limit === "limited" ? "rateLimited" : "unavailable",
+    );
   const store = await cookies();
   const token = invitationTokenSchema.safeParse(
     store.get(invitationCookie)?.value,
@@ -101,6 +125,7 @@ export async function acceptInvitationAction(
     invitation_token: token.data,
   });
   const accepted = z.object({ tenant_id: z.string().uuid() }).safeParse(data);
+  if (isRpcRateLimit(error)) return authReply(form, false, "rateLimited");
   if (error || !accepted.success)
     return authReply(form, false, "acceptanceFailed");
   store.delete(invitationCookie);

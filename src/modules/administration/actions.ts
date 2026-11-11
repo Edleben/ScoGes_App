@@ -1,4 +1,7 @@
 "use server";
+import { isRpcRateLimit } from "@/lib/security/rpc-errors";
+import { authText } from "@/modules/identity/auth-messages";
+import { requestLimit } from "@/lib/security/request-limit";
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getActiveMembership, requireCurrentUser } from "@/lib/auth/session";
@@ -40,6 +43,14 @@ async function execute(
     const client = await createSupabaseServerClient();
     if (!client) return reply(form, false, "unavailable");
     const { data, error } = await client.rpc(rpc, args);
+    if (isRpcRateLimit(error))
+      return {
+        ok: false,
+        message: authText(
+          getLocale(String(form.get("locale") ?? "fr")),
+          "rateLimited",
+        ),
+      };
     if (error)
       return reply(
         form,
@@ -70,6 +81,8 @@ export async function changeMemberRolesAction(
   if (!parsed.success) return reply(form, false, "invalid");
   if (!parsed.data.roles.every((role) => canAssignRole(membership.roles, role)))
     return reply(form, false, "denied");
+  if ((await requestLimit("administration", membership.userId)) !== "allowed")
+    return reply(form, false, "unavailable");
   return execute(form, "administer_tenant_membership", {
     target_tenant_id: membership.tenantId,
     target_membership_id: parsed.data.membershipId,
@@ -85,6 +98,8 @@ export async function changeMemberStatusAction(
   if (!membership) return reply(form, false, "denied");
   const parsed = statusSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return reply(form, false, "invalid");
+  if ((await requestLimit("administration", membership.userId)) !== "allowed")
+    return reply(form, false, "unavailable");
   return execute(form, "administer_tenant_membership", {
     target_tenant_id: membership.tenantId,
     target_membership_id: parsed.data.membershipId,
@@ -100,6 +115,8 @@ export async function updateSettingsAction(
   if (!membership) return reply(form, false, "denied");
   const parsed = settingsSchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return reply(form, false, "invalid");
+  if ((await requestLimit("administration", membership.userId)) !== "allowed")
+    return reply(form, false, "unavailable");
   return execute(form, "update_tenant_settings", {
     target_tenant_id: membership.tenantId,
     expected_updated_at: parsed.data.updatedAt,

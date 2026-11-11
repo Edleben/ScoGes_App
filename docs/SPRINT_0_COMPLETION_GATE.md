@@ -29,3 +29,7 @@ Evaluate the full [Sprint 0 Definition of Done](prompts/SPRINT_0_MASTER_PROMPT.m
 2. After acceptance, record review/merge evidence and set Sprint 0 to `done` in both trackers through a protected, freshly validated PR. Keep the six milestones at 100%, preserving dated evidence. Until that decision, both trackers intentionally remain `in_progress` at 100%.
 3. Stop at Sprint 0. Obtain separate explicit activation of the [bounded Sprint 1 proposal](prompts/SPRINT_1_MASTER_PROMPT.md) and resolve its business decisions before affected slices.
 4. Production deployment, hosted migration changes and pilot readiness require their own authorization and evidence. Do not infer them from closure.
+
+## R3 direct RPC checkpoint — 2026-11-11
+
+[The prepared database backstop](R3_DIRECT_RPC_BACKSTOP.md) passed clean implementation push/PR CI, including upgraded history, authorization/audit rollback, direct HTTP429, races and 34 Chromium cases. Hosted metadata confirms it is not deployed. R3 remains open for reviewed deployment, actual Vercel/HTTPS configuration and exercised quota/outage monitoring; this does not accept residual risks or close the owner-controlled Sprint 0 gate.

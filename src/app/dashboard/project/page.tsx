@@ -20,19 +20,18 @@ import { cn } from "@/lib/utils";
 
 function ProgressBar({ value, locale }: { value: number; locale: Locale }) {
   return (
-    <div
+    <progress
       aria-label={`${foundationText(locale, "progress")} ${value}%`}
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={value}
-      className="h-2 w-full overflow-hidden rounded-full bg-slate-200"
+      className="h-2 w-full appearance-none overflow-hidden rounded-full border-0 bg-slate-200 text-[var(--primary)] [&::-moz-progress-bar]:rounded-full [&::-moz-progress-bar]:bg-[var(--primary)] [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-slate-200 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-[var(--primary)]"
       role="progressbar"
+      max={100}
+      value={value}
     >
-      <div
-        className="h-full rounded-full bg-[var(--primary)]"
-        style={{ width: `${value}%` }}
-      />
-    </div>
+      {value}%
+    </progress>
   );
 }
 

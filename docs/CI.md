@@ -37,3 +37,7 @@ The unit suite compares Markdown tracker rows with every UI sprint/milestone ID,
 Closure review uses [PR #8](https://github.com/Edleben/ScoGes_App/pull/8/checks); push and PR required gates must pass on the final head. Branch protection was re-read on 2026-11-01 with the documented settings intact, including conversation resolution and zero mandatory additional approvals. Human acceptance of Sprint 0/risk dispositions is separate from CI and must not be inferred from those zero-approval settings.
 
 R1 follow-up on 2026-11-01: the locked Vitest/mocker 5.0.3 patch removes both mocker findings. Current local audit is one moderate minimatch advisory, zero high/critical; [compatibility investigation](R1_DEPENDENCY_REMEDIATION.md) keeps R1 open. The existing high threshold and visible moderate audit artifact are unchanged. Required CI must run on the new remediation head.
+
+## R3 Redis isolation
+
+The integration job starts a digest-pinned Redis container and a loopback REST bridge on port 8079. The existing environment exporter generates/masks a disposable Redis token; hosted Redis credentials are never supplied. `pnpm test:redis` exercises actual SDK Lua concurrency/expiry plus transport/timeout failures before the browser suite. The fixture strips the Upstash-only locking shebang; application configuration still uses the same managed-provider adapter. Teardown stops the bridge and Actions disposes the Redis service. No production-secret requirement or rate-limit bypass is introduced into CI.

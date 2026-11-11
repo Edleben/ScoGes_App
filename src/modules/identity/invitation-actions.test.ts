@@ -1,3 +1,7 @@
+import { requestLimit } from "@/lib/security/request-limit";
+vi.mock("@/lib/security/request-limit", () => ({
+  requestLimit: vi.fn(async () => "allowed"),
+}));
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { authText } from "./auth-messages";
 const { rpc, send, membership, provider, cookieStore } = vi.hoisted(() => ({
@@ -44,6 +48,42 @@ describe("invitation actions", () => {
     provider.mockReturnValue({ sendInvitation: send });
     cookieStore.get.mockReturnValue({ value: token });
   });
+  it.each(["limited", "unavailable"] as const)(
+    "blocks protected side effects when limiter is %s",
+    async (decision) => {
+      vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+      expect(
+        (
+          await inviteMemberAction(
+            { ok: false },
+            form({ email: "a@example.com", role: "cashier" }),
+          )
+        ).ok,
+      ).toBe(false);
+      expect(requestLimit).toHaveBeenCalled();
+      expect(rpc).not.toHaveBeenCalled();
+    },
+  );
+  it.each(["fr", "en"] as const)(
+    "keeps %s invitation side effects safe on database quota rejection",
+    async (locale) => {
+      rpc.mockResolvedValue({
+        data: null,
+        error: { code: "PT429", message: "rpc_rate_limited" },
+      });
+      expect(
+        await inviteMemberAction(
+          { ok: false },
+          form({ locale, email: "a@example.com", role: "cashier" }),
+        ),
+      ).toEqual({ ok: false, message: authText(locale, "rateLimited") });
+      expect(send).not.toHaveBeenCalled();
+      expect(
+        await acceptInvitationAction({ ok: false }, form({ locale })),
+      ).toEqual({ ok: false, message: authText(locale, "rateLimited") });
+      expect(cookieStore.delete).not.toHaveBeenCalled();
+    },
+  );
   it("rejects missing permissions before issuing or sending an invitation", async () => {
     membership.mockResolvedValue({ tenantId: id, roles: ["cashier"] });
     const result = await inviteMemberAction(

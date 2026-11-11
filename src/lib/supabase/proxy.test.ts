@@ -40,5 +40,12 @@ describe("session refresh proxy", () => {
     expect(response.cookies.get("session")?.value).toBe("refreshed");
     expect(response.headers.get("Cache-Control")).toBe("private, no-store");
     expect(response.headers.get("Pragma")).toBe("no-cache");
+    const policy = response.headers.get("Content-Security-Policy");
+    expect(policy).toContain("'strict-dynamic'");
+    expect(
+      response.headers.get("x-middleware-request-content-security-policy"),
+    ).toBe(policy);
+    const nonce = response.headers.get("x-middleware-request-x-nonce");
+    expect(policy).toContain(`'nonce-${nonce}'`);
   });
 });

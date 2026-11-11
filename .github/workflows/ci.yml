@@ -98,6 +98,15 @@ jobs:
     name: Isolated integration and browser tests
     runs-on: ubuntu-24.04
     timeout-minutes: 35
+    services:
+      redis:
+        image: redis:8.2.3-alpine@sha256:08ad0b1d280850169a790dba1393ff7a90aef951fc19632cf4d3ce4f78e679ba
+        ports: ["6380:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
@@ -119,6 +128,11 @@ jobs:
           supabase status -o env > "$RUNNER_TEMP/supabase-status.env"
           chmod 600 "$RUNNER_TEMP/supabase-status.env"
           node scripts/ci/export-environment.mjs "$RUNNER_TEMP/supabase-status.env"
+      - name: Start isolated Redis REST fixture and test atomic expiry
+        run: |
+          node scripts/ci/redis-rest.mjs > "$RUNNER_TEMP/redis-rest.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/scoges-redis-rest.pid"
+          pnpm test:redis
       - name: Check local database security advisors
         run: supabase db advisors --local --type security --level warn --fail-on error
       - name: Start isolated TLS SMTP fixture
@@ -150,6 +164,9 @@ jobs:
         if: always()
         run: |
           supabase stop --no-backup || true
+          if [ -f "$RUNNER_TEMP/scoges-redis-rest.pid" ]; then
+            kill "$(cat "$RUNNER_TEMP/scoges-redis-rest.pid")" || true
+          fi
           if [ -f "$RUNNER_TEMP/scoges-smtp/pid" ]; then
             kill "$(cat "$RUNNER_TEMP/scoges-smtp/pid")" || true
           fi

@@ -1,3 +1,7 @@
+import { requestLimit } from "@/lib/security/request-limit";
+vi.mock("@/lib/security/request-limit", () => ({
+  requestLimit: vi.fn(async () => "allowed"),
+}));
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { authText } from "./auth-messages";
 const { auth, cookieStore } = vi.hoisted(() => ({
@@ -40,6 +44,22 @@ describe("authentication actions", () => {
     vi.clearAllMocks();
     cookieStore.has.mockReturnValue(false);
   });
+  it.each(["limited", "unavailable"] as const)(
+    "blocks protected side effects when limiter is %s",
+    async (decision) => {
+      vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+      expect(
+        (
+          await signInAction(
+            { ok: false },
+            form({ email: "a@example.com", password: "password123" }),
+          )
+        ).ok,
+      ).toBe(false);
+      expect(requestLimit).toHaveBeenCalled();
+      expect(auth.signInWithPassword).not.toHaveBeenCalled();
+    },
+  );
   it("preserves English after login and still rejects hostile return destinations", async () => {
     auth.signInWithPassword.mockResolvedValue({ error: null });
     await expect(
@@ -255,3 +275,37 @@ describe("authentication actions", () => {
     expect(auth.signOut).toHaveBeenCalledWith({ scope: "global" });
   });
 });
+
+it.each(["limited", "unavailable"] as const)(
+  "blocks signup, recovery and password writes on %s",
+  async (decision) => {
+    const input = form({
+      email: "a@example.com",
+      password: "password123",
+      confirmPassword: "password123",
+      locale: "en",
+    });
+    for (const [action, scope, effect] of [
+      [signUpAction, "signup", auth.signUp],
+      [requestPasswordResetAction, "recovery", auth.resetPasswordForEmail],
+      [updatePasswordAction, "password", auth.updateUser],
+    ] as const) {
+      vi.clearAllMocks();
+      auth.getUser.mockResolvedValue({
+        data: {
+          user: { id: "verified-user", email_confirmed_at: "2026-11-10" },
+        },
+        error: null,
+      });
+      vi.mocked(requestLimit).mockResolvedValueOnce(decision);
+      expect((await action({ ok: false }, input)).message).toBe(
+        authText("en", decision === "limited" ? "rateLimited" : "unavailable"),
+      );
+      expect(requestLimit).toHaveBeenCalledWith(
+        scope,
+        ...(scope === "password" ? ["verified-user"] : []),
+      );
+      expect(effect).not.toHaveBeenCalled();
+    }
+  },
+);
