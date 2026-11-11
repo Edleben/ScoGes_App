@@ -1,4 +1,5 @@
 "use server";
+import { isRpcRateLimit } from "@/lib/security/rpc-errors";
 import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 
@@ -65,6 +66,8 @@ export async function createTenantAction(
       tenant_default_locale: parsed.data.defaultLocale,
       actor_user_id: user.id,
     });
+    if (isRpcRateLimit(error))
+      return { ok: false, message: authText(locale, "rateLimited") };
     if (error?.code === "23505")
       return {
         ok: false,

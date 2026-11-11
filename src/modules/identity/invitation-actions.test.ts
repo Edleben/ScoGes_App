@@ -64,6 +64,26 @@ describe("invitation actions", () => {
       expect(rpc).not.toHaveBeenCalled();
     },
   );
+  it.each(["fr", "en"] as const)(
+    "keeps %s invitation side effects safe on database quota rejection",
+    async (locale) => {
+      rpc.mockResolvedValue({
+        data: null,
+        error: { code: "PT429", message: "rpc_rate_limited" },
+      });
+      expect(
+        await inviteMemberAction(
+          { ok: false },
+          form({ locale, email: "a@example.com", role: "cashier" }),
+        ),
+      ).toEqual({ ok: false, message: authText(locale, "rateLimited") });
+      expect(send).not.toHaveBeenCalled();
+      expect(
+        await acceptInvitationAction({ ok: false }, form({ locale })),
+      ).toEqual({ ok: false, message: authText(locale, "rateLimited") });
+      expect(cookieStore.delete).not.toHaveBeenCalled();
+    },
+  );
   it("rejects missing permissions before issuing or sending an invitation", async () => {
     membership.mockResolvedValue({ tenantId: id, roles: ["cashier"] });
     const result = await inviteMemberAction(

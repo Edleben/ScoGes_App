@@ -1,4 +1,6 @@
 "use server";
+import { isRpcRateLimit } from "@/lib/security/rpc-errors";
+import { authText } from "@/modules/identity/auth-messages";
 import { requestLimit } from "@/lib/security/request-limit";
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -41,6 +43,14 @@ async function execute(
     const client = await createSupabaseServerClient();
     if (!client) return reply(form, false, "unavailable");
     const { data, error } = await client.rpc(rpc, args);
+    if (isRpcRateLimit(error))
+      return {
+        ok: false,
+        message: authText(
+          getLocale(String(form.get("locale") ?? "fr")),
+          "rateLimited",
+        ),
+      };
     if (error)
       return reply(
         form,

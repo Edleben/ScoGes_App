@@ -57,3 +57,5 @@ Update `src/modules/project-tracker/tracker-data.ts` and `PROJECT_TRACKER.md` to
 The [bounded Sprint 1 prompt](prompts/SPRINT_1_MASTER_PROMPT.md) is proposed and inactive. The [foundation completion gate](SPRINT_0_COMPLETION_GATE.md) has complete technical evidence, including [hosted email verification](SPRINT_0_EMAIL_VALIDATION.md), but the owner kept it open for R1–R7 remediation; Sprint 0 remains active. Approval and implementation follow the documented gate, rather than the presence of a prompt file.
 
 Security follow-up: [R3 distributed Redis limits and browser policy](R3_ABUSE_AND_BROWSER_SECURITY.md) records the owner-approved provider, server-only configuration, failure policy, evidence and pending deployment gate.
+
+Direct API follow-up: [R3 database write-quota backstop](R3_DIRECT_RPC_BACKSTOP.md) describes the prepared append-only migration, security/retention/transaction boundaries and pending deployment gate.

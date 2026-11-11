@@ -1,3 +1,4 @@
+import { authText } from "@/modules/identity/auth-messages";
 import { requestLimit } from "@/lib/security/request-limit";
 vi.mock("@/lib/security/request-limit", () => ({
   requestLimit: vi.fn(async () => "allowed"),
@@ -47,6 +48,20 @@ describe("tenant onboarding failure safety", () => {
       expect((await createTenantAction({ ok: false }, form())).ok).toBe(false);
       expect(requestLimit).toHaveBeenCalled();
       expect(rpc).not.toHaveBeenCalled();
+    },
+  );
+  it.each(["fr", "en"] as const)(
+    "returns safe %s quota feedback without redirecting",
+    async (locale) => {
+      rpc.mockResolvedValue({
+        data: null,
+        error: { code: "PT429", message: "rpc_rate_limited" },
+      });
+      const result = await createTenantAction({ ok: false }, form({ locale }));
+      expect(result).toEqual({
+        ok: false,
+        message: authText(locale, "rateLimited"),
+      });
     },
   );
   it("preserves the UI language independently of the institution default", async () => {

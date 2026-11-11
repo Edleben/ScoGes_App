@@ -1,4 +1,5 @@
 "use server";
+import { isRpcRateLimit } from "@/lib/security/rpc-errors";
 import { requestLimit } from "@/lib/security/request-limit";
 import { localizedPath } from "@/i18n/navigation";
 import { cookies } from "next/headers";
@@ -48,6 +49,7 @@ export async function inviteMemberAction(
   const issued = z
     .object({ id: z.string().uuid(), token: invitationTokenSchema })
     .safeParse(data);
+  if (isRpcRateLimit(error)) return authReply(form, false, "rateLimited");
   if (error || !issued.success) return authReply(form, false, "inviteFailed");
   const url = new URL("/invitations/accept", getAppUrl());
   url.searchParams.set("locale", formLocale(form));
@@ -123,6 +125,7 @@ export async function acceptInvitationAction(
     invitation_token: token.data,
   });
   const accepted = z.object({ tenant_id: z.string().uuid() }).safeParse(data);
+  if (isRpcRateLimit(error)) return authReply(form, false, "rateLimited");
   if (error || !accepted.success)
     return authReply(form, false, "acceptanceFailed");
   store.delete(invitationCookie);

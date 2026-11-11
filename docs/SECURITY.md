@@ -86,3 +86,7 @@ The prepared append-only migration pins `public.touch_updated_at()` to trusted `
 ## R3 remediation checkpoint — 2026-11-10
 
 The earlier statement that shared limits and CSP are absent is superseded for this implementation branch. Server-only managed Redis sliding windows, explicit fail-closed handling, verified-ingress selection, keyed identifiers, nonce CSP and response headers are implemented. Configuration/deployment checks and final PR validation remain distinct from code completion. See [the R3 policy and residual-risk record](R3_ABUSE_AND_BROWSER_SECURITY.md); do not infer pilot approval or Sprint 0 closure.
+
+## Direct API backstop prepared — 2026-11-11
+
+[Private R3 write quotas](R3_DIRECT_RPC_BACKSTOP.md) now cover the audited onboarding, administration, invitation, delivery and acceptance mutation paths, including the legacy invitation wrapper. Fixed verified-user attribution, cross-tenant actor aggregation, private schema/RLS/revoked client privileges and atomic quota/audit rollback preserve authorization. The prepared append-only migration has not been applied to hosted Supabase. Only after deployment/verification may the direct-successful-write gap be considered mitigated there; request/DDoS, Vercel and quota/monitoring gates remain open.

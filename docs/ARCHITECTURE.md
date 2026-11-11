@@ -55,3 +55,7 @@ The existing `?locale=fr|en` convention is shared across foundation pages. The p
 Sensitive server actions call a small server-only request/adapter boundary under `src/lib/security`. The Upstash adapter owns Redis and sliding-window SDK calls. PostgreSQL/Supabase remain authoritative for identity, tenant membership, permissions, transactional audit and all future financial records. Redis contains only short-lived HMAC counter keys; it never authorizes a business mutation. No privileged Supabase/database credential is used by this adapter.
 
 See [R3 configuration, policies and residual risks](R3_ABUSE_AND_BROWSER_SECURITY.md). Local CI bridges the SDK HTTP envelope to disposable real Redis, executing the Lua atomically; it removes only Upstash's proprietary locking shebang, since OSS Redis already serializes scripts. The bridge is test infrastructure, never a production provider. Production uses the provisioned managed Upstash database.
+
+## Direct RPC mutation backstop — 2026-11-11
+
+[The R3 backstop](R3_DIRECT_RPC_BACKSTOP.md) adds a private PostgreSQL rolling-write quota trigger at the existing transactional audit boundary. No public RPC body/signature/grant is replaced. PostgreSQL owns atomic business-write/audit/quota consistency; Redis remains the server-only application attempt limiter and never becomes a financial source of truth. Database counters hold only bounded security metadata, not financial balances or authorization state. Hosted rollout is pending.
