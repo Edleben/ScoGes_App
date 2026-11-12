@@ -33,3 +33,7 @@ Evaluate the full [Sprint 0 Definition of Done](prompts/SPRINT_0_MASTER_PROMPT.m
 ## R3 direct RPC checkpoint — 2026-11-11
 
 [The prepared database backstop](R3_DIRECT_RPC_BACKSTOP.md) passed clean implementation push/PR CI, including upgraded history, authorization/audit rollback, direct HTTP429, races and 34 Chromium cases. Hosted metadata confirms it is not deployed. R3 remains open for reviewed deployment, actual Vercel/HTTPS configuration and exercised quota/outage monitoring; this does not accept residual risks or close the owner-controlled Sprint 0 gate.
+
+## R4 planning does not close a gate — 2026-11-11
+
+[The R4 plan](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) defines proposed recovery objectives, isolated restore/release/alert drills and owner acceptance evidence. Those operational checks have not run. Backup existence, CI, merged database hardening or written runbooks cannot substitute for measured recovery, actual Vercel/HTTPS checks, delivered/acknowledged alerts and controlled foundation UAT. R3/R4 and the owner-controlled Sprint 0 gate remain open; Sprint 1 is not activated.

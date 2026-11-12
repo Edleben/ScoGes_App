@@ -1,5 +1,7 @@
 # Shared handoff — Claude, Codex and Antigravity
 
+Current hosted checkpoint — **2026-11-11**: PR #10 is merged; the R2 helper and R3 direct-RPC quota migrations are now applied to the configured project and post-deployment checks passed. [Deployment evidence](DEPLOYMENT_2026-11-11.md) supersedes older pending-deployment notes below. Full advisor refresh, Vercel/monitoring and Sprint 0 acceptance remain open; Sprint 1 is inactive.
+
 Checkpoint: **2026-11-01**, Sprint 0 closure candidate after merged PR #7 (`6a76c43`). Historical test counts below retain their original baseline. This is a repository handoff, not permission to execute the next sprint, deploy, reset databases, or contact recipients. Recheck repository and remote state before acting; conversation history and these dated counts can become stale.
 
 ## Start here
@@ -213,3 +215,15 @@ Owner authorized the database backstop after the direct-RPC risk explanation. [R
 [The backstop](R3_DIRECT_RPC_BACKSTOP.md) implementation `8de04cc` passed [PR validation](https://github.com/Edleben/ScoGes_App/actions/runs/42966995033) and [push validation](https://github.com/Edleben/ScoGes_App/actions/runs/42966987541): 134 unit/contract, 10 safety, 3 Redis, all database/RLS/audit/fresh-upgrade/race checks and 34 Chromium cases (zero failures/skips/flaky), plus lint/types/build/security. Dedicated logs confirm private quota permissions, expiry/storage/audit rollback, unchanged existing RPC/data/grants, cross-tenant final-slot races and direct HTTP429. Hosted baseline connectivity/rollback-only database tests and 20 Chromium cases also passed.
 
 Read-only hosted metadata confirms that neither this quota table/migration nor the R2 migration is applied. This is implementation/CI completion, not deployment, risk acceptance or R3/Sprint 0 closure. Review PR #10, then obtain separate hosted migration authorization. Vercel/HTTPS and quota/outage monitoring remain required before public exposure; rejected-request floods still need perimeter/operational controls. Later documentation-head CI must also pass.
+
+## R4 planning checkpoint — 2026-11-11
+
+Owner authorized R4 recovery/deployment/monitoring **planning**. [The plan](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) and linked runbooks now define inventory gaps, decision IDs R4-D1–D7, backup options/scope/retention, isolated restore/identity/access reconciliation, controlled Vercel release/rollback, alerts and foundation UAT/evidence gates. Proposed pilot RPO≤1h/RTO≤4h is awaiting owner acceptance and feasibility; owners, budget, backup entitlement and restore/Vercel targets are unverified. No export/restore, cloud provisioning, spending, deployment, alert subscription or real communication was performed.
+
+Read-only provider inventory: Supabase project-settings access denied for the configured project; Vercel connector returned zero visible projects in the queried default scope, not proof no project exists elsewhere. Do not substitute another project/account or infer Supabase backup tier from the Redis Free selection. Repository has safe event logs and a DSN placeholder, not proven telemetry collection/alerts. Functional auth readiness must cover early fail-closed configuration/ingress paths that do not emit the Redis warning event.
+
+Original PR #11 runs [43048625819](https://github.com/Edleben/ScoGes_App/actions/runs/43048625819) and [43048526301](https://github.com/Edleben/ScoGes_App/actions/runs/43048526301) failed Chromium dependency installation because Ubuntu/Azure mirrors could not resolve. Quality/database checks passed; Chromium did not run in those attempts. Keep required checks intact and validate the new documentation head. R4/R3/Sprint 0 remain open; original six milestone percentages and Sprint 1 inactivity are unchanged.
+
+## R4 owner decisions — 2026-11-12
+
+Recorded primary incident/recovery owner as the project owner (user), technical backup unassigned, and business-hours coverage (exact window/timezone pending). Backup/monitoring evaluation may consider up to US$50/month total additional cost; every purchase/paid upgrade still needs explicit approval. Owner will provide different RPO/RTO values; earlier numerical proposals are not adopted. See [the updated decision register](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md). No provider, paid resource, backup/restore, deployment, alert schedule or acceptance gate was changed.

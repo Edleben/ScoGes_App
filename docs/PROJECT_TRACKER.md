@@ -93,3 +93,15 @@ UI summary and this tracker now identify R3 Redis/CSP validation and pending dep
 ## R3 direct RPC validation checkpoint — 2026-11-11
 
 [Backstop implementation and evidence](R3_DIRECT_RPC_BACKSTOP.md) now pass isolated CI, including direct HTTP429 and concurrent cross-tenant quotas. Both UI language summaries distinguish CI validation from pending hosted migration/deployment/monitoring. Sprint 0 and R3 remain open; original milestones/progress and Sprint 1 inactivity are unchanged.
+
+## Authorized hosted rollout — 2026-11-11
+
+[R2/R3 deployment and post-checks](DEPLOYMENT_2026-11-11.md) are now executed on the configured Supabase project: six recorded migration versions, pinned invoker helper, enabled private quota enforcement, hosted SQL/PT429/direct HTTP429 and 20 clean Chromium cases. Both language summaries now reflect applied database migrations and the remaining Vercel/monitoring work. Full hosted advisor refresh is pending due connector permissions. Sprint 0 remains `in_progress` / 100% of its six historical milestones; Sprint 1 stays planned/zero. No acceptance gate is closed.
+
+## R4 planning package — 2026-11-11
+
+[Recovery/deployment/monitoring planning](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) is prepared; owner decisions and operational drills are pending. UI French/English summaries now distinguish deployed R2/R3 database controls from unexecuted R4 recovery/monitoring work. Milestone rows/progress remain unchanged: Sprint 0 `in_progress` / historical 100%, later sprints planned/zero. PR #11's original Ubuntu-DNS browser-install failures remain disclosed; new review-head checks must pass before merge.
+
+## R4 owner decisions — 2026-11-12
+
+Recorded primary incident/recovery owner as the project owner (user), technical backup unassigned, and business-hours coverage (exact window/timezone pending). Backup/monitoring evaluation may consider up to US$50/month total additional cost; every purchase/paid upgrade still needs explicit approval. Owner will provide different RPO/RTO values; earlier numerical proposals are not adopted. See [the updated decision register](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md). No provider, paid resource, backup/restore, deployment, alert schedule or acceptance gate was changed.

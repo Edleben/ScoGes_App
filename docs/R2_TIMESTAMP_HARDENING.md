@@ -1,6 +1,6 @@
 # R2 timestamp-helper hardening — 2026-11-03
 
-Status: **implementation prepared; validation/review and hosted deployment tracked separately**. R2 is not closed on the hosted project. R1 remains partial, R3–R7 remain open and Sprint 0 acceptance is unchanged. This task does not authorize hosted deployment or Sprint 1.
+Current status — **deployed and target-verified on 2026-11-11 after explicit owner authorization**. [Deployment evidence](DEPLOYMENT_2026-11-11.md) records the atomic rollout and post-checks. The full hosted advisor refresh was inaccessible through the connector and remains pending; no full advisor scan or Sprint 0 closure is claimed. Original preparation/checkpoint notes below are historical. R1 remains partial and R3–R7/Sprint 0 acceptance remain open.
 
 ## Smallest change
 

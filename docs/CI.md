@@ -41,3 +41,7 @@ R1 follow-up on 2026-11-01: the locked Vitest/mocker 5.0.3 patch removes both mo
 ## R3 Redis isolation
 
 The integration job starts a digest-pinned Redis container and a loopback REST bridge on port 8079. The existing environment exporter generates/masks a disposable Redis token; hosted Redis credentials are never supplied. `pnpm test:redis` exercises actual SDK Lua concurrency/expiry plus transport/timeout failures before the browser suite. The fixture strips the Upstash-only locking shebang; application configuration still uses the same managed-provider adapter. Teardown stops the bridge and Actions disposes the Redis service. No production-secret requirement or rate-limit bypass is introduced into CI.
+
+## Observed dependency-install incident — 2026-11-11
+
+Original deployment-evidence PR #11 [PR run](https://github.com/Edleben/ScoGes_App/actions/runs/43048625819) and [push run](https://github.com/Edleben/ScoGes_App/actions/runs/43048526301) passed quality/database checks but failed `playwright install --with-deps chromium`: Ubuntu package downloads reported temporary DNS resolution failures for archive mirrors. Browser cases did not start; missing-report failure kept the required gate red. This is infrastructure evidence, not a passing browser run or an application regression diagnosis. The [R4 plan](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md) records bounded retry/escalation and a known-good compatible rollback artifact; it does not weaken required checks or authorize a CI/DNS rewrite. No workflow change is part of this planning slice.

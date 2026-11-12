@@ -60,3 +60,7 @@ The typed tracker defines UI milestones; a unit test checks Markdown IDs/status/
 ## ADR 0009 — Preserve foundation locale without changing route structure (2026-10-31)
 
 Retain the established `locale=fr|en` query convention. The proxy overwrites a validated presentation header used by the per-request root layout and error context. French remains the default; internal links/actions preserve English. Locale switches use full navigation because layouts are cached during client transitions. This avoids a route-prefix rewrite or a new i18n dependency. The header is never an authorization input; session refresh is still limited to the existing sensitive route families. Tradeoff: the root layout is dynamic, and switching language reloads the page and resets transient form/pagination state. Translation and tracker status are separate; email validation still blocks foundation completion.
+
+## R4 operational planning note — 2026-11-11 (proposed, not accepted)
+
+Preserve the existing modular/provider stack while evaluating backup recovery, environment-separated deployment and alerting through [R4-D1–D7](R4_RECOVERY_DEPLOYMENT_MONITORING_PLAN.md). Selection of recovery targets, plan capabilities, costs, operators and restore/Vercel targets requires recorded owner decisions and executed proof. A completed runbook, a backup file, a DSN or a green CI run is not recovery/monitoring acceptance. No new provider, paid feature, architecture implementation or production behavior is approved by this note.
