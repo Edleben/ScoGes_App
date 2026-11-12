@@ -42,18 +42,18 @@ Local-only destructive upgrade/race fixtures in existing scripts must never be p
 
 ## Evidence record — fill only after execution
 
-| Field                                                       | Recorded value                            |
-| ----------------------------------------------------------- | ----------------------------------------- |
-| Approval / source classification / exact target             | Pending                                   |
-| Primary, backup, reviewer and coverage                      | Unassigned                                |
-| Accepted RPO/RTO                                            | Pending                                   |
-| Incident start / recovery-point UTC / validated-service UTC | Not measured                              |
-| Tool/DB versions, backup ID/checksum/key reference          | Not captured; references only, no secrets |
-| Export/decrypt/import/configure/validate timings            | Not measured                              |
-| Observed RPO / observed RTO / objective met                 | Not measured / not claimed                |
-| Validation outcomes and access/link reconciliation          | Not executed                              |
-| Alert delivery / acknowledgement                            | Not executed                              |
-| Source unchanged / cleanup proof / retained artifacts       | Not executed                              |
-| Failures, residual risks and owner sign-off                 | Pending                                   |
+| Field                                                       | Recorded value                                                                                                     |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Approval / source classification / exact target             | Pending                                                                                                            |
+| Primary, backup, reviewer and coverage                      | Primary: project owner (user); technical backup/reviewer unassigned; business hours, exact window/timezone pending |
+| Accepted RPO/RTO                                            | Pending                                                                                                            |
+| Incident start / recovery-point UTC / validated-service UTC | Not measured                                                                                                       |
+| Tool/DB versions, backup ID/checksum/key reference          | Not captured; references only, no secrets                                                                          |
+| Export/decrypt/import/configure/validate timings            | Not measured                                                                                                       |
+| Observed RPO / observed RTO / objective met                 | Not measured / not claimed                                                                                         |
+| Validation outcomes and access/link reconciliation          | Not executed                                                                                                       |
+| Alert delivery / acknowledgement                            | Not executed                                                                                                       |
+| Source unchanged / cleanup proof / retained artifacts       | Not executed                                                                                                       |
+| Failures, residual risks and owner sign-off                 | Pending                                                                                                            |
 
 Provider references: [backups and coverage](https://supabase.com/docs/guides/platform/backups), [provider-aware backup/restore](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore). Verify actual project capabilities before execution.
